@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a1f44;
+  --primary: #0a1f44; /* Dark Blue */
+  --accent: #d71920; /* Red */
+  --text-primary: #171717; /* Neutral dark for text */
+}
