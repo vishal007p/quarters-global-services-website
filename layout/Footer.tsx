@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import {
   FaFacebookF,
@@ -12,7 +13,7 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Logo & Contact */}
         <div className="md:col-span-1">
-          <h2 className="text-xl font-bold mb-2">QUARTUS</h2>
+          <Image src={"/whiteLogo.png"} className="mb-4" width={200} height={240} alt="logo"></Image>
           <p className="text-sm mb-2">
             Simplifying Visa & Document Processes <br /> with Speed & Security.
           </p>
