@@ -1,9 +1,16 @@
 "use client"
 import BannerLayout from "@/components/Banner/BannerLayout";
 import Button from "@/components/Buttons/Button";
+import ButtonTwo from "@/components/Buttons/ButtonTwo";
 import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import Image from "next/image";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { useState } from "react";
 
 const features = [
@@ -47,6 +54,61 @@ const features = [
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("visa");
+  const testimonials = [
+    {
+      name: "Devon Lane",
+      image: "https://randomuser.me/api/portraits/men/1.jpg",
+      text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
+    },
+    {
+      name: "Kathryn Murphy",
+      image: "https://randomuser.me/api/portraits/women/2.jpg",
+      text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
+    },
+    {
+      name: "Annette Black",
+      image: "https://randomuser.me/api/portraits/women/3.jpg",
+      text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+    },
+    {
+      name: "Annette Black",
+      image: "https://randomuser.me/api/portraits/women/3.jpg",
+      text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+    },
+  ];
+
+  const blogPosts = [
+    {
+      tag: "Visa",
+      title: "Top 5 Mistakes to Avoid When Applying for a Tourist Visa",
+      description:
+        "Applying for a tourist visa can be a straightforward process—if done correctly. However, many applicants unknowingly make errors that lead to...",
+      image: "/blog-1.jpg",
+      author: "Eleanor Pena",
+      date: "20 April 2024",
+      authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
+    },
+    {
+      tag: "Apostille",
+      title: "What is an Apostille and Why Do You Need It?",
+      description:
+        "If you’ve ever needed to use an Indian document abroad for a job, education, or legal process—you’ve probably heard the term...",
+      image: "/blog-2.jpg",
+      author: "Albert Flores",
+      date: "20 April 2024",
+      authorImage: "https://randomuser.me/api/portraits/men/2.jpg",
+    },
+    {
+      tag: "Visa",
+      title: "How to Track Your Visa Application in Real-Time with Quartus?",
+      description:
+        "Worried about where your visa application stands? With Quartus Global Service, you no longer have to rely on emails or long...",
+      image: "/blog-3.jpg",
+      author: "Leslie Alexander",
+      date: "20 April 2024",
+      authorImage: "https://randomuser.me/api/portraits/women/3.jpg",
+    },
+  ];
 
   return (
     <>
@@ -113,7 +175,7 @@ export default function Home() {
             </button>
             <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-white text-black text-xs px-2 py-1 rounded shadow-md">
               Need Help? Chat with us
-            </div>
+            </div>``
           </div>
         </div>
       </BannerLayout>
@@ -210,6 +272,28 @@ export default function Home() {
         </div>
       </section>
 
+      <div className=" bg-[url('/img.jpg')] bg-cover bg-center p-16 max-w-7xl mx-auto my-10 rounded-3xl  text-white">
+        <h3>Ready to Start Your Visa or Immigration Process?</h3>
+        <p>Get expert guidance, track your application in real time, and submit <br />  everything securely right from your device.</p>
+
+        <div className="flex items-center gap-4 justify-start py-6">
+          <ButtonTwo iconPosition="right" name={"Log in to portal"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12.5" r="12" fill="white" />
+            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
+
+          } />
+
+          <ButtonTwo iconPosition="right" name={"Track Application"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12.5" r="12" fill="white" />
+            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+
+          } />
+        </div>
+      </div>
+
       <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
         <SectionTitle
           subtitle="Our services"
@@ -261,6 +345,85 @@ export default function Home() {
       </section>
 
 
+      <div className="max-w-7xl mx-auto px-10 py-12 h-[400px]">
+        <SectionTitle
+          subtitle="Our services"
+          title="Why Choose Quartus Global Service"
+          highlight="Quartus"
+          align="center"
+        />
+        <Swiper
+          modules={[Navigation, Pagination]}
+          spaceBetween={30}
+          slidesPerView={1}
+          breakpoints={{
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          pagination={{ clickable: true }}
+          navigation
+        >
+          {testimonials.map((item, index) => (
+            <SwiperSlide key={index}>
+              <div className="bg-white shadow-md rounded-xl p-6 h-full flex flex-col justify-between text-center">
+                <div className="flex justify-center mb-4">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 rounded-full border-4 border-yellow-300"
+                  />
+                </div>
+                <h4 className="font-semibold text-lg">{item.name}</h4>
+                <p className="text-sm text-gray-600 mt-2">{item.text}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+      <div className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]   py-12 px-4">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+          {blogPosts.map((post, index) => (
+            <div
+              key={index}
+className="w-[464px] h-[562px] bg-white rounded-[36px] p-4 flex flex-col gap-10 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-400 transition-all duration-300 ease-in-out cursor-pointer"
+            >
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-48 object-cover rounded-[20px]"
+              />
+              <div className="flex flex-col justify-between flex-grow">
+                <div>
+                  <p className="text-sm text-blue-600 font-semibold mb-1">{post.tag}</p>
+                  <h3 className="font-bold text-lg text-gray-900 mb-2">{post.title}</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    {post.description}{" "}
+                    <span className="text-red-600 font-semibold">Read More</span>
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 mt-auto">
+                  <img
+                    src={post.authorImage}
+                    alt={post.author}
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <div className="text-sm text-gray-700">
+                    <p className="font-medium">{post.author}</p>
+                    <p className="text-gray-500 text-xs">{post.date}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <button className="inline-flex items-center gap-2 bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-600 hover:text-white transition">
+            Explore All Blogs <span className="text-red-500">🔴</span>
+          </button>
+        </div>
+      </div>
     </>
 
   );
