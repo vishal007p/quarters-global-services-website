@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { FaChevronDown, FaUserCircle, FaArrowRight } from "react-icons/fa";
+import { FaChevronDown, FaArrowRight } from "react-icons/fa";
 import { MdGTranslate } from "react-icons/md";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 const navItems = [
   "Visa",
@@ -16,7 +17,7 @@ const navItems = [
 ];
 
 const Header = () => {
-  const lastLoginTime = "July 23, 2025, 10:30 AM"; // Example
+  const [showTranslate, setShowTranslate] = useState(false);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -44,17 +45,33 @@ const Header = () => {
 
         {/* Right Section - Last Login, Translate, Login */}
         <div className="flex items-center gap-4 text-sm text-gray-700">
-         
+
 
           {/* Translate Button */}
-          <button className="flex items-center gap-1 px-3 py-1 text-xs border rounded-md hover:bg-gray-100 transition">
-            <MdGTranslate className="text-base" />
-            Translate
-          </button>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowTranslate(!showTranslate)}
+              className="flex items-center gap-[6px] w-[123px] h-[30px] px-[6px] py-[3px] text-xs border border-[#BFBFBF] text-center rounded-[6px] bg-white hover:bg-gray-100 transition"
+            >
+              <MdGTranslate className="text-base" />
+              Translate
+            </button>
+
+            {showTranslate && (
+              <div className="absolute z-50 mt-2">
+                <GoogleTranslate />
+              </div>
+            )}
+            <span className="text-xs text-gray-400 block mt-1">Powered by Google Translate</span>
+          </div>
+
 
           {/* Login Button with Dropdown */}
           <div className="relative group">
-            <button className="px-4 py-1 text-xs font-semibold border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition">
+            <button
+              className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition"
+            >
               Login
             </button>
 

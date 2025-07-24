@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
         alignItems: "center",
         padding: "0.5rem 1rem",
         borderRadius: "1rem",
-        border: "1px solid #00529B",
+       
         backgroundColor: "white",
         color: "black",
         fontWeight: 600,

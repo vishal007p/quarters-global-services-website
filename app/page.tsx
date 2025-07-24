@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState } from "react";
+import SectionHeading from "@/components/SectionTitle/SectionHeading";
 
 const features = [
   {
@@ -52,63 +53,73 @@ const features = [
   },
 ];
 
+const locations = [
+  { country: "Canada", flag: "/flags/canada.png", style: "top-[10%] left-[15%]" },
+  { country: "Germany", flag: "/flags/germany.png", style: "top-[25%] left-[55%]" },
+  { country: "India", flag: "/flags/india.png", style: "top-[35%] left-[65%]" },
+  { country: "Brazil", flag: "/flags/brazil.png", style: "top-[55%] left-[30%]" },
+  { country: "Australia", flag: "/flags/australia.png", style: "top-[70%] left-[80%]" },
+];
+
+const testimonials = [
+  {
+    name: "Devon Lane",
+    image: "https://randomuser.me/api/portraits/men/1.jpg",
+    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
+  },
+  {
+    name: "Kathryn Murphy",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
+  },
+  {
+    name: "Annette Black",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+  },
+  {
+    name: "Annette Black",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+  },
+];
+
+const blogPosts = [
+  {
+    tag: "Visa",
+    title: "Top 5 Mistakes to Avoid When Applying for a Tourist Visa",
+    description:
+      "Applying for a tourist visa can be a straightforward process—if done correctly. However, many applicants unknowingly make errors that lead to...",
+    image: "/blog-1.jpg",
+    author: "Eleanor Pena",
+    date: "20 April 2024",
+    authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
+  },
+  {
+    tag: "Apostille",
+    title: "What is an Apostille and Why Do You Need It?",
+    description:
+      "If you’ve ever needed to use an Indian document abroad for a job, education, or legal process—you’ve probably heard the term...",
+    image: "/blog-2.jpg",
+    author: "Albert Flores",
+    date: "20 April 2024",
+    authorImage: "https://randomuser.me/api/portraits/men/2.jpg",
+  },
+  {
+    tag: "Visa",
+    title: "How to Track Your Visa Application in Real-Time with Quartus?",
+    description:
+      "Worried about where your visa application stands? With Quartus Global Service, you no longer have to rely on emails or long...",
+    image: "/blog-3.jpg",
+    author: "Leslie Alexander",
+    date: "20 April 2024",
+    authorImage: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+];
+
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState("visa");
-  const testimonials = [
-    {
-      name: "Devon Lane",
-      image: "https://randomuser.me/api/portraits/men/1.jpg",
-      text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-    },
-    {
-      name: "Kathryn Murphy",
-      image: "https://randomuser.me/api/portraits/women/2.jpg",
-      text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-    },
-    {
-      name: "Annette Black",
-      image: "https://randomuser.me/api/portraits/women/3.jpg",
-      text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-    {
-      name: "Annette Black",
-      image: "https://randomuser.me/api/portraits/women/3.jpg",
-      text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-  ];
-
-  const blogPosts = [
-    {
-      tag: "Visa",
-      title: "Top 5 Mistakes to Avoid When Applying for a Tourist Visa",
-      description:
-        "Applying for a tourist visa can be a straightforward process—if done correctly. However, many applicants unknowingly make errors that lead to...",
-      image: "/blog-1.jpg",
-      author: "Eleanor Pena",
-      date: "20 April 2024",
-      authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
-    },
-    {
-      tag: "Apostille",
-      title: "What is an Apostille and Why Do You Need It?",
-      description:
-        "If you’ve ever needed to use an Indian document abroad for a job, education, or legal process—you’ve probably heard the term...",
-      image: "/blog-2.jpg",
-      author: "Albert Flores",
-      date: "20 April 2024",
-      authorImage: "https://randomuser.me/api/portraits/men/2.jpg",
-    },
-    {
-      tag: "Visa",
-      title: "How to Track Your Visa Application in Real-Time with Quartus?",
-      description:
-        "Worried about where your visa application stands? With Quartus Global Service, you no longer have to rely on emails or long...",
-      image: "/blog-3.jpg",
-      author: "Leslie Alexander",
-      date: "20 April 2024",
-      authorImage: "https://randomuser.me/api/portraits/women/3.jpg",
-    },
-  ];
 
   return (
     <>
@@ -279,7 +290,7 @@ export default function Home() {
         <div className="flex items-center gap-4 justify-start py-6">
           <ButtonTwo iconPosition="right" name={"Log in to portal"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12.5" r="12" fill="white" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
 
 
@@ -287,7 +298,7 @@ export default function Home() {
 
           <ButtonTwo iconPosition="right" name={"Track Application"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12.5" r="12" fill="white" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
 
           } />
@@ -344,7 +355,6 @@ export default function Home() {
         </div>
       </section>
 
-
       <div className="max-w-7xl mx-auto px-10 py-12 h-[400px]">
         <SectionTitle
           subtitle="Our services"
@@ -381,14 +391,14 @@ export default function Home() {
         </Swiper>
       </div>
       <div className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]   py-12 px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto flex items-center gap-6">
           {blogPosts.map((post, index) => (
             <div
               key={index}
-className="w-[464px] h-[562px] bg-white rounded-[36px] p-4 flex flex-col gap-10 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-blue-400 transition-all duration-300 ease-in-out cursor-pointer"
+              className="w-[464px] h-[500px] bg-white rounded-[36px] p-4 flex flex-col gap-10 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-[#E7000B] transition-all duration-300 ease-in-out cursor-pointer"
             >
               <img
-                src={post.image}
+                src={"/img.jpg"}
                 alt={post.title}
                 className="w-full h-48 object-cover rounded-[20px]"
               />
@@ -417,13 +427,102 @@ className="w-[464px] h-[562px] bg-white rounded-[36px] p-4 flex flex-col gap-10 
 
           ))}
         </div>
-
-        <div className="text-center mt-8">
-          <button className="inline-flex items-center gap-2 bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded-full font-semibold hover:bg-blue-600 hover:text-white transition">
-            Explore All Blogs <span className="text-red-500">🔴</span>
-          </button>
+        <div className="flex items-center justify-center my-10">
+          <Button iconPosition="right" name={"  Explore All Blogs"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12.5" r="12" fill="#D31021" />
+            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          } />
         </div>
+
+
       </div>
+
+
+      <section className="mt-10">
+        <SectionHeading
+          label="Contact Us"
+          titleLeft="Need Assistance?"
+          titleRight="Let’s Connect."
+          leftColor="text-gray-400"
+          rightColor="text-black"
+        />
+
+        <div className=" max-w-7xl mx-auto  flex flex-col lg:flex-row items-center justify-between gap-8 px-6 lg:px-16 py-12 bg-white">
+          {/* Left Form */}
+
+          <div className="w-full lg:w-1/2 space-y-4">
+
+            <div>
+              <input
+                type="text"
+                placeholder="Name"
+                className="bg-[#F9F9F9] w-full h-[64px] px-[24px] py-[17px] rounded-[7px] opacity-100"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 space-x-2">
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="bg-[#F9F9F9] w-full h-[64px] px-[24px] py-[17px] rounded-[7px] opacity-100"
+                />
+              </div>
+              <div className="flex gap-2">
+                <select
+                  title="ss"
+                  className="bg-[#F9F9F9] w-[90px] h-[64px] px-[16px] py-[17px] rounded-[7px] "
+                >
+                  <option value="+1">+1</option>
+                  <option value="+91">+91</option>
+                  <option value="+49">+49</option>
+                </select>
+
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  className="bg-[#F9F9F9] w-full flex-1 h-[64px] px-[24px] py-[17px] rounded-[7px] opacity-100"
+                />
+              </div>
+            </div>
+
+
+            <div >
+              <select
+                title="aa"
+                className="bg-[#F9F9F9] w-full h-[64px] px-[24px] py-[17px] rounded-[7px] opacity-100 "
+              >
+                <option>How can we help you</option>
+                <option>Support</option>
+                <option>Sales</option>
+              </select>
+            </div>
+
+
+            <textarea
+              placeholder="Message"
+              className="bg-[#F9F9F9] w-full h-[120px] px-[24px] py-[17px] rounded-[7px] opacity-100 "
+            />
+
+            <button className="bg-red-600 text-white px-6 py-2 rounded-xl hover:bg-red-700 transition">
+              Send Message →
+            </button>
+          </div>
+
+
+          {/* Right Map */}
+          <div className="w-full lg:w-1/2 relative">
+            <img
+              src="/map.png" // Place your uploaded map here
+              alt="World Map"
+              className="w-full rounded"
+            />
+
+          </div>
+        </div>
+      </section>
+
     </>
 
   );
