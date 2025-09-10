@@ -5,7 +5,7 @@ interface VisaServiceCardProps {
     icon: React.ReactNode;
     title: string;
     description: string;
-    link: string;
+    link?: string;
 }
 
 const VisaServiceCard: React.FC<VisaServiceCardProps> = ({

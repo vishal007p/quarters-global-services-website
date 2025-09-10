@@ -5,14 +5,15 @@ import ButtonTwo from "@/components/Buttons/ButtonTwo";
 import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import Image from "next/image";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useState } from "react";
 import SectionHeading from "@/components/SectionTitle/SectionHeading";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Flags from "react-world-flags";
+import TestimonialSlider from "@/components/TestimonialSlider ";
+import { useRouter } from "nextjs-toploader/app";
 
 const features = [
   {
@@ -51,14 +52,6 @@ const features = [
       'Apply, upload, track, and get support — all through one central dashboard.',
     image: '/images/feature6.jpg',
   },
-];
-
-const locations = [
-  { country: "Canada", flag: "/flags/canada.png", style: "top-[10%] left-[15%]" },
-  { country: "Germany", flag: "/flags/germany.png", style: "top-[25%] left-[55%]" },
-  { country: "India", flag: "/flags/india.png", style: "top-[35%] left-[65%]" },
-  { country: "Brazil", flag: "/flags/brazil.png", style: "top-[55%] left-[30%]" },
-  { country: "Australia", flag: "/flags/australia.png", style: "top-[70%] left-[80%]" },
 ];
 
 const testimonials = [
@@ -118,67 +111,330 @@ const blogPosts = [
 ];
 
 
+const GoButton = ({ handleGo }: any) => (
+  <div className="w-full md:w-auto flex items-center mt-4 md:mt-0">
+    <button
+      onClick={handleGo}
+      className="bg-red-600 text-white font-semibold px-6 py-2 rounded-md shadow-md hover:bg-red-700 transition"
+    >
+      Go
+    </button>
+  </div>
+);
+
+function DropdownForm({ activeTab, setActiveTab }: any) {
+
+  // --- Sample Data ---
+  const states = [
+    { id: 1, name: "Alabama" }, { id: 2, name: "Alaska" }, { id: 3, name: "Arizona" },
+    { id: 4, name: "Arkansas" }, { id: 5, name: "California" }, { id: 6, name: "Colorado" },
+    { id: 7, name: "Connecticut" }, { id: 8, name: "Delaware" }, { id: 9, name: "Florida" },
+    { id: 10, name: "Georgia" }
+  ];
+
+  const citizenships = [
+    { code: "US", name: "United States" },
+    { code: "CA", name: "Canada" },
+    { code: "MX", name: "Mexico" },
+  ];
+
+  const countries = [
+    { code: "US", name: "United States" },
+    { code: "CA", name: "Canada" },
+    { code: "MX", name: "Mexico" },
+  ];
+
+  const passportOptions = [
+    { id: 1, name: "Regular Passport" },
+    { id: 2, name: "Emergency Passport" }
+  ];
+
+  const apostilleOptions = [
+    { id: 1, name: "Document Apostille" },
+    { id: 2, name: "Legalization Service" }
+  ];
+
+
+  const router = useRouter()
+  // --- State ---
+  const [citizenship, setCitizenship] = useState("");
+  const [citizenshipSearch, setCitizenshipSearch] = useState("");
+
+  const [country, setCountry] = useState("");
+  const [countrySearch, setCountrySearch] = useState("");
+
+  const [stateOrCountry, setStateOrCountry] = useState("");
+  const [stateSearch, setStateSearch] = useState("");
+
+  const [passportType, setPassportType] = useState("");
+  const [passportSearch, setPassportSearch] = useState("");
+
+  const [apostilleType, setApostilleType] = useState("");
+  const [apostilleSearch, setApostilleSearch] = useState("");
+
+  const [errors, setErrors] = useState({
+    citizenship: "",
+    country: "",
+    state: "",
+    passport: "",
+    apostille: "",
+  });
+
+  // --- Filters ---
+  const filteredCountries = countries.filter((option) =>
+    option.name.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+  const filteredCitizenships = citizenships.filter((option) =>
+    option.name.toLowerCase().includes(citizenshipSearch.toLowerCase())
+  );
+  const filteredStates = states.filter((option) =>
+    option.name.toLowerCase().includes(stateSearch.toLowerCase())
+  );
+  const filteredPassport = passportOptions.filter((option) =>
+    option.name.toLowerCase().includes(passportSearch.toLowerCase())
+  );
+  const filteredApostille = apostilleOptions.filter((option) =>
+    option.name.toLowerCase().includes(apostilleSearch.toLowerCase())
+  );
+
+  // --- Validation ---
+  const validate = () => {
+    let newErrors = { ...errors };
+    if (activeTab === "visa") {
+      newErrors = {
+        citizenship: citizenship ? "" : "Please select citizenship",
+        country: country ? "" : "Please select country",
+        state: stateOrCountry ? "" : "Please select state",
+        passport: "",
+        apostille: ""
+      };
+    } else if (activeTab === "passport") {
+      newErrors = {
+        citizenship: "",
+        country: "",
+        state: "",
+        passport: passportType ? "" : "Please select passport type",
+        apostille: ""
+      };
+    } else if (activeTab === "apostille") {
+      newErrors = {
+        citizenship: "",
+        country: "",
+        state: "",
+        passport: "",
+        apostille: apostilleType ? "" : "Please select apostille type"
+      };
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((err) => err === "");
+  };
+
+  const handleGo = () => {
+    if (validate()) {
+      if (activeTab === "visa") {
+        router.push(`/visa?citizenship=${encodeURIComponent(citizenship)}&country=${encodeURIComponent(country)}&state=${encodeURIComponent(stateOrCountry)}`);
+      } else if (activeTab === "passport") {
+        router.push(`/passport?type=${encodeURIComponent(passportType)}`);
+      } else if (activeTab === "apostille") {
+        router.push(`/apostille?type=${encodeURIComponent(apostilleType)}`);
+      }
+    }
+  };
+  // --- Tab Buttons ---
+  const tabs = ["visa", "passport", "apostille"];
+
+  return (
+    <div>
+      {/* Tabs */}
+      <div className="flex justify-center space-x-8 text-sm font-medium mt-10 text-white mb-6">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab as any)}
+            className={`pb-2 border-b-2 transition ${activeTab === tab
+              ? "border-blue-500 text-blue-400 font-semibold"
+              : "border-transparent hover:text-blue-300"
+              }`}
+          >
+            {tab === "visa"
+              ? "Expedited Visas"
+              : tab === "passport"
+                ? "Expedited Passport"
+                : "Apostille & Legalization"}
+          </button>
+        ))}
+      </div>
+
+      {/* Dropdown Forms */}
+      {activeTab === "visa" && (
+        <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4  justify-center">
+          {/* Citizenship */}
+          <DropdownWrapper
+            value={citizenship}
+            setValue={setCitizenship}
+            search={citizenshipSearch}
+            setSearch={setCitizenshipSearch}
+            filteredOptions={filteredCitizenships}
+            errors={errors.citizenship}
+            placeholder="Select Citizenship"
+            type="flag"
+          />
+
+          {/* Country */}
+          <DropdownWrapper
+            value={country}
+            setValue={setCountry}
+            search={countrySearch}
+            setSearch={setCountrySearch}
+            filteredOptions={filteredCountries}
+            errors={errors.country}
+            placeholder="Select Country"
+            type="flag"
+          />
+
+          {/* State */}
+          <DropdownWrapper
+            value={stateOrCountry}
+            setValue={setStateOrCountry}
+            search={stateSearch}
+            setSearch={setStateSearch}
+            filteredOptions={filteredStates}
+            errors={errors.state}
+            placeholder="Select State"
+          />
+
+          <GoButton handleGo={handleGo} />
+        </div>
+      )}
+
+      {activeTab === "passport" && (
+        <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4   justify-center">
+          <DropdownWrapper
+            value={passportType}
+            setValue={setPassportType}
+            search={passportSearch}
+            setSearch={setPassportSearch}
+            filteredOptions={filteredPassport}
+            errors={errors.passport}
+            placeholder="Select Passport Type"
+          />
+          <GoButton handleGo={handleGo} />
+        </div>
+      )}
+
+      {activeTab === "apostille" && (
+        <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center ">
+          <DropdownWrapper
+            value={apostilleType}
+            setValue={setApostilleType}
+            search={apostilleSearch}
+            setSearch={setApostilleSearch}
+            filteredOptions={filteredApostille}
+            errors={errors.apostille}
+            placeholder="Select Apostille Type"
+          />
+          <GoButton handleGo={handleGo} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Components ---
+const DropdownWrapper = ({
+  value,
+  setValue,
+  search,
+  setSearch,
+  filteredOptions,
+  errors,
+  placeholder,
+  type,
+}: any) => {
+  return (
+    <div className="w-full md:w-1/3 flex flex-col">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          className={`px-4 py-2 rounded-md shadow-md text-left flex items-center gap-2 ${errors ? "border border-red-500" : "border border-gray-600"
+            } bg-black text-white`}
+        >
+          {value || placeholder}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-[#1a1a1a] rounded-md shadow-lg p-2 w-full min-w-[300px]">
+          <input
+            type="text"
+            placeholder={`Search ${placeholder}...`}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full px-3 py-2 mb-2 border border-gray-600 rounded-md bg-black text-white placeholder-gray-500 focus:outline-none"
+          />
+          <div className="max-h-60 overflow-y-auto">
+            {filteredOptions.map((option: any) => (
+              <DropdownMenuItem
+                key={option.id || option.code}
+                onClick={() => setValue(option.name)}
+                className="hover:bg-gray-700 rounded-md cursor-pointer flex items-center gap-2 text-white"
+              >
+                {type === "flag" && <Flags code={option.code} style={{ width: 20, height: 15 }} />}
+                {option.name}
+              </DropdownMenuItem>
+            ))}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {errors && <span className="text-red-500 mt-1 text-sm">{errors}</span>}
+    </div>
+  );
+};
+
+
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("visa");
+
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
+
 
   return (
     <>
-      <BannerLayout videoSrc="/homeBg.mp4">
-
-        <h4 className=" bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">Quartus Global Service</h4>
-        <h1 className=" text-4xl font-bold mb-4">Smart Travel Starts Here – Fast, Secure, Digital</h1>
+      <BannerLayout bg={activeTab === "visa" ? "/panel2_bg.jpg" : ""}>
+        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4 text-white text-center">
+          Quartus Global Service
+        </h4>
+        <h1 className="text-4xl font-bold text-white text-center mb-4">
+          Smart Travel Starts Here – Fast, Secure, Digital
+        </h1>
 
         <div className="flex items-center gap-4 justify-center py-6">
-          <Button iconPosition="right" name={"Book a consultation"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          } />
+          <Button
+            iconPosition="right"
+            name={"Book a consultation"}
+            icon={
+              <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12.5" r="12" fill="#D31021" />
+                <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            }
+          />
 
-          <Button iconPosition="right" name={"Book a consultation"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          } />
+          <Button
+            iconPosition="right"
+            name={"Book a consultation"}
+            icon={
+              <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12.5" r="12" fill="#D31021" />
+                <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            }
+          />
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center space-x-8 text-sm font-medium mt-10 text-white mb-6">
-          {["visa", "passport", "apostille"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-2 border-b-2 transition ${activeTab === tab
-                ? "border-blue-500 text-blue-400"
-                : "border-transparent hover:text-blue-300"
-                }`}
-            >
-              {tab === "visa"
-                ? "Expedited Visas"
-                : tab === "passport"
-                  ? "Expedited Passport"
-                  : "Apostille & Legalization"}
-            </button>
-          ))}
-        </div>
 
-        {/* Search Form */}
-        <div className="  p-4 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row items-center gap-4">
-          <select title="sasd" className="w-full md:w-1/3 px-4 py-2 bg-white text-black rounded-md">
-            <option value="">Select Citizenship</option>
-          </select>
-          <select title="sasd" className="w-full md:w-1/3 px-4 py-2 bg-white text-black rounded-md">
-            <option value="">Select Country</option>
-          </select>
-          <select title="sasd" className="w-full md:w-1/3 px-4 py-2 bg-white text-black rounded-md">
-            <option value="">Select state or Country</option>
-          </select>
-          <button className="bg-red-600 text-white font-semibold px-6 py-2 rounded-md">
-            Go
-          </button>
-        </div>
 
-        {/* Floating Chat Bubble (Optional) */}
+        <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
+
+
+
+
+        {/* Floating Chat Bubble */}
         <div className="fixed bottom-4 right-4 z-50">
           <div className="relative group">
             <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center">
@@ -186,12 +442,12 @@ export default function Home() {
             </button>
             <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-white text-black text-xs px-2 py-1 rounded shadow-md">
               Need Help? Chat with us
-            </div>``
+            </div>
           </div>
         </div>
       </BannerLayout>
 
-      <section className="py-12 px-4 lg:px-28 bg-gray-50">
+      <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
           {/* Left: Text and Image */}
           <div className="space-y-6">
@@ -355,41 +611,16 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-10 py-12 h-[400px]">
+      <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
-          subtitle="Our services"
-          title="Why Choose Quartus Global Service"
+          subtitle="Our Testimonials"
+          title="Real Stories. Real Success."
           highlight="Quartus"
           align="center"
         />
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={30}
-          slidesPerView={1}
-          breakpoints={{
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          pagination={{ clickable: true }}
-          navigation
-        >
-          {testimonials.map((item, index) => (
-            <SwiperSlide key={index}>
-              <div className="bg-white shadow-md rounded-xl p-6 h-full flex flex-col justify-between text-center">
-                <div className="flex justify-center mb-4">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 rounded-full border-4 border-yellow-300"
-                  />
-                </div>
-                <h4 className="font-semibold text-lg">{item.name}</h4>
-                <p className="text-sm text-gray-600 mt-2">{item.text}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <TestimonialSlider testimonials={testimonials} />
       </div>
+
       <div className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]   py-12 px-4">
         <div className="max-w-7xl mx-auto flex items-center gap-6">
           {blogPosts.map((post, index) => (
@@ -437,7 +668,6 @@ export default function Home() {
 
 
       </div>
-
 
       <section className="mt-10">
         <SectionHeading

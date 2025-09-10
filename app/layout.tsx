@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google"; // import Poppins
 import "./globals.css";
 import Header from "@/layout/Header";
 import { Footer } from "@/layout/Footer";
+import NextTopLoader from 'nextjs-toploader';
+
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,6 +29,8 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <NextTopLoader />
+
       </body>
     </html>
   );
