@@ -13,6 +13,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
     title,
     description,
     link,
+    
 }) => {
     return (
         <div className="max-w-sm p-4 rounded-xl border border-gray-200 h-[320px]  hover:shadow-md transition-shadow  flex items-center">
@@ -33,7 +34,9 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
                     rightIcon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.63672 18.864L18.3646 6.13611M18.3646 6.13611H11.2939M18.3646 6.13611L18.3643 13.2072" stroke="#444444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>}
-                    onClick={() => alert("Button clicked")} />
+                    onClick={() => {
+                        if (link) window.location.href = link; // navigate to link
+                    }} />
             </div>
         </div>
     );

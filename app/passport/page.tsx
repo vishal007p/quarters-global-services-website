@@ -9,103 +9,96 @@ import { useSearchParams } from 'next/navigation';
 import React from 'react'
 
 const visaServices = [
-    {
-        title: "New Passport Application",
-        description: "For first-time applicants or children under 16",
-        iconColor: "#96C6FF",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#96C6FF" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Passport Renewal",
-        description: "For expired or expiring passports (adult renewals)",
-        iconColor: "#FFB6B6",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Lost Passport",
-        description: "Secure replacement with identity safeguards",
-        iconColor: "#96C6FF",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#96C6FF" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Child Passport",
-        description: "Expert handling for minors under 16",
-        iconColor: "#FFB6B6",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Second Passport",
-        description: "Hassle-free application or reissue process",
-        iconColor: "#FFB6B6",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Name Change",
-        description: "Make your documents valid internationally",
-        iconColor: "#96C6FF",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#96C6FF" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Damaged Passport",
-        description: "Make your documents valid internationally",
-        iconColor: "#FFB6B6",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
-    {
-        title: "Stolen Passport",
-        description: "Make your documents valid internationally",
-        iconColor: "#96C6FF",
-        icon: (
-            <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="74" height="74" rx="16" fill="#96C6FF" />
-                {/* Add the inner icon paths here */}
-            </svg>
-        ),
-        link: "#",
-    },
+  {
+    title: "New Passport Application",
+    description: "For first-time applicants or children under 16",
+    iconColor: "#96C6FF",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#96C6FF" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Regular&id=1",
+  },
+  {
+    title: "Passport Renewal",
+    description: "For expired or expiring passports (adult renewals)",
+    iconColor: "#FFB6B6",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Renewal&id=2",
+  },
+  {
+    title: "Lost Passport",
+    description: "Secure replacement with identity safeguards",
+    iconColor: "#96C6FF",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#96C6FF" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Lost&id=3",
+  },
+  {
+    title: "Child Passport",
+    description: "Expert handling for minors under 16",
+    iconColor: "#FFB6B6",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Child&id=4",
+  },
+  {
+    title: "Second Passport",
+    description: "Hassle-free application or reissue process",
+    iconColor: "#FFB6B6",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Second&id=5",
+  },
+  {
+    title: "Name Change",
+    description: "Make your documents valid internationally",
+    iconColor: "#96C6FF",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#96C6FF" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=NameChange&id=6",
+  },
+  {
+    title: "Damaged Passport",
+    description: "Make your documents valid internationally",
+    iconColor: "#FFB6B6",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Damaged&id=7",
+  },
+  {
+    title: "Stolen Passport",
+    description: "Make your documents valid internationally",
+    iconColor: "#96C6FF",
+    icon: (
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="74" height="74" rx="16" fill="#96C6FF" />
+      </svg>
+    ),
+    link: "/passport/plan-section?type=Stolen&id=8",
+  },
 ];
+
 
 const testimonials = [
     {
@@ -225,6 +218,7 @@ const page = () => {
                             }
                             title={service.title}
                             description={service.description}
+                            link={service.link} // ✅ Pass dynamic link here
                         />
                     ))}
 

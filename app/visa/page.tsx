@@ -6,106 +6,115 @@ import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import { useSearchParams } from 'next/navigation';
-import React  from 'react'
+import React from 'react'
 
 const visaServices = [
   {
+    id: 1,
     title: "New Passport Application",
     description: "For first-time applicants or children under 16",
     iconColor: "#96C6FF",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=1`,
   },
   {
+    id: 2,
     title: "Passport Renewal",
     description: "For expired or expiring passports (adult renewals)",
     iconColor: "#FFB6B6",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=2`,
   },
   {
+    id: 3,
     title: "Lost Passport",
     description: "Secure replacement with identity safeguards",
     iconColor: "#96C6FF",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=3`,
   },
   {
+    id: 4,
     title: "Child Passport",
     description: "Expert handling for minors under 16",
     iconColor: "#FFB6B6",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=4`,
   },
   {
+    id: 5,
     title: "Second Passport",
     description: "Hassle-free application or reissue process",
     iconColor: "#FFB6B6",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=5`,
   },
   {
+    id: 6,
     title: "Name Change",
     description: "Make your documents valid internationally",
     iconColor: "#96C6FF",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=6`,
   },
   {
+    id: 7,
     title: "Damaged Passport",
     description: "Make your documents valid internationally",
     iconColor: "#FFB6B6",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=7`,
   },
   {
+    id: 8,
     title: "Stolen Passport",
     description: "Make your documents valid internationally",
     iconColor: "#96C6FF",
     icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
       </svg>
     ),
-    link: "#",
+    getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
+      `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=8`,
   },
 ];
+
 
 const testimonials = [
   {
@@ -197,7 +206,9 @@ const features = [
 
 const page = () => {
   const searchParams = useSearchParams();
-  const country = searchParams.get("country") || "Visa Services"; // fallback text
+  const citizenship = searchParams.get("citizenship") || "";
+  const country = searchParams.get("country") || "";
+  const state = searchParams.get("state") || "";
   return (
     <>
       <BannerLayout videoSrc="/homeBg.mp4">
@@ -214,6 +225,7 @@ const page = () => {
           {/* Left: Text and Image */}
           {visaServices.map((service, index) => (
             <VisaServiceCard
+              link={service.getLink({ citizenship, country, state })} // ✅ Pass dynamic link here
               key={index}
               icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="74" height="74" rx="16" fill="#96C6FF" />
