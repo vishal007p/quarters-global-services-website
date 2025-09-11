@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/layout/Header";
 import { Footer } from "@/layout/Footer";
 import NextTopLoader from 'nextjs-toploader';
+import ReduxProvider from "@/providers/ReduxProvider";
 
 
 const poppins = Poppins({
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
         <Header />
-        {children}
+        <ReduxProvider>
+          {children}
+        </ReduxProvider>
         <Footer />
         <NextTopLoader />
 

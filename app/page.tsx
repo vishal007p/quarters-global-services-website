@@ -395,7 +395,7 @@ export default function Home() {
 
   return (
     <>
-      <BannerLayout bg={activeTab === "visa" ? "/panel2_bg.jpg" : ""}>
+      <BannerLayout bg={activeTab === "visa" ? "/visa.jpg" : "/password.jpg"}>
         <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4 text-white text-center">
           Quartus Global Service
         </h4>
