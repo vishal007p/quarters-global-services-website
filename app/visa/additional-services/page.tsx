@@ -3,6 +3,7 @@ import BannerLayout from '@/components/Banner/BannerLayout'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import SectionTitle from '@/components/SectionTitle/SectionTitle'
 import TestimonialSlider from '@/components/TestimonialSlider '
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 const testimonials = [
@@ -85,11 +86,25 @@ export const services = [
 const page = () => {
 
     const [selected, setSelected] = useState<number[]>([]);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const currentQuery = Object.fromEntries(searchParams.entries());
 
     const toggleSelection = (id: number) => {
         setSelected((prev) =>
             prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
         );
+    };
+
+    const handleContinue = () => {
+        const updatedQuery = {
+            ...currentQuery,
+            services: selected.join(','),  // Pass as CSV string
+        };
+
+        const queryString = new URLSearchParams(updatedQuery).toString();
+
+        router.push(`/checkout?${queryString}`);
     };
     return (
         <>
@@ -139,7 +154,8 @@ const page = () => {
                 </div>
 
                 <div className="mt-8 text-center">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                    <button             onClick={handleContinue}
+ className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
                         Continue
                     </button>
                 </div>

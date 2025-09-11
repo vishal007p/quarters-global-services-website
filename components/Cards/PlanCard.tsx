@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +16,22 @@ export interface VisaPlan {
 }
 
 const PlanCard = ({ plan }: { plan: VisaPlan }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentQuery = Object.fromEntries(searchParams.entries());
   const primaryColor = '#D20F21';
+
+  const handleApplyNow = () => {
+    const updatedQuery = {
+      ...currentQuery,
+      planId: plan.id.toString(),
+      subcationId: "12345"  // Example custom param you want to send
+    };
+
+    const queryString = new URLSearchParams(updatedQuery).toString();
+
+    router.push(`/visa/additional-services?${queryString}`);
+  };
 
   return (
     <Card
@@ -59,6 +77,7 @@ const PlanCard = ({ plan }: { plan: VisaPlan }) => {
 
       <CardFooter className="px-4 pb-4">
         <Button
+          onClick={handleApplyNow}
           className={`
             w-full bg-[${primaryColor}] text-white 
             hover:bg-red-700 
