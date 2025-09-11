@@ -76,13 +76,10 @@ const PlanCard = ({ plan }: { plan: VisaPlan }) => {
       </CardContent>
 
       <CardFooter className="px-4 pb-4">
+      
         <Button
           onClick={handleApplyNow}
-          className={`
-            w-full bg-[${primaryColor}] text-white 
-            hover:bg-red-700 
-            transition-colors duration-300
-          `}
+          className="inline-flex items-center px-6 py-3 rounded-full border border-gray-400 bg-transparent hover:text-white text-black font-semibold gap-2 hover:bg-[#D31021] transition-colors duration-200"
         >
           Apply Now
         </Button>
