@@ -1,20 +1,15 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const apiSlice = createApi({
-  reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.example.com/' }),
+// Define your API
+export const api = createApi({
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({ baseUrl: "https://jsonplaceholder.typicode.com" }),
   endpoints: (builder) => ({
-    getImages: builder.query<string[], void>({
-      query: () => '/images',
-    }),
-    uploadImage: builder.mutation<{ url: string }, FormData>({
-      query: (formData) => ({
-        url: '/upload',
-        method: 'POST',
-        body: formData,
-      }),
+    getPosts: builder.query<any[], void>({
+      query: () => "/posts", // GET /posts
     }),
   }),
 });
 
-export const { useGetImagesQuery, useUploadImageMutation } = apiSlice;
+// Export hooks for usage in components
+export const { useGetPostsQuery } = api;

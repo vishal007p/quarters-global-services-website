@@ -5,7 +5,8 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
-import React, { useState } from 'react'
+import { useSearchParams } from 'next/navigation';
+import React from 'react'
 
 const visaServices = [
     {
@@ -107,50 +108,50 @@ const visaServices = [
 ];
 
 const testimonials = [
-  {
-    name: "Devon Lane",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-  },
-  {
-    name: "Kathryn Murphy",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
+    {
+        name: "Devon Lane",
+        image: "https://randomuser.me/api/portraits/men/1.jpg",
+        text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
+    },
+    {
+        name: "Kathryn Murphy",
+        image: "https://randomuser.me/api/portraits/women/2.jpg",
+        text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
+    },
+    {
+        name: "Annette Black",
+        image: "https://randomuser.me/api/portraits/women/3.jpg",
+        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+    },
+    {
+        name: "Annette Black",
+        image: "https://randomuser.me/api/portraits/women/3.jpg",
+        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+    },
 ];
 
 const faqData = [
-  {
-    question: "Can I apply for a passport online through Quartus?",
-    answer:
-      "Yes! We help you complete your application digitally and guide you through the submission process, including document uploads and form preparation.",
-  },
-  {
-    question: "What documents are required for a new passport?",
-    answer: "You will typically need proof of identity, proof of citizenship, and passport-sized photos.",
-  },
-  {
-    question: "What if my passport is damaged or unreadable?",
-    answer: "You may need to apply for a replacement with additional documentation.",
-  },
-  {
-    question: "Do I need to send my original passport for renewal or updates?",
-    answer: "Yes, original passports are generally required during renewal.",
-  },
-  {
-    question: "How long does passport processing take?",
-    answer: "Processing times vary by country but usually take between 2 to 8 weeks.",
-  },
+    {
+        question: "Can I apply for a passport online through Quartus?",
+        answer:
+            "Yes! We help you complete your application digitally and guide you through the submission process, including document uploads and form preparation.",
+    },
+    {
+        question: "What documents are required for a new passport?",
+        answer: "You will typically need proof of identity, proof of citizenship, and passport-sized photos.",
+    },
+    {
+        question: "What if my passport is damaged or unreadable?",
+        answer: "You may need to apply for a replacement with additional documentation.",
+    },
+    {
+        question: "Do I need to send my original passport for renewal or updates?",
+        answer: "Yes, original passports are generally required during renewal.",
+    },
+    {
+        question: "How long does passport processing take?",
+        answer: "Processing times vary by country but usually take between 2 to 8 weeks.",
+    },
 ];
 
 
@@ -193,15 +194,18 @@ const features = [
     },
 ];
 
-
 const page = () => {
-    const [activeTab, setActiveTab] = useState("visa");
+    const searchParams = useSearchParams();
+    const citizenship = searchParams.get("citizenship") || "U.S."; // fallback
     return (
         <>
             <BannerLayout videoSrc="/homeBg.mp4">
-                <h4 className=" bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">Fast, Secure U.S. Passport Services
+                <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
+                    Fast, Secure {citizenship} Passport Services
                 </h4>
-                <h1 className=" text-4xl font-bold mb-4">We Handle Everything</h1>
+                <h1 className="text-4xl font-bold mb-4">
+                    We Handle Everything
+                </h1>
             </BannerLayout>
 
             <section className="py-12 px-4 lg:px-28  ">
@@ -270,7 +274,7 @@ const page = () => {
             </div>
 
 
-  <FAQSection items={faqData}/>
+            <FAQSection items={faqData} />
 
         </>
     )

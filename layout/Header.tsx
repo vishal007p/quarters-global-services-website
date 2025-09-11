@@ -8,7 +8,7 @@ import {   usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 
 const navItems = [
-  { label: "Visa", path: "/" },
+  { label: "Visa", path: "/visa" },
   { label: "Passport", path: "/passport" },
   { label: "E-Visa", path: "/e-visa" },
   { label: "Apostille & Legalization", path: "/apostille" },
@@ -26,7 +26,7 @@ const Header = () => {
       <div className="max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <Image src="/logo.png" alt="Quartus Logo" width={120} height={40} />
+          <Image src="/logo.png" alt="Quartus Logo" width={120} height={40} onClick={()=> router.push("/")} className="cursor-pointer" />
         </div>
 
         {/* Navigation */}
@@ -39,7 +39,7 @@ const Header = () => {
                 currentPath === item.path
                   ? "text-blue-600 font-semibold"
                   : "hover:text-blue-600"
-              } transition`}
+              } transition  cursor-pointer `}
             >
               {item.label}
             </button>

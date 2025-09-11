@@ -5,102 +5,65 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
-import { useSearchParams } from 'next/navigation';
-import React  from 'react'
+import React, { useState } from 'react'
 
-const visaServices = [
+const apostilleServices = [
   {
-    title: "New Passport Application",
-    description: "For first-time applicants or children under 16",
+    title: "Fast Apostille",
+    description: "Quick processing for urgent documents",
     iconColor: "#96C6FF",
     icon: (
       <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
+        {/* Add inner icon paths for 'fast' here */}
       </svg>
     ),
     link: "#",
   },
   {
-    title: "Passport Renewal",
-    description: "For expired or expiring passports (adult renewals)",
+    title: "Secure Apostille",
+    description: "Guaranteed safe handling of your documents",
     iconColor: "#FFB6B6",
     icon: (
       <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
+        {/* Add inner icon paths for 'secure' here */}
       </svg>
     ),
     link: "#",
   },
   {
-    title: "Lost Passport",
-    description: "Secure replacement with identity safeguards",
+    title: "Document Legalization",
+    description: "Make your documents legally valid internationally",
     iconColor: "#96C6FF",
     icon: (
       <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
+        {/* Add inner icon paths for 'legalization' here */}
       </svg>
     ),
     link: "#",
   },
   {
-    title: "Child Passport",
-    description: "Expert handling for minors under 16",
+    title: "Certified Translation",
+    description: "Translation services for legal & official documents",
     iconColor: "#FFB6B6",
     icon: (
       <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
+        {/* Add inner icon paths for 'translation' here */}
       </svg>
     ),
     link: "#",
   },
   {
-    title: "Second Passport",
-    description: "Hassle-free application or reissue process",
-    iconColor: "#FFB6B6",
-    icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
-      </svg>
-    ),
-    link: "#",
-  },
-  {
-    title: "Name Change",
-    description: "Make your documents valid internationally",
+    title: "Authentication Services",
+    description: "Verify your documents with government authorities",
     iconColor: "#96C6FF",
     icon: (
       <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
-      </svg>
-    ),
-    link: "#",
-  },
-  {
-    title: "Damaged Passport",
-    description: "Make your documents valid internationally",
-    iconColor: "#FFB6B6",
-    icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="74" height="74" rx="16" fill="#FFB6B6" />
-        {/* Add the inner icon paths here */}
-      </svg>
-    ),
-    link: "#",
-  },
-  {
-    title: "Stolen Passport",
-    description: "Make your documents valid internationally",
-    iconColor: "#96C6FF",
-    icon: (
-      <svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="74" height="74" rx="16" fill="#96C6FF" />
-        {/* Add the inner icon paths here */}
+        {/* Add inner icon paths for 'authentication' here */}
       </svg>
     ),
     link: "#",
@@ -196,23 +159,19 @@ const features = [
 
 
 const page = () => {
-  const searchParams = useSearchParams();
-  const country = searchParams.get("country") || "Visa Services"; // fallback text
   return (
     <>
-      <BannerLayout videoSrc="/homeBg.mp4">
-        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
-          Fast, Hassle-Free {country} Visa Services
+      <BannerLayout bg="/apostilleServices.jpg">
+        <h4 className=" bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">Fast, Secure Apostille &
+          <br></br>Document Legalization Services
         </h4>
-        <h1 className="text-4xl font-bold mb-4">
-          We help U.S. citizens apply for tourist, business, student, and<br />
-          work visas—accurately, securely, and on time.
-        </h1>
+        <h1 className=" text-4xl font-bold mb-4">We legalize your U.S. documents for international use with complete handling—no stress, no delays.</h1>
       </BannerLayout>
+
       <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10 items-center">
           {/* Left: Text and Image */}
-          {visaServices.map((service, index) => (
+          {apostilleServices.map((service, index) => (
             <VisaServiceCard
               key={index}
               icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -228,6 +187,7 @@ const page = () => {
               description={service.description}
             />
           ))}
+
         </div>
       </section>
 

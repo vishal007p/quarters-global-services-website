@@ -33,7 +33,6 @@ export default function RootLayout({
         </ReduxProvider>
         <Footer />
         <NextTopLoader />
-
       </body>
     </html>
   );
