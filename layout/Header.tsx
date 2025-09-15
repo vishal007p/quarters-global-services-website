@@ -4,19 +4,17 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MdGTranslate } from "react-icons/md";
 import GoogleTranslate from "@/components/GoogleTranslate";
-import {   usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
-
-const navItems = [
-  { label: "Visa", path: "/visa" },
-  { label: "Passport", path: "/passport" },
-  { label: "E-Visa", path: "/e-visa" },
-  { label: "Apostille & Legalization", path: "/apostille" },
-  { label: "Services", path: "/services" },
-  { label: "About Us", path: "/about" },
-];
+import { useGetPlatformServicesQuery } from "@/services/platformApi";
 
 const Header = () => {
+  const { data, isLoading, isError } = useGetPlatformServicesQuery({
+    page: 1,
+    limit: 20,
+    category: 1,
+  });
+
   const [showTranslate, setShowTranslate] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
@@ -24,26 +22,40 @@ const Header = () => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
+
         {/* Logo */}
         <div className="flex items-center">
-          <Image src="/logo.png" alt="Quartus Logo" width={120} height={40} onClick={()=> router.push("/")} className="cursor-pointer" />
+          <Image
+            src="/logo.png"
+            alt="Quartus Logo"
+            width={120}
+            height={40}
+            onClick={() => router.push("/")}
+            className="cursor-pointer"
+          />
         </div>
 
-        {/* Navigation */}
+        {/* Dynamic Navigation */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-800">
-          {navItems.map((item) => (
-            <button
-              key={item.label}
-              onClick={() => router.push(item.path)}
-              className={`${
-                currentPath === item.path
-                  ? "text-blue-600 font-semibold"
-                  : "hover:text-blue-600"
-              } transition  cursor-pointer `}
-            >
-              {item.label}
-            </button>
-          ))}
+
+          {isLoading && <span>Loading services...</span>}
+          {isError && <span>Error loading services</span>}
+
+          {data?.data?.data
+            ?.filter((service: any) => service.isDisplayedOnNavbar === true)
+            .map((service: any) => (
+              <button
+                key={service._id}
+                onClick={() => router.push(`/service/${service._id}`)}
+                className={`${
+                  currentPath === `/service/${service._id}`
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
+                } transition cursor-pointer`}
+              >
+                {service.displayName}
+              </button>
+            ))}
         </nav>
 
         {/* Right Section */}

@@ -5,6 +5,7 @@ import { emptySplitApi } from "./rtk/emptySplitApi.ts";
 export const store = configureStore({
   reducer: {
     [emptySplitApi.reducerPath]: emptySplitApi.reducer,
+    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(emptySplitApi.middleware),

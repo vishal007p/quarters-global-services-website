@@ -64,7 +64,6 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     const [citizenshipSearch, setCitizenshipSearch] = useState("");
 
     const [country, setCountry] = useState<{ id: string, code: string, name: string } | null>(null);
-    console.log(country, "country")
     const [countrySearch, setCountrySearch] = useState("");
 
     const [stateOrCountry, setStateOrCountry] = useState("");

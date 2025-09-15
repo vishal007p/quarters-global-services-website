@@ -27,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <Header />
+      
         <ReduxProvider>
+            <Header />
           {children}
+              <Footer />
         </ReduxProvider>
-        <Footer />
+    
         <NextTopLoader />
       </body>
     </html>
