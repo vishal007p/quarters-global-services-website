@@ -1,14 +1,15 @@
-import { api } from "@/services/api";
+// store.ts
 import { configureStore } from "@reduxjs/toolkit";
+import { emptySplitApi } from "./rtk/emptySplitApi.ts";
  
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    [emptySplitApi.reducerPath]: emptySplitApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    getDefaultMiddleware().concat(emptySplitApi.middleware),
 });
 
-// Type for useSelector and dispatch
+// Types for convenience
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

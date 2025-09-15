@@ -12,7 +12,7 @@ import { useState } from "react";
 import SectionHeading from "@/components/SectionTitle/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
-import { useGetPostsQuery } from "@/services/api";
+import { useGetCountriesQuery } from "@/services/countryApi";
 
 const features = [
   {
@@ -113,7 +113,8 @@ const blogPosts = [
 export default function Home() {
 
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
-  const { data, error, isLoading } = useGetPostsQuery();
+  const { data, error, isLoading } = useGetCountriesQuery();
+  console.log(data?.data?.data, "datasss")
 
 
   if (isLoading)

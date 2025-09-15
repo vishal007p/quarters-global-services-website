@@ -1,6 +1,7 @@
 import { useRouter } from "nextjs-toploader/app";
 import DropdownWrapper from "./DropdownWrapper";
 import { useState } from "react";
+import { useGetCountriesQuery } from "@/services/countryApi";
 
 
 const GoButton = ({ handleGo }: any) => (
@@ -16,6 +17,15 @@ const GoButton = ({ handleGo }: any) => (
 
 
 function DropdownForm({ activeTab, setActiveTab }: any) {
+
+
+    const { data, error, isLoading } = useGetCountriesQuery();
+
+    const apiCountries = data?.data?.data?.map((country: any) => ({
+        id: country._id,
+        code: country.code,
+        name: country.name
+    })) || [];
 
     // --- Sample Data ---
     const states = [
@@ -53,7 +63,8 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     const [citizenship, setCitizenship] = useState("");
     const [citizenshipSearch, setCitizenshipSearch] = useState("");
 
-    const [country, setCountry] = useState("");
+    const [country, setCountry] = useState<{ id: string, code: string, name: string } | null>(null);
+    console.log(country, "country")
     const [countrySearch, setCountrySearch] = useState("");
 
     const [stateOrCountry, setStateOrCountry] = useState("");
@@ -74,7 +85,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     });
 
     // --- Filters ---
-    const filteredCountries = countries.filter((option) =>
+    const filteredCountries = apiCountries.filter((option) =>
         option.name.toLowerCase().includes(countrySearch.toLowerCase())
     );
     const filteredCitizenships = citizenships.filter((option) =>
@@ -125,7 +136,8 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     const handleGo = () => {
         if (validate()) {
             if (activeTab === "visa") {
-                router.push(`/visa?citizenship=${citizenship}&country=${country}&state=${stateOrCountry}`);
+                router.push(`/visa?citizenship=${citizenship}&country=${country?.id}&state=${stateOrCountry}`
+                );
             } else if (activeTab === "passport") {
                 router.push(`/passport?type=${passportType}`);
             } else if (activeTab === "apostille") {
