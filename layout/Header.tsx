@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { MdGTranslate } from "react-icons/md";
+import { MdGTranslate, MdMenu, MdClose } from "react-icons/md";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import GoogleTranslate from "@/components/GoogleTranslate";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
@@ -16,12 +18,18 @@ const Header = () => {
   });
 
   const [showTranslate, setShowTranslate] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const router = useRouter();
   const currentPath = usePathname();
 
+  const services = data?.data?.data?.filter(
+    (service: any) => service.isDisplayedOnNavbar === true
+  );
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="w-[85%] gap-4 mx-auto px-4 py-4 flex items-center justify-between">
 
         {/* Logo */}
         <div className="flex items-center">
@@ -35,15 +43,18 @@ const Header = () => {
           />
         </div>
 
-        {/* Dynamic Navigation */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-800">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6 text-xs font-medium text-gray-800">
+          {isLoading &&
+            Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} width={100} height={20} />
+            ))}
 
-          {isLoading && <span>Loading services...</span>}
-          {isError && <span>Error loading services</span>}
+          {isError && <span className="text-red-500">Error loading services</span>}
 
-          {data?.data?.data
-            ?.filter((service: any) => service.isDisplayedOnNavbar === true)
-            .map((service: any) => (
+          {!isLoading &&
+            !isError &&
+            services?.map((service: any) => (
               <button
                 key={service._id}
                 onClick={() => router.push(`/service/${service._id}`)}
@@ -58,9 +69,18 @@ const Header = () => {
             ))}
         </nav>
 
+        {/* Mobile Hamburger Menu Button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-2xl"
+          >
+            {mobileMenuOpen ? <MdClose /> : <MdMenu />}
+          </button>
+        </div>
+
         {/* Right Section */}
-        <div className="flex items-center gap-4 text-sm text-gray-700">
-          {/* Translate Button */}
+        <div className="hidden md:flex items-center gap-4 text-sm text-gray-700">
           <div className="relative">
             <button
               onClick={() => setShowTranslate(!showTranslate)}
@@ -81,14 +101,65 @@ const Header = () => {
             </span>
           </div>
 
-          {/* Login Button */}
           <button className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
             Login
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-lg px-4 py-4">
+          {isLoading &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} width={`100%`} height={20} className="mb-2" />
+            ))}
+
+          {isError && <span className="text-red-500">Error loading services</span>}
+
+          {!isLoading &&
+            !isError &&
+            services?.map((service: any) => (
+              <button
+                key={service._id}
+                onClick={() => {
+                  router.push(`/service/${service._id}`);
+                  setMobileMenuOpen(false);
+                }}
+                className={`block w-full text-left py-2 ${
+                  currentPath === `/service/${service._id}`
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
+                }`}
+              >
+                {service.displayName}
+              </button>
+            ))}
+
+          <div className="mt-4">
+            <button
+              onClick={() => setShowTranslate(!showTranslate)}
+              className="flex items-center gap-2 w-full px-4 py-2 text-xs border border-[#BFBFBF] rounded-md bg-white hover:bg-gray-100"
+            >
+              <MdGTranslate />
+              Translate
+            </button>
+
+            {showTranslate && (
+              <div className="mt-2">
+                <GoogleTranslate />
+              </div>
+            )}
+          </div>
+
+          <button className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
+            Login
+          </button>
+        </div>
+      )}
     </header>
   );
 };
 
-export default Header;
+ 
+export default Header
