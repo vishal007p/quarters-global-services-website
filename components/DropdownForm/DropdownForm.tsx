@@ -24,6 +24,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
       id: country._id,
       code: country.code,
       name: country.name,
+      slug: country.slug
     })) || [];
 
   // --- Sample Data ---
@@ -137,7 +138,9 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
   const handleGo = () => {
     if (validate()) {
       if (activeTab === "visa") {
-        router.push(`/visa?country=${country?.id}`);
+        router.push(
+          `/visa?country=${country?.id}`
+        );
       } else if (activeTab === "passport") {
         router.push(`/passport?type=${passportType}`);
       } else if (activeTab === "apostille") {
@@ -157,11 +160,10 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
           <button
             key={tab}
             onClick={() => setActiveTab(tab as any)}
-            className={`pb-2 border-b-2 transition ${
-              activeTab === tab
+            className={`pb-2 border-b-2 transition ${activeTab === tab
                 ? "border-blue-500 text-blue-400 font-semibold"
                 : "border-transparent hover:text-blue-300"
-            }`}
+              }`}
           >
             {tab === "visa"
               ? "Expedited Visas"

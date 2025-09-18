@@ -1,7 +1,4 @@
-// rtk/countryApi.ts
-
 import { emptySplitApi } from "@/store/rtk/emptySplitApi.ts";
-
 
 export const countryApi = emptySplitApi.injectEndpoints({
     endpoints: (build) => ({
