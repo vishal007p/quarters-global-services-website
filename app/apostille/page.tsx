@@ -5,7 +5,7 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
-import React, { useState } from 'react'
+import React from 'react'
 
 const apostilleServices = [
   {
@@ -230,11 +230,11 @@ const page = () => {
           highlight="Quartus"
           align="center"
         />
-        <TestimonialSlider testimonials={testimonials} />
+        <TestimonialSlider   />
       </div>
 
 
-      <FAQSection items={faqData} />
+      <FAQSection   />
 
     </>
   )

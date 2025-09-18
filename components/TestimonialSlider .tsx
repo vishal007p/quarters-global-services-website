@@ -7,22 +7,42 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
-import SectionTitle from "./SectionTitle/SectionTitle";
-
+ 
 interface Testimonial {
   name: string;
   text: string;
   image: string;
 }
 
-interface Props {
-  testimonials: Testimonial[];
-}
+ 
+
+const testimonials = [
+  {
+    name: "Devon Lane",
+    image: "https://randomuser.me/api/portraits/men/1.jpg",
+    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
+  },
+  {
+    name: "Kathryn Murphy",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
+  },
+  {
+    name: "Annette Black",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+  },
+  {
+    name: "Annette Black",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+  },
+];
 
 // Install modules
 SwiperCore.use([Navigation, Pagination]);
 
-const TestimonialSlider: React.FC<Props> = ({ testimonials }) => {
+const TestimonialSlider: React.FC = ( ) => {
   const [currentSlide, setCurrentSlide] = useState(1);
 
   return (

@@ -2,11 +2,14 @@
 import BannerLayout from '@/components/Banner/BannerLayout'
 import VisaServiceCard from '@/components/Cards/VisaServiceCard'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection';
+import DropdownForm from '@/components/DropdownForm/DropdownForm';
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
+import WhyChoose from '@/components/WhyChoose/WhyChoose';
+import { useGetPlatformServiceByIdQuery } from '@/services/platformApi';
 import { useSearchParams } from 'next/navigation';
-import React from 'react'
+import React, { useState } from 'react'
 
 const visaServices = [
   // Tourist Visa
@@ -146,100 +149,17 @@ const visaServices = [
 ];
 
 
-
-const testimonials = [
-  {
-    name: "Devon Lane",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-  },
-  {
-    name: "Kathryn Murphy",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-];
-
-const faqData = [
-  {
-    question: "Can I apply for a passport online through Quartus?",
-    answer:
-      "Yes! We help you complete your application digitally and guide you through the submission process, including document uploads and form preparation.",
-  },
-  {
-    question: "What documents are required for a new passport?",
-    answer: "You will typically need proof of identity, proof of citizenship, and passport-sized photos.",
-  },
-  {
-    question: "What if my passport is damaged or unreadable?",
-    answer: "You may need to apply for a replacement with additional documentation.",
-  },
-  {
-    question: "Do I need to send my original passport for renewal or updates?",
-    answer: "Yes, original passports are generally required during renewal.",
-  },
-  {
-    question: "How long does passport processing take?",
-    answer: "Processing times vary by country but usually take between 2 to 8 weeks.",
-  },
-];
-
-
-const features = [
-  {
-    title: 'End-to-End Digital Process',
-    description:
-      'Skip paperwork by processing your documents in a hassle-free, secure, and intuitive environment.',
-    image: '/images/feature1.jpg',
-  },
-  {
-    title: 'Real-Time Application Tracking',
-    description:
-      'Stay informed at every stage. Get real-time updates as your application moves forward.',
-    image: '/images/feature2.jpg',
-  },
-  {
-    title: 'Expert Guidance & Support',
-    description:
-      'Access professional advisors for questions and clarifications — timely, informed, and efficient support.',
-    image: '/images/feature3.jpg',
-  },
-  {
-    title: 'Data Security You Can Trust',
-    description:
-      'We use bank-level encryption to protect your personal data and document uploads.',
-    image: '/images/feature4.jpg',
-  },
-  {
-    title: 'Seamless Access: 20+ Countries',
-    description:
-      'Apply for services across 20+ countries through one single portal, no matter where you are.',
-    image: '/images/feature5.jpg',
-  },
-  {
-    title: 'One Portal. All Services.',
-    description:
-      'Apply, upload, track, and get support — all through one central dashboard.',
-    image: '/images/feature6.jpg',
-  },
-];
-
-
 const page = () => {
   const searchParams = useSearchParams();
   const citizenship = searchParams.get("citizenship") || "";
   const country = searchParams.get("country") || "";
   const state = searchParams.get("state") || "";
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
+  const { data, isLoading, error } = useGetPlatformServiceByIdQuery(country);
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching service</p>;
+
+
   return (
     <>
       <BannerLayout videoSrc="/homeBg.mp4">
@@ -250,6 +170,8 @@ const page = () => {
           We help U.S. citizens apply for tourist, business, student, and<br />
           work visas—accurately, securely, and on time.
         </h1>
+
+        <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
       </BannerLayout>
 
       <section className="py-12 px-4 lg:px-28  ">
@@ -282,35 +204,7 @@ const page = () => {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
-        <SectionTitle
-          subtitle="Our services"
-          title="Why Choose Quartus Global Service"
-          highlight="Quartus"
-          align="center"
-        />
-
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg"
-              >
-                <img
-                  src={"/home.png"}
-                  alt={feature.title}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <WhyChoose/>
 
       <CommitmentSection />
 
@@ -321,11 +215,11 @@ const page = () => {
           highlight="Quartus"
           align="center"
         />
-        <TestimonialSlider testimonials={testimonials} />
+        <TestimonialSlider  />
       </div>
 
 
-      <FAQSection items={faqData} />
+      <FAQSection   />
 
     </>
   )

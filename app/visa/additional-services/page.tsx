@@ -172,7 +172,7 @@ const page = () => {
                     highlight="Quartus"
                     align="center"
                 />
-                <TestimonialSlider testimonials={testimonials} />
+                <TestimonialSlider   />
             </div>
         </>
     )

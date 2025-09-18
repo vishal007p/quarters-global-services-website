@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-
+ 
 const steps = [
   { id: 1, label: "Traveler Info" },
   { id: 2, label: "Shipping/Billing" },
@@ -15,6 +15,7 @@ const steps = [
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<any>({});
+
 
   const next = (data: any) => {
     setFormData((prev: any) => ({ ...prev, ...data }));

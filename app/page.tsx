@@ -114,21 +114,9 @@ export default function Home() {
 
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
   const { data, error, isLoading } = useGetCountriesQuery();
-  console.log(data?.data?.data, "datasss")
+ 
 
-
-  if (isLoading)
-    return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-black z-50">
-        {/* Spinner */}
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white mb-4"></div>
-        {/* Blinking Loading Text */}
-        <p className="text-white text-xl font-bold animate-pulse">
-          Loading...
-        </p>
-      </div>
-    );
-
+ 
 
   // Full screen error
   if (error)
