@@ -7,16 +7,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
- 
+
 interface Testimonial {
   name: string;
   text: string;
   image: string;
 }
 
- 
+interface TestimonialSliderProps {
+  testimonials?: Testimonial[];
+}
 
-const testimonials = [
+const defaultTestimonials = [
   {
     name: "Devon Lane",
     image: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -42,12 +44,13 @@ const testimonials = [
 // Install modules
 SwiperCore.use([Navigation, Pagination]);
 
-const TestimonialSlider: React.FC = ( ) => {
+const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
+  testimonials = defaultTestimonials,
+}) => {
   const [currentSlide, setCurrentSlide] = useState(1);
 
   return (
     <div className="max-w-7xl mx-auto px-10 py-12 h-[400px] relative">
-      
       <Swiper
         spaceBetween={30}
         slidesPerView={1}

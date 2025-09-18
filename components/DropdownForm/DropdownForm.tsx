@@ -1,7 +1,8 @@
 import { useRouter } from "nextjs-toploader/app";
-import DropdownWrapper from "./DropdownWrapper";
+// import DropdownWrapper from "./DropdownWrapper";
 import { useState } from "react";
 import { useGetCountriesQuery } from "@/services/countryApi";
+import DropdownWrapper from "./DropdownWrapper";
 
 const GoButton = ({ handleGo }: any) => (
   <div className="w-full md:w-auto flex items-center mt-4 md:mt-0">
@@ -16,7 +17,6 @@ const GoButton = ({ handleGo }: any) => (
 
 function DropdownForm({ activeTab, setActiveTab }: any) {
   const { data, error, isLoading } = useGetCountriesQuery();
-
 
   const apiCountries =
     //@ts-ignore
@@ -39,7 +39,6 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     { id: 9, name: "Florida" },
     { id: 10, name: "Georgia" },
   ];
-
 
   const passportOptions = [
     { id: 1, name: "Regular Passport" },
@@ -65,7 +64,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     code: string;
     name: string;
   } | null>(null);
-  console.log(country, "country")
+  console.log(country, "country");
   const [countrySearch, setCountrySearch] = useState("");
 
   const [stateOrCountry, setStateOrCountry] = useState("");
@@ -89,7 +88,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
   const filteredCountries = apiCountries.filter((option: any) =>
     option.name.toLowerCase().includes(countrySearch.toLowerCase())
   );
-  console.log(filteredCountries, "filteredCountries")
+  console.log(filteredCountries, "filteredCountries");
   const filteredCitizenships = apiCountries.filter((option: any) =>
     option.name.toLowerCase().includes(citizenshipSearch.toLowerCase())
   );
@@ -138,9 +137,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
   const handleGo = () => {
     if (validate()) {
       if (activeTab === "visa") {
-        router.push(
-          `/visa?country=${country?.id}`
-        );
+        router.push(`/visa?country=${country?.id}`);
       } else if (activeTab === "passport") {
         router.push(`/passport?type=${passportType}`);
       } else if (activeTab === "apostille") {
@@ -160,16 +157,17 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
           <button
             key={tab}
             onClick={() => setActiveTab(tab as any)}
-            className={`pb-2 border-b-2 transition ${activeTab === tab
+            className={`pb-2 border-b-2 transition ${
+              activeTab === tab
                 ? "border-blue-500 text-blue-400 font-semibold"
                 : "border-transparent hover:text-blue-300"
-              }`}
+            }`}
           >
             {tab === "visa"
               ? "Expedited Visas"
               : tab === "passport"
-                ? "Expedited Passport"
-                : "Apostille & Legalization"}
+              ? "Expedited Passport"
+              : "Apostille & Legalization"}
           </button>
         ))}
       </div>
