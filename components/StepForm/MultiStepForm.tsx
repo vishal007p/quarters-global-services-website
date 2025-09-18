@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
- 
+import { useGetPlatformServiceCategoryPackageAddonsQuery } from "@/services/platformCategoryPackageAddonApi";
+import { useSearchParams } from "next/navigation";
+
 const steps = [
   { id: 1, label: "Traveler Info" },
   { id: 2, label: "Shipping/Billing" },
@@ -15,7 +17,14 @@ const steps = [
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<any>({});
+  const searchParams = useSearchParams();
+  const slug = searchParams.get("slug") || "";
+  const { data, isLoading, error } =
+    useGetPlatformServiceCategoryPackageAddonsQuery({
+      platformServiceCategoryPackageSlug: slug,
+    });
 
+    console.log(data,  "datssa")
 
   const next = (data: any) => {
     setFormData((prev: any) => ({ ...prev, ...data }));

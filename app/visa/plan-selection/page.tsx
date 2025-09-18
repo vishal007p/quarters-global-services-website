@@ -11,47 +11,21 @@ import { useSearchParams } from 'next/navigation';
 import React from 'react'
 
  
-const visaPlans: VisaPlan[] = [
-    {
-        id: 1,
-        title: "Standard Processing",
-        processingTime: "15-20 Business Days",
-        price: "$420.00",
-        serviceFee: "No service fee",
-    },
-    {
-        id: 2,
-        title: "Priority",
-        processingTime: "8-10 Processing Days",
-        price: "$620.00",
-        serviceFee: "Includes service fee",
-        isPopular: true,
-        isPriority: true,
-    },
-    {
-        id: 3,
-        title: "Express Processing",
-        processingTime: "3-5 Business Days",
-        price: "$850.00",
-        serviceFee: "Includes premium service fee",
-    },
-];
- 
 
 const page = () => {
     const searchParams = useSearchParams();
 
-    const country = searchParams.get("country") || "";
-    const planId = searchParams.get("planId") || "";
+    const country = searchParams.get("toCountrySlug") || "";
+    const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
 
    
     const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery({
-        platformServiceCategoryId: planId,
-        page: 1,
-        limit: 10,
-        country,
+        platformServiceCategorySlug: platformServiceCategorySlug,
+        toCountrySlug: country,
+       
     });
-
+    const packages = data?.data?.data;
+ 
     if (isLoading) return <p>Loading...</p>;
     // if (error) return <p>Something went wrong</p>;
 
@@ -71,9 +45,9 @@ const page = () => {
             <div className="max-w-6xl mx-auto my-16 px-4">
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {visaPlans.map((plan, index) => (
+                    {packages.map((plan:VisaPlan, index:any) => (
                         <div
-                            key={plan.id}
+                            key={index}
                             className={`${index % 2 === 1 ? 'mt-4' : 'mt-0'}`} // Apply 16px margin-top to odd-indexed cards
                         >
                             <PlanCard plan={plan} />

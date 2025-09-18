@@ -9,8 +9,8 @@ export const platformApi = emptySplitApi.injectEndpoints({
         }),
 
          getPlatformServiceById: build.query<any, string>({
-            query: (platformServiceId) =>
-                `/platform-service/get-platform-service/?platformServiceId=${platformServiceId}`,
+            query: (toCountrySlug) =>
+                `/platform-service/get-platform-service/?toCountrySlug=${toCountrySlug}`,
         }),
     }),
     overrideExisting: false,

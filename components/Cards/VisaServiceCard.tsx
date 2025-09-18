@@ -1,6 +1,7 @@
 import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
-
+import { useRouter } from "next/navigation";
+ 
 interface VisaServiceCardProps {
     icon: React.ReactNode;
     title: string;
@@ -13,8 +14,8 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
     title,
     description,
     link,
-    
 }) => {
+    const router = useRouter()
     return (
         <div className="max-w-sm p-4 rounded-xl border border-gray-200 h-[320px]  hover:shadow-md transition-shadow  flex items-center">
             <div className="flex flex-col items-start gap-3">
@@ -35,7 +36,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
                         <path d="M5.63672 18.864L18.3646 6.13611M18.3646 6.13611H11.2939M18.3646 6.13611L18.3643 13.2072" stroke="#444444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>}
                     onClick={() => {
-                        if (link) window.location.href = link; // navigate to link
+                        if (link) router.push(link); // navigate to link
                     }} />
             </div>
         </div>

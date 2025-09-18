@@ -1,9 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import {useSearchParams } from "next/navigation";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from "nextjs-toploader/app";
 
 export interface VisaPlan {
   id: number;
@@ -22,15 +23,7 @@ const PlanCard = ({ plan }: { plan: VisaPlan }) => {
   const primaryColor = '#D20F21';
 
   const handleApplyNow = () => {
-    const updatedQuery = {
-      ...currentQuery,
-      planId: plan.id.toString(),
-      subcationId: "12345"  // Example custom param you want to send
-    };
-
-    const queryString = new URLSearchParams(updatedQuery).toString();
-
-    router.push(`/visa/additional-services?${queryString}`);
+    router.push(`/checkout?slug=${plan.slug}`);
   };
 
   return (
@@ -50,29 +43,29 @@ const PlanCard = ({ plan }: { plan: VisaPlan }) => {
         `}
       >
         <CardTitle className="flex justify-between items-center text-lg font-semibold">
-          {plan.title}
-          {plan.isPopular && (
+          {plan.name}
+          {/* {plan.isPopular && (
             <Badge className={`bg-[${primaryColor}] text-white px-2 py-1 rounded-full`}>
               Popular
             </Badge>
-          )}
+          )} */}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="flex flex-col justify-between flex-grow py-6 px-4">
-        <div className="mb-4">
+        <div className="mb-1">
           <Badge
             variant="outline"
             className={`
               text-sm px-2 py-1 rounded 
-              ${plan.isPriority ? 'bg-amber-100 text-amber-800 font-medium' : 'bg-gray-100 text-gray-800'}
+              ${plan.priceDescription ? 'bg-amber-100 text-amber-800 font-medium' : 'bg-gray-100 text-gray-800'}
             `}
           >
-            {plan.processingTime}
+            {plan.priceDescription}
           </Badge>
         </div>
-        <div className="text-3xl font-bold text-[${primaryColor}]">{plan.price}</div>
-        <p className="text-sm text-muted-foreground mt-2">{plan.serviceFee}</p>
+        <div className="text-3xl font-bold text-[${primaryColor}]">${plan.price}</div>
+        <p className="text-sm text-muted-foreground mt-2">{plan.priceDescription}</p>
       </CardContent>
 
       <CardFooter className="px-4 pb-4">

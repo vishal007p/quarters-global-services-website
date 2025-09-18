@@ -17,13 +17,14 @@ const GoButton = ({ handleGo }: any) => (
 function DropdownForm({ activeTab, setActiveTab }: any) {
   const { data, error, isLoading } = useGetCountriesQuery();
 
-
+  console.log(data, "datasss")
   const apiCountries =
     //@ts-ignore
     data?.data?.data?.map((country: any) => ({
       id: country._id,
       code: country.code,
       name: country.name,
+      slug: country.slug
     })) || [];
 
   // --- Sample Data ---
@@ -139,7 +140,7 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     if (validate()) {
       if (activeTab === "visa") {
         router.push(
-          `/visa?country=${country?.id}`
+          `/visa?toCountrySlug=${country?.slug}`
         );
       } else if (activeTab === "passport") {
         router.push(`/passport?type=${passportType}`);
@@ -161,8 +162,8 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
             key={tab}
             onClick={() => setActiveTab(tab as any)}
             className={`pb-2 border-b-2 transition ${activeTab === tab
-                ? "border-blue-500 text-blue-400 font-semibold"
-                : "border-transparent hover:text-blue-300"
+              ? "border-blue-500 text-blue-400 font-semibold"
+              : "border-transparent hover:text-blue-300"
               }`}
           >
             {tab === "visa"

@@ -1,5 +1,6 @@
 import React from 'react'
 import SectionTitle from '../SectionTitle/SectionTitle'
+import Image from 'next/image';
 const features = [
   {
     title: 'End-to-End Digital Process',
@@ -39,39 +40,40 @@ const features = [
   },
 ];
 
-
 export const WhyChoose = () => {
-    return (
-        <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
-            <SectionTitle
-                subtitle="Our services"
-                title="Why Choose Quartus Global Service"
-                highlight="Quartus"
-                align="center"
-            />
+  return (
+    <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
+      <SectionTitle
+        subtitle="Our services"
+        title="Why Choose Quartus Global Service"
+        highlight="Quartus"
+        align="center"
+      />
 
-            <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {features.map((feature, index) => (
-                        <div
-                            key={index}
-                            className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg"
-                        >
-                            <img
-                                src={"/home.png"}
-                                alt={feature.title}
-                                className="w-full h-64 object-cover"
-                            />
-                            <div className="p-4">
-                                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                                <p className="text-sm text-gray-600">{feature.description}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg"
+            >
+              <Image
+                width={150}
+                height={150}
+                src={"/home.png"}
+                alt={feature.title}
+                className="w-full h-64 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.description}</p>
+              </div>
             </div>
-        </section>
-    )
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 export default WhyChoose
