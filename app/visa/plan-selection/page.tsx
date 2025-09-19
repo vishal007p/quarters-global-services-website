@@ -10,24 +10,18 @@ import { useGetPlatformServiceCategoryPackagesQuery } from '@/services/platformC
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
 
- 
-
-const page = () => {
+const Page = () => {
     const searchParams = useSearchParams();
-
     const country = searchParams.get("toCountrySlug") || "";
     const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
-
-   
     const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery({
         platformServiceCategorySlug: platformServiceCategorySlug,
         toCountrySlug: country,
-       
+
     });
     const packages = data?.data?.data;
- 
     if (isLoading) return <p>Loading...</p>;
-    // if (error) return <p>Something went wrong</p>;
+    if (error) return <p>Something went wrong</p>;
 
     return (
         <>
@@ -40,12 +34,9 @@ const page = () => {
                     work visas—accurately, securely, and on time.
                 </h1>
             </BannerLayout>
-
-
             <div className="max-w-6xl mx-auto my-16 px-4">
-
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {packages.map((plan:VisaPlan, index:any) => (
+                    {packages.map((plan: VisaPlan, index: number) => (
                         <div
                             key={index}
                             className={`${index % 2 === 1 ? 'mt-4' : 'mt-0'}`} // Apply 16px margin-top to odd-indexed cards
@@ -55,11 +46,7 @@ const page = () => {
                     ))}
                 </div>
             </div>
-
-
-
             <CommitmentSection />
-
             <div className="max-w-7xl mx-auto px-10 py-12  ">
                 <SectionTitle
                     subtitle="Our Testimonials"
@@ -67,12 +54,11 @@ const page = () => {
                     highlight="Quartus"
                     align="center"
                 />
-                <TestimonialSlider   />
+                <TestimonialSlider />
             </div>
-
-            <FAQSection   />
+            <FAQSection />
         </>
     )
 }
 
-export default page
+export default Page

@@ -11,144 +11,7 @@ import WhyChoose from '@/components/WhyChoose/WhyChoose';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 
-// const visaServices = [
-//   // Tourist Visa
-//   {
-//     id: 101,
-//     title: "Tourist Visa",
-//     description: "Short-term visa for leisure travel",
-//     iconColor: "#FFD580",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <circle cx="37" cy="37" r="37" fill="#FFD580" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=101`,
-//   },
-
-//   // Business Visa
-//   {
-//     id: 102,
-//     title: "Business Visa",
-//     description: "For attending business meetings and conferences",
-//     iconColor: "#80FFD4",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <rect width="74" height="74" rx="12" fill="#80FFD4" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=102`,
-//   },
-
-//   // Student Visa
-//   {
-//     id: 103,
-//     title: "Student Visa",
-//     description: "For studying abroad in accredited institutions",
-//     iconColor: "#A180FF",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <path d="M0 0h74v74H0z" fill="#A180FF" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=103`,
-//   },
-
-//   // Work Visa
-//   {
-//     id: 104,
-//     title: "Work Visa",
-//     description: "For long-term employment abroad",
-//     iconColor: "#FF80C0",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <rect width="74" height="74" rx="10" fill="#FF80C0" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=104`,
-//   },
-
-//   // Medical Visa
-//   {
-//     id: 105,
-//     title: "Medical Visa",
-//     description: "For medical treatment or consultations abroad",
-//     iconColor: "#80C0FF",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <rect width="74" height="74" rx="20" fill="#80C0FF" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=105`,
-//   },
-
-//   // Transit Visa
-//   {
-//     id: 106,
-//     title: "Transit Visa",
-//     description: "For temporary stay while en route to another country",
-//     iconColor: "#FFD080",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <path d="M0 0h74v74H0z" fill="#FFD080" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=106`,
-//   },
-
-//   // Diplomatic Visa
-//   {
-//     id: 107,
-//     title: "Diplomatic Visa",
-//     description: "For government officials on official duty",
-//     iconColor: "#80FFA0",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <rect width="74" height="74" rx="15" fill="#80FFA0" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=107`,
-//   },
-
-//   // Family Reunion Visa
-//   {
-//     id: 108,
-//     title: "Family Reunion Visa",
-//     description: "To join family members legally residing abroad",
-//     iconColor: "#FFA080",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <circle cx="37" cy="37" r="37" fill="#FFA080" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=108`,
-//   },
-
-//   // Permanent Residency Visa
-//   {
-//     id: 109,
-//     title: "Permanent Residency Visa",
-//     description: "For long-term stay and work with residency privileges",
-//     iconColor: "#80FFB6",
-//     icon: (
-//       <svg width="74" height="74" viewBox="0 0 74 74" fill="none">
-//         <rect width="74" height="74" rx="10" fill="#80FFB6" />
-//       </svg>
-//     ),
-//     getLink: ({ citizenship, country, state }: { citizenship: string; country: string; state: string }) =>
-//       `/visa/plan-selection?citizenship=${citizenship}&country=${country}&state=${state}&planId=109`,
-//   },
-// ];
-
-
+ 
 interface services {
   id: string,
   code: string,
@@ -157,11 +20,11 @@ interface services {
 }
 
 
-const page = () => {
+const Page = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "";
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
-  const { data, isLoading, error } = useGetPlatformServiceCategoriesQuery({
+  const { data, } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "visa",
     toCountrySlug: country,
   });
@@ -232,4 +95,4 @@ const page = () => {
     </>
   )
 }
-export default page
+export default Page

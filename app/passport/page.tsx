@@ -19,11 +19,11 @@ interface services {
 }
 
 
-const page = () => {
+const Page = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "";
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
-  const { data, isLoading, error } = useGetPlatformServiceCategoriesQuery({
+  const { data,   } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "visa",
     toCountrySlug: country,
   });
@@ -87,4 +87,4 @@ const page = () => {
     </>
   )
 }
-export default page
+export default Page

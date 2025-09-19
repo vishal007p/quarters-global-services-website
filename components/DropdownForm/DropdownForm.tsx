@@ -16,7 +16,7 @@ const GoButton = ({ handleGo }: any) => (
 );
 
 function DropdownForm({ activeTab, setActiveTab }: any) {
-  const { data, error, isLoading } = useGetCountriesQuery();
+  const { data,  } = useGetCountriesQuery();
 
   const apiCountries =
     //@ts-ignore
@@ -64,8 +64,8 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
     id: string;
     code: string;
     name: string;
+    slug: string ;
   } | null>(null);
-  console.log(country, "country");
   const [countrySearch, setCountrySearch] = useState("");
 
   const [stateOrCountry, setStateOrCountry] = useState("");
@@ -161,15 +161,15 @@ function DropdownForm({ activeTab, setActiveTab }: any) {
             key={tab}
             onClick={() => setActiveTab(tab as any)}
             className={`pb-2 border-b-2 transition ${activeTab === tab
-                ? "border-blue-500 text-blue-400 font-semibold"
-                : "border-transparent hover:text-blue-300"
+              ? "border-blue-500 text-blue-400 font-semibold"
+              : "border-transparent hover:text-blue-300"
               }`}
           >
             {tab === "visa"
               ? "Expedited Visas"
               : tab === "passport"
-              ? "Expedited Passport"
-              : "Apostille & Legalization"}
+                ? "Expedited Passport"
+                : "Apostille & Legalization"}
           </button>
         ))}
       </div>

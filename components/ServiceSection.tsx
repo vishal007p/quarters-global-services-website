@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 
 interface ServiceSectionProps {
@@ -12,7 +13,6 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   title,
   description,
   buttonText,
-  imageSrc,
   imagePosition,
 }) => {
   return (
@@ -22,7 +22,9 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
         {imagePosition === "left" && (
           <>
             <div className="lg:w-1/2 w-full">
-              <img
+              <Image
+                width={150}
+                height={150}
                 src={"/service.jpg"}
                 alt={title}
                 className="w-full h-auto rounded-xl shadow-lg object-cover transition-transform duration-300 hover:scale-105"
@@ -53,9 +55,10 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               )}
             </div>
             <div className="lg:w-1/2 w-full order-1 lg:order-2">
-              <img
-                               src={"/service.jpg"}
-
+              <Image
+                width={150}
+                height={150}
+                src={"/service.jpg"}
                 alt={title}
                 className="w-full h-auto rounded-xl shadow-lg object-cover transition-transform duration-300 hover:scale-105"
               />

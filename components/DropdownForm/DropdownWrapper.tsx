@@ -24,6 +24,7 @@ interface DropdownOption {
   id?: string | number;
   code?: string;
   name: string;
+  slug: string
 }
 
 interface DropdownWrapperProps {
@@ -35,6 +36,7 @@ interface DropdownWrapperProps {
   errors?: string;
   placeholder: string;
   type?: string;
+  
 }
 
 const DropdownWrapper = ({

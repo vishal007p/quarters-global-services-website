@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
+import Image from "next/image";
 
 interface Testimonial {
   name: string;
@@ -34,15 +33,12 @@ const defaultTestimonials = [
     image: "https://randomuser.me/api/portraits/women/3.jpg",
     text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
   },
-  {
+   {
     name: "Annette Black",
     image: "https://randomuser.me/api/portraits/women/3.jpg",
     text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
   },
 ];
-
-// Install modules
-SwiperCore.use([Navigation, Pagination]);
 
 const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   testimonials = defaultTestimonials,
@@ -52,6 +48,7 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-10 py-12 h-[400px] relative">
       <Swiper
+        modules={[Navigation, Pagination]}  
         spaceBetween={30}
         slidesPerView={1}
         breakpoints={{
@@ -64,15 +61,19 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
           prevEl: ".swiper-button-prev-custom",
         }}
         onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex + 1)}
+
+
       >
         {testimonials.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="bg-white shadow-md rounded-xl p-6 h-full flex flex-col justify-between text-center">
               <div className="flex justify-center mb-4">
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
                   className="w-16 h-16 rounded-full border-4 border-yellow-300"
+                  width={150}
+                  height={150}
                 />
               </div>
               <h4 className="font-semibold text-lg">{item.name}</h4>

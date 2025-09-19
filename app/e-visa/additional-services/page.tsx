@@ -6,31 +6,7 @@ import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-
-const testimonials = [
-    {
-        name: "Devon Lane",
-        image: "https://randomuser.me/api/portraits/men/1.jpg",
-        text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-    },
-    {
-        name: "Kathryn Murphy",
-        image: "https://randomuser.me/api/portraits/women/2.jpg",
-        text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-    },
-    {
-        name: "Annette Black",
-        image: "https://randomuser.me/api/portraits/women/3.jpg",
-        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-    {
-        name: "Annette Black",
-        image: "https://randomuser.me/api/portraits/women/3.jpg",
-        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-];
-
-
+ 
 export const services = [
     {
         id: 1,
@@ -81,10 +57,7 @@ export const services = [
         priceLocal: "₹3445.95",
     },
 ];
-
-
-
-const page = () => {
+const Page = () => {
 
     const [selected, setSelected] = useState<number[]>([]);
     const router = useRouter();
@@ -172,10 +145,10 @@ const page = () => {
                     highlight="Quartus"
                     align="center"
                 />
-                <TestimonialSlider testimonials={testimonials} />
+                <TestimonialSlider   />
             </div>
         </>
     )
 }
 
-export default page
+export default Page

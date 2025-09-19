@@ -5,6 +5,7 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
+import Image from 'next/image';
 import React from 'react'
 
 const apostilleServices = [
@@ -69,54 +70,6 @@ const apostilleServices = [
     link: "#",
   },
 ];
-
-const testimonials = [
-  {
-    name: "Devon Lane",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-  },
-  {
-    name: "Kathryn Murphy",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-];
-
-const faqData = [
-  {
-    question: "Can I apply for a passport online through Quartus?",
-    answer:
-      "Yes! We help you complete your application digitally and guide you through the submission process, including document uploads and form preparation.",
-  },
-  {
-    question: "What documents are required for a new passport?",
-    answer: "You will typically need proof of identity, proof of citizenship, and passport-sized photos.",
-  },
-  {
-    question: "What if my passport is damaged or unreadable?",
-    answer: "You may need to apply for a replacement with additional documentation.",
-  },
-  {
-    question: "Do I need to send my original passport for renewal or updates?",
-    answer: "Yes, original passports are generally required during renewal.",
-  },
-  {
-    question: "How long does passport processing take?",
-    answer: "Processing times vary by country but usually take between 2 to 8 weeks.",
-  },
-];
-
 
 const features = [
   {
@@ -206,10 +159,12 @@ const page = () => {
                 key={index}
                 className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg"
               >
-                <img
+                <Image
                   src={"/home.png"}
                   alt={feature.title}
                   className="w-full h-64 object-cover"
+                  width={150}
+                  height={150}
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>

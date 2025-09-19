@@ -39,10 +39,10 @@ export default function Step2({ onNext, onBack }: Props) {
     <div className="bg-white p-8 rounded-lg shadow-md mx-auto max-w-3xl">
       <h2 className="text-2xl font-bold mb-4">Where should your documents be shipped?</h2>
       <p className="text-gray-700 mb-6">
-        An inbound shipping lab 531 Hug 36 Hug is a complimentary part of your Concierge Service for Indian visas. 
+        {`An inbound shipping lab 531 Hug 36 Hug is a complimentary part of your Concierge Service for Indian visas. 
         Your completed visa will be returned directly to the residential address listed on your visa application 
         by the Indian Visa Office. The Indian Visa Office's return shipping fee is included in the consular fee.
-        Please proceed to the Billing section.
+        Please proceed to the Billing section.`}
       </p>
 
       <h3 className="text-xl font-semibold mb-4">Enter Billing Information</h3>

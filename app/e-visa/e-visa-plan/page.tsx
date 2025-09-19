@@ -6,6 +6,7 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
+import WhyChoose from '@/components/WhyChoose/WhyChoose';
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
 
@@ -36,70 +37,7 @@ const eVisaServices = [
         link: "/e-visa/plan-section?type=Transit&id=5",
     },
 ];
-
-const testimonials = [
-    {
-        name: "Devon Lane",
-        image: "https://randomuser.me/api/portraits/men/1.jpg",
-        text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-    },
-    {
-        name: "Kathryn Murphy",
-        image: "https://randomuser.me/api/portraits/women/2.jpg",
-        text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-    },
-    {
-        name: "Annette Black",
-        image: "https://randomuser.me/api/portraits/women/3.jpg",
-        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-    {
-        name: "Annette Black",
-        image: "https://randomuser.me/api/portraits/women/3.jpg",
-        text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-    },
-];
-const faqData = [
-    {
-        question: "How long does it take to process an e-visa?",
-        answer: "Processing times vary by country, but typically between 24 hours and 5 business days."
-    },
-    {
-        question: "Do I need to visit an embassy?",
-        answer: "No, with an e-visa you can apply completely online without visiting an embassy."
-    },
-    {
-        question: "What documents are required?",
-        answer: "Usually a valid passport, recent photograph, and sometimes travel/medical insurance."
-    },
-    {
-        question: "Can I extend my e-visa?",
-        answer: "Extensions depend on the destination country’s rules. Quartus can guide you through the process."
-    },
-];
-
-const features = [
-    {
-        title: "100% Online Process",
-        description: "No embassy visits — apply, upload documents, and track online.",
-        image: "/images/feature1.jpg",
-    },
-    {
-        title: "Fast Approvals",
-        description: "Get your e-visa within 24–72 hours for most countries.",
-        image: "/images/feature2.jpg",
-    },
-    {
-        title: "Secure Document Uploads",
-        description: "Bank-level encryption ensures your data stays safe.",
-        image: "/images/feature3.jpg",
-    },
-    {
-        title: "Expert Assistance",
-        description: "Guidance from professionals for smooth application.",
-        image: "/images/feature4.jpg",
-    },
-];
+ 
 
 const EVisaPage = () => {
     const searchParams = useSearchParams();
@@ -138,37 +76,17 @@ const EVisaPage = () => {
             </section>
 
             {/* Why Choose Us Section */}
-            <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)] p-20 flex flex-col items-center justify-center">
-                <SectionTitle
-                    subtitle="Our Services"
-                    title="Why Choose Quartus Global E-Visa"
-                    highlight="Quartus"
-                    align="center"
-                />
-
-                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {features.map((feature, index) => (
-                        <div key={index} className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg">
-                            <img src={"/home.png"} alt={feature.title} className="w-full h-64 object-cover" />
-                            <div className="p-4">
-                                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                                <p className="text-sm text-gray-600">{feature.description}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
+            <WhyChoose />
             <CommitmentSection />
 
             {/* Testimonials */}
             <div className="max-w-7xl mx-auto px-10 py-12">
                 <SectionTitle subtitle="Our Testimonials" title="Traveler Success Stories" highlight="Quartus" align="center" />
-                <TestimonialSlider testimonials={testimonials} />
+                <TestimonialSlider />
             </div>
 
             {/* FAQ */}
-            <FAQSection items={faqData} />
+            <FAQSection />
         </>
     );
 };

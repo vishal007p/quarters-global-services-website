@@ -8,50 +8,21 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import { useGetPlatformServiceCategoryPackagesQuery } from '@/services/platformCategoryPackageApi';
 import { useSearchParams } from 'next/navigation';
- import React from 'react'
+import React from 'react'
 
- 
-const visaPlans: VisaPlan[] = [
-    {
-        id: 1,
-        title: "Standard Processing",
-        processingTime: "15-20 Business Days",
-        price: "$420.00",
-        serviceFee: "No service fee",
-    },
-    {
-        id: 2,
-        title: "Priority",
-        processingTime: "8-10 Processing Days",
-        price: "$620.00",
-        serviceFee: "Includes service fee",
-        isPopular: true,
-        isPriority: true,
-    },
-    {
-        id: 3,
-        title: "Express Processing",
-        processingTime: "3-5 Business Days",
-        price: "$850.00",
-        serviceFee: "Includes premium service fee",
-    },
-];
-
- 
-
-const page = () => {
+const Page = () => {
     const searchParams = useSearchParams();
 
-    const country = searchParams.get("country") || "";
-    const planId = searchParams.get("planId") || "";
+    const country = searchParams.get("toCountrySlug") || "";
+    const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
 
-    // 👇 API Call
+
     const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery({
-        platformServiceCategoryId: planId,
-        page: 1,
-        limit: 10,
-        country,
+        platformServiceCategorySlug: platformServiceCategorySlug,
+        toCountrySlug: country,
+
     });
+    const packages = data?.data?.data;
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Something went wrong</p>;
@@ -73,7 +44,7 @@ const page = () => {
                 <h2 className="text-3xl font-bold text-center mb-12">Our Visa Processing Plans</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {visaPlans.map((plan) => (
+                    {packages.map((plan:VisaPlan) => (
                         <PlanCard key={plan.id} plan={plan} />
                     ))}
                 </div>
@@ -89,12 +60,12 @@ const page = () => {
                     highlight="Quartus"
                     align="center"
                 />
-                <TestimonialSlider  />
+                <TestimonialSlider />
             </div>
 
-            <FAQSection   />
+            <FAQSection />
         </>
     )
 }
 
-export default page
+export default Page

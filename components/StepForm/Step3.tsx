@@ -1,8 +1,5 @@
-type Props = {
-  data: any;
-};
-
-const Step3 = ({ data }: Props) => {
+ 
+const Step3 = ( ) => {
   return (
     <div className="text-center py-16 flex items-center justify-center flex-col gap-6">
       <h2 className="text-2xl font-bold text-green-600 mb-4">Thank you for Submitting Your <br></br>

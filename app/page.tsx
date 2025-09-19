@@ -12,69 +12,8 @@ import { useState } from "react";
 import SectionHeading from "@/components/SectionTitle/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
-import { useGetCountriesQuery } from "@/services/countryApi";
+import WhyChoose from "@/components/WhyChoose/WhyChoose";
 
-const features = [
-  {
-    title: 'End-to-End Digital Process',
-    description:
-      'Skip paperwork by processing your documents in a hassle-free, secure, and intuitive environment.',
-    image: '/images/feature1.jpg',
-  },
-  {
-    title: 'Real-Time Application Tracking',
-    description:
-      'Stay informed at every stage. Get real-time updates as your application moves forward.',
-    image: '/images/feature2.jpg',
-  },
-  {
-    title: 'Expert Guidance & Support',
-    description:
-      'Access professional advisors for questions and clarifications — timely, informed, and efficient support.',
-    image: '/images/feature3.jpg',
-  },
-  {
-    title: 'Data Security You Can Trust',
-    description:
-      'We use bank-level encryption to protect your personal data and document uploads.',
-    image: '/images/feature4.jpg',
-  },
-  {
-    title: 'Seamless Access: 20+ Countries',
-    description:
-      'Apply for services across 20+ countries through one single portal, no matter where you are.',
-    image: '/images/feature5.jpg',
-  },
-  {
-    title: 'One Portal. All Services.',
-    description:
-      'Apply, upload, track, and get support — all through one central dashboard.',
-    image: '/images/feature6.jpg',
-  },
-];
-
-const testimonials = [
-  {
-    name: "Devon Lane",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
-  },
-  {
-    name: "Kathryn Murphy",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-    text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-  {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
-  },
-];
 
 const blogPosts = [
   {
@@ -113,18 +52,6 @@ const blogPosts = [
 export default function Home() {
 
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
-  const { data, error, isLoading } = useGetCountriesQuery();
- 
-
- 
-
-  // Full screen error
-  if (error)
-    return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center bg-red-100 z-50">
-        <p className="text-red-700 text-xl font-bold">Error fetching data</p>
-      </div>
-    );
 
   return (
     <>
@@ -186,7 +113,9 @@ export default function Home() {
               <span className="text-gray-900">Service and Secure Technology</span>
             </h2>
             <div className="rounded-xl overflow-hidden w-full max-w-md">
-              <img
+              <Image
+              width={150}
+              height={150}
                 src="/home.png" // Replace with your actual image path
                 alt="Travel Passport"
                 className="w-full rounded-xl"
@@ -290,37 +219,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
-        <SectionTitle
-          subtitle="Our services"
-          title="Why Choose Quartus Global Service"
-          highlight="Quartus"
-          align="center"
-        />
-
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white shadow-md rounded-xl overflow-hidden transition hover:shadow-lg"
-              >
-                <img
-                  src={"/home.png"}
-                  alt={feature.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-
-        </div>
-      </section>
+      <WhyChoose />
 
       <section className="py-12 px-4 lg:px-28 bg-gray-50">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
@@ -332,7 +231,7 @@ export default function Home() {
             </h2>
 
             <p className="font-normal mt-4">Join Our Trusted Network of Certified Visa Agents Worldwide</p>
-            <p className="text-sm mt-5">Quartus Global Service empowers agents across the globe to connect, collaborate, and offer streamlined visa and immigration services through our secure digital platform. Whether you're an individual consultant or an agency, our cloud-based system gives you the tools to manage client applications, upload documents, and track statuses in real-time—all from one centralized portal.</p>
+            <p className="text-sm mt-5">{`Quartus Global Service empowers agents across the globe to connect, collaborate, and offer streamlined visa and immigration services through our secure digital platform. Whether you're an individual consultant or an agency, our cloud-based system gives you the tools to manage client applications, upload documents, and track statuses in real-time—all from one centralized portal.`}</p>
           </div>
           <div className="flex justify-end">
             <Image src="/serviceImg.png" width={500} height={500} alt="serve"></Image>
@@ -347,7 +246,7 @@ export default function Home() {
           highlight="Quartus"
           align="center"
         />
-        <TestimonialSlider testimonials={testimonials} />
+        <TestimonialSlider />
       </div>
 
       <div className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]   py-12 px-4">
@@ -357,7 +256,9 @@ export default function Home() {
               key={index}
               className="w-[464px] h-[500px] bg-white rounded-[36px] p-4 flex flex-col gap-10 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-[#E7000B] transition-all duration-300 ease-in-out cursor-pointer"
             >
-              <img
+              <Image
+                width={150}
+                height={15}
                 src={"/img.jpg"}
                 alt={post.title}
                 className="w-full h-48 object-cover rounded-[20px]"
@@ -372,7 +273,9 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 mt-auto">
-                  <img
+                  <Image
+                  width={15}
+                  height={15}
                     src={post.authorImage}
                     alt={post.author}
                     className="w-8 h-8 rounded-full"
@@ -394,8 +297,6 @@ export default function Home() {
           </svg>
           } />
         </div>
-
-
       </div>
 
       <section className="mt-10">
@@ -472,12 +373,13 @@ export default function Home() {
 
           {/* Right Map */}
           <div className="w-full lg:w-1/2 relative">
-            <img
+            <Image
+              width={150}
+              height={150}
               src="/map.png" // Place your uploaded map here
               alt="World Map"
               className="w-full rounded"
             />
-
           </div>
         </div>
       </section>

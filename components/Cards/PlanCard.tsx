@@ -1,6 +1,5 @@
 "use client";
 
-import {useSearchParams } from "next/navigation";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,12 +13,13 @@ export interface VisaPlan {
   serviceFee: string;
   isPopular?: boolean;
   isPriority?: boolean;
+  slug:string;
+  name:string;
+  priceDescription:string
 }
 
 const PlanCard = ({ plan }: { plan: VisaPlan }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentQuery = Object.fromEntries(searchParams.entries());
   const primaryColor = '#D20F21';
 
   const handleApplyNow = () => {

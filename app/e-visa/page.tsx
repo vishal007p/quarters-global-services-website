@@ -7,7 +7,7 @@ import TestimonialSlider from '@/components/TestimonialSlider '
 import WhyChoose from '@/components/WhyChoose/WhyChoose'
 import React, { useState } from 'react'
 
-const page = () => {
+const Page = () => {
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
 
 
@@ -26,4 +26,4 @@ const page = () => {
     </div>
   )
 }
-export default page
+export default Page
