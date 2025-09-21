@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Form,
     FormField,
@@ -10,89 +13,179 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { step1Schema, Step1Data } from "@/lib/validationSchemas";
 import { FileEdit } from "lucide-react";
+import { step1Schema, Step1Data } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
-import { useEffect } from "react";
 import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+import { useDispatch } from "react-redux";
+import { setFormData } from "@/store/slices/applicationSlice";
+import { store } from "@/store/store";
 
-// --- Utility to map API response → form fields
-const mapApiToForm = (app: any): Step1Data => {
-    return {
-        firstName: app.firstName || "",
-        lastName: app.lastName || "",
-        phone: app.phone || "",
-        email: app.email || "",
-        company: app.company || "",
-        departureDate: app.departureDate?.split("T")[0] || "",
-        physicalAddress: app.physicalAddress?.addressLine1 || "",
-        legalAddress: app.currentLegalAddress?.addressLine1 || "",
-        zipCode: app.physicalAddress?.zipCode || "",
+// --- Types for API ---
+interface Address {
+    addressLine1?: string;
+    addressLine2?: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
+    country?: string;
+}
+
+interface Application {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+    departureDate?: string;
+    physicalAddress?: Address;
+    currentLegalAddress?: Address;
+    platformServices?: any[];
+}
+
+// --- Map API response to form values ---
+const mapApiToForm = (app: Application): Step1Data => ({
+    firstName: app.firstName || "",
+    lastName: app.lastName || "",
+    email: app.email || "",
+    phone: app.phone || "",
+    company: app.company || "",
+    departureDate: app.departureDate?.split("T")[0] || "",
+    physicalAddress: {
+        addressLine1: app.physicalAddress?.addressLine1 || "",
+        addressLine2: app.physicalAddress?.addressLine2 || "",
         city: app.physicalAddress?.city || "",
         state: app.physicalAddress?.state || "",
-    };
-};
+        zipCode: app.physicalAddress?.zipCode || "",
+        country: app.physicalAddress?.country || "",
+    },
+    currentLegalAddress: {
+        addressLine1: app.currentLegalAddress?.addressLine1 || "",
+        addressLine2: app.currentLegalAddress?.addressLine2 || "",
+        city: app.currentLegalAddress?.city || "",
+        state: app.currentLegalAddress?.state || "",
+        zipCode: app.currentLegalAddress?.zipCode || "",
+        country: app.currentLegalAddress?.country || "",
+    },
+
+});
 
 type Props = {
     onNext: (data: Step1Data) => void;
 };
 
 export default function Step1({ onNext }: Props) {
-    const [createApplication, { data, isLoading }] =
-        useCreateApplicationMutation();
-
+    const [createApplication, { data, isLoading }] = useCreateApplicationMutation();
+    const dispatch = useDispatch();
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
         defaultValues: {
             firstName: "",
             lastName: "",
-            phone: "",
             email: "",
+            phone: "",
             company: "",
             departureDate: "",
-            physicalAddress: "",
-            legalAddress: "",
-            zipCode: "",
-            city: "",
-            state: "",
+            physicalAddress: {
+                addressLine1: "",
+                addressLine2: "",
+                city: "",
+                state: "",
+                zipCode: "",
+                country: "",
+            },
+            currentLegalAddress: {
+                addressLine1: "",
+                addressLine2: "",
+                city: "",
+                state: "",
+                zipCode: "",
+                country: "",
+            },
         },
     });
 
-    // when API response arrives, reset form values
+    // Prefill form when API response arrives
     useEffect(() => {
         if (data?.applications?.[0]) {
-            const app = data.applications[0];
-            form.reset(mapApiToForm(app));
+            form.reset(mapApiToForm(data.applications[0]));
         }
     }, [data, form]);
 
+    // Prefill form from local storage (previous step)
+    useEffect(() => {
+        const savedStep = localStorage.getItem("step1Data");
+        if (savedStep) {
+            form.reset(JSON.parse(savedStep));
+        }
+    }, [form]);
+
     const onSubmit = async (values: Step1Data) => {
         try {
-            // Get stored platform services from localStorage
-            const platformServices = getPlatformServices();
+            const platformServices = getPlatformServices() || [];
 
-            // Prepare payload
+            // Split phone input if it includes country code
+            let countryCode = "+1"; // default fallback
+            let phone = values.phone || "";
+
+            if (phone.startsWith("+")) {
+                const parts = phone.split(" ");
+                if (parts.length === 2) {
+                    countryCode = parts[0];
+                    phone = parts[1];
+                } else {
+                    // If no space, take first 3 characters as country code (adjust as needed)
+                    countryCode = phone.slice(0, 3);
+                    phone = phone.slice(3);
+                }
+            }
+
             const payload = {
                 applications: [
                     {
                         ...values,
-                        platformServices, // include all stored IDs
+                        phone,
+                        countryCode,
+                        platformServices,
                         status: "Draft",
+                        "serviceFields": {
+                            "serviceType": "CourierDelivery",
+                            "country": "Germany",
+                            "visaCategory": "Tourist",
+                            "passport": "passport_germany.pdf",
+                            "applicationForm": "schengen_visa_form.pdf",
+                            "passportPhotos": ["photo1.jpg", "photo2.jpg"],
+                            "supportingDocs": [
+                                "hotel_booking.pdf",
+                                "travel_itinerary.pdf",
+                                "bank_statement.pdf"
+                            ],
+                            "travelItinerary": "travel_plan.pdf",
+                            "proofOfFunds": "funds_proof.pdf"
+                        }
                     },
                 ],
             };
 
-            // Call your API
-            //@ts-ignore
-            const response = await createApplication(payload);
-            //@ts-ignore
-            if (response?.status && response.data?.redirectURL) {
-                // Clear stored platform services if you no longer need them
-                clearPlatformServices();
+            // Get the current active application ID from Redux
+            const activeId = store.getState().application.activeId;
 
-                // Redirect to the URL from API
+            if (activeId) {
+                dispatch(
+                    setFormData({
+                        id: activeId,
+                        form: payload, // save payload in Redux
+                    })
+                );
+            } else {
+                console.warn("No active application ID found");
+            }
+
+            //@ts-ignore
+            const response = await createApplication(payload).unwrap();
+
+            if (response?.status && response.data?.redirectURL) {
+                clearPlatformServices();
                 window.location.href = response.data.redirectURL;
             } else {
                 console.error("Application created but no redirect URL returned");
@@ -101,7 +194,6 @@ export default function Step1({ onNext }: Props) {
             console.error("Error creating application:", error);
         }
 
-        // Call next step if you have a wizard
         onNext(values);
     };
 
@@ -117,13 +209,8 @@ export default function Step1({ onNext }: Props) {
                             (Expedited - 20 Processing Days)
                         </span>
                     </h2>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-2"
-                    >
-                        <FileEdit className="w-4 h-4" />
-                        Edit
+                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                        <FileEdit className="w-4 h-4" /> Edit
                     </Button>
                 </div>
             </div>
@@ -131,10 +218,7 @@ export default function Step1({ onNext }: Props) {
             <h3 className="text-xl font-semibold mb-4">Your Information</h3>
 
             <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="grid gap-6"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
                     <div className="grid md:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
@@ -149,7 +233,6 @@ export default function Step1({ onNext }: Props) {
                                 </FormItem>
                             )}
                         />
-
                         <FormField
                             control={form.control}
                             name="lastName"
@@ -172,10 +255,7 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Phone Number</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="+91 9876543210"
-                                        {...field}
-                                    />
+                                    <Input placeholder="+91 9876543210" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -189,10 +269,7 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Email Address</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="you@example.com"
-                                        {...field}
-                                    />
+                                    <Input placeholder="you@example.com" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -206,10 +283,7 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Company</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="ABC Corp."
-                                        {...field}
-                                    />
+                                    <Input placeholder="ABC Corp." {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -230,78 +304,165 @@ export default function Step1({ onNext }: Props) {
                         )}
                     />
 
-
-                    <FormField
-                        control={form.control}
-                        name="physicalAddress"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Physical Address</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="123 Main Street"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="legalAddress"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Current Legal Address</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="456 Legal St."
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-
-                    <div className="grid md:grid-cols-3 gap-4">
+                    {/* --- Physical Address --- */}
+                    <h4 className="font-semibold mt-4">Physical Address</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
-                            name="zipCode"
+                            name="physicalAddress.addressLine1"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Zip Code</FormLabel>
+                                    <FormLabel>Address Line 1</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="10001" {...field} />
+                                        <Input {...field} placeholder="123 Main St" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
                         <FormField
                             control={form.control}
-                            name="city"
+                            name="physicalAddress.addressLine2"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Address Line 2</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Apt 4B" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="physicalAddress.city"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>City</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="New York" {...field} />
+                                        <Input {...field} placeholder="New York" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
                         <FormField
                             control={form.control}
-                            name="state"
+                            name="physicalAddress.state"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>State</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="NY" {...field} />
+                                        <Input {...field} placeholder="NY" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="physicalAddress.zipCode"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Zip Code</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="10001" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="physicalAddress.country"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Country</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="USA" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+                    {/* --- Legal Address --- */}
+                    <h4 className="font-semibold mt-4">Current Legal Address</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.addressLine1"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Address Line 1</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="456 Elm St" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.addressLine2"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Address Line 2</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.city"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>City</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Brooklyn" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.state"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>State</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="NY" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.zipCode"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Zip Code</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="11201" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="currentLegalAddress.country"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Country</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="USA" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

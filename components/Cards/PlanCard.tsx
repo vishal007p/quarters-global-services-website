@@ -39,6 +39,7 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
   const country = searchParams.get("toCountrySlug") || "";
   const platformServiceCategorySlug =
     searchParams.get("platformServiceCategorySlug") || "";
+     
   const handleApplyNow = () => {
     dispatch(
       setPackage({

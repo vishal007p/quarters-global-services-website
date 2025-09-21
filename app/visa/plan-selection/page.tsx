@@ -21,7 +21,6 @@ const Page = () => {
     }
   );
   const packages = data?.data?.data;
-  console.log(packages, "packages");
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Something went wrong</p>;
 

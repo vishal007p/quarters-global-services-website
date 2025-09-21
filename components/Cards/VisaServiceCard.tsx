@@ -2,10 +2,9 @@ import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
 import { useRouter } from "next/navigation";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
-import { setCategory, startApplication } from "@/store/slices/applicationSlice";
+import { setCategory } from "@/store/slices/applicationSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { title } from "process";
-
+ 
 interface VisaServiceCardProps {
   id: string;
   icon: React.ReactNode;

@@ -9,10 +9,9 @@ import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import { startApplication } from "@/store/slices/applicationSlice";
-import { RootState } from "@/store/store";
-import { useSearchParams } from "next/navigation";
+ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 interface services {
   _id: string;
@@ -33,14 +32,10 @@ const Page = () => {
   });
   const dispatch = useDispatch();
   const visaService = data?.data?.data;
-  const state = useSelector((state: RootState) => state);
-  console.log(state, "state");
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
   }, []);
 
- 
- 
   return (
     <>
       <BannerLayout videoSrc="/homeBg.mp4">
@@ -62,9 +57,8 @@ const Page = () => {
           {visaService?.map((service: services, index: number) => (
             <div
               key={index}
-              className={`transform transition-transform duration-500 ${
-                index % 2 === 0 ? "translate-y-0" : "translate-y-8"
-              }`}
+              className={`transform transition-transform duration-500 ${index % 2 === 0 ? "translate-y-0" : "translate-y-8"
+                }`}
             >
               <VisaServiceCard
                 id={service._id}

@@ -1,5 +1,14 @@
 import * as z from "zod";
 
+export const addressSchema = z.object({
+  addressLine1: z.string().min(1, "Address Line 1 is required"),
+  addressLine2: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  zipCode: z.string().regex(/^\d{5}$/, "ZIP code must be exactly 5 digits"),
+  country: z.string().min(1, "Country is required"),
+});
+
 export const step1Schema = z.object({
   firstName: z.string().min(1, "First Name is required"),
   lastName: z.string().min(1, "Last Name is required"),
@@ -9,15 +18,12 @@ export const step1Schema = z.object({
     .min(10, "Phone number must be at least 10 digits")
     .regex(/^\+?\d{10,15}$/, "Invalid phone number format"),
   company: z.string().min(1, "Company is required"),
- departureDate: z.string().regex(
-  /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
-  "Date must be in YYYY-MM-DD format"
-),
-  physicalAddress: z.string().min(1, "Physical Address is required"),
-  legalAddress: z.string().min(1, "Current Legal Address is required"),
-  zipCode: z.string().regex(/^\d{5}$/, "ZIP code must be exactly 5 digits"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
+  departureDate: z.string().regex(
+    /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+    "Date must be in YYYY-MM-DD format"
+  ),
+  physicalAddress: addressSchema,
+  currentLegalAddress: addressSchema,
 });
 
 export const step2Schema = z.object({
