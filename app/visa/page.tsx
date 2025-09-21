@@ -7,13 +7,13 @@ import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import WhyChoose from '@/components/WhyChoose/WhyChoose';
- import { useGetPlatformServiceCategoriesQuery } from '@/services/platformCategoryApi';
+import { useGetPlatformServiceCategoriesQuery } from '@/services/platformCategoryApi';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 
- 
+
 interface services {
-  id: string,
+  _id: string,
   code: string,
   name: string,
   slug: string
@@ -29,7 +29,7 @@ const Page = () => {
     toCountrySlug: country,
   });
   const visaService = data?.data?.data
- 
+console.log(visaService,"visaService")
 
   return (
     <>
@@ -55,6 +55,7 @@ const Page = () => {
                 }`}
             >
               <VisaServiceCard
+                id={service._id}
                 link={`/visa/plan-selection?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`} // ✅ Pass dynamic link here
                 key={index}
                 icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,8 +1,10 @@
 import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
 import { useRouter } from "next/navigation";
- 
+import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
+
 interface VisaServiceCardProps {
+    id:string;
     icon: React.ReactNode;
     title: string;
     description: string;
@@ -13,7 +15,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
     icon,
     title,
     description,
-    link,
+    link,id
 }) => {
     const router = useRouter()
     return (
@@ -36,7 +38,13 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
                         <path d="M5.63672 18.864L18.3646 6.13611M18.3646 6.13611H11.2939M18.3646 6.13611L18.3643 13.2072" stroke="#444444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>}
                     onClick={() => {
-                        if (link) router.push(link); // navigate to link
+                        // Save the step in localStorage first
+                       savePlatformServiceStep({ platformServiceCategoryId: String(id) });
+
+                        // Then navigate
+                        if (link) {
+                            router.push(link);
+                        }
                     }} />
             </div>
         </div>

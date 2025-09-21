@@ -4,86 +4,76 @@ import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import SectionTitle from '@/components/SectionTitle/SectionTitle'
 import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
+import { savePlatformServiceStep } from '@/lib/platformServiceStorage'
+import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 
- 
 
-export const services = [
-    {
-        id: 1,
-        title: "Super Urgent Appointment",
-        description: "Expedited Option offered via India Only. Super Urgent Appointment within 1–3 weeks.",
-        timeline: "Within 1–3 weeks",
-        priceUSD: "$500.00",
-        priceLocal: "₹41893.64",
-    },
-    {
-        id: 2,
-        title: "Embassy Legalization",
-        description: "Exclusive Concierge service for India Only. Includes an appointment for US visa within 2–4 months.",
-        timeline: "Within 2–4 months",
-        priceUSD: "$600.00",
-        priceLocal: "₹48718.84",
-    },
-    {
-        id: 3,
-        title: "Global Concierge Service",
-        description: "Our bundled Concierge Service. Receive the ultimate visa handling experience.",
-        timeline: "-",
-        priceUSD: "$370.00",
-        priceLocal: "₹30030.00",
-    },
-    {
-        id: 4,
-        title: "Photo Printing",
-        description: "Have a pair of passport photos printed in our office, mailed to you, or provided digitally.",
-        timeline: "Within 1–3 weeks",
-        priceUSD: "$15.00",
-        priceLocal: "₹1252.23",
-    },
-    {
-        id: 5,
-        title: "Digital Photo Service",
-        description: "Email your photos to us. We'll format & size them for official use.",
-        timeline: "Within 2–4 months",
-        priceUSD: "$25.00",
-        priceLocal: "₹2153.77",
-    },
-    {
-        id: 6,
-        title: "Passport Protection Plan",
-        description: "If your passport is lost, stolen, or damaged, we’ll replace the documents and provide assistance.",
-        timeline: "-",
-        priceUSD: "$40.00",
-        priceLocal: "₹3445.95",
-    },
-];
+export interface Addon {
+    _id: string;
+    platformServiceCategoryPackageId: string;
+    name: string;
+    price: number;
+    currency: string;
+    isDeleted: boolean;
+    deletedBy: string | null;
+    deletedAt: string | null;
+    applicableFrom: string[];
+    applicableTo: string[];
+    createdAt: string;
+    updatedAt: string;
+    slug: string;
+    __v: number;
+    description?: string;  // optional, if backend includes description
+    timeline?: string;     // optional, if backend includes timeline
+}
 
 
 
 const Page = () => {
 
-    const [selected, setSelected] = useState<number[]>([]);
+    const [selected, setSelected] = useState<string[]>([]);
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const currentQuery = Object.fromEntries(searchParams.entries());
 
-    const toggleSelection = (id: number) => {
-        setSelected((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-        );
+    const searchParams = useSearchParams();
+
+    const country = searchParams.get("toCountrySlug") || "";
+    const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
+
+    const { data, isLoading, error } = useGetPlatformServiceCategoryPackageAddonQuery({
+        platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
+        toCountrySlug: country, // ← must not be empty
+    });
+    const additional = data?.data?.data
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error loading data</p>;
+
+    const toggleSelection = (id: string) => {
+        setSelected((prev) => {
+            let updated: string[];
+
+            if (prev.includes(id)) {
+                // Deselect
+                updated = prev.filter((item) => item !== id);
+            } else {
+                // Select
+                updated = [...prev, id];
+            }
+
+            // Save updated addons to localStorage
+            savePlatformServiceStep({
+                platformServiceCategoryPackageAddonsId: updated,
+            });
+
+            return updated;
+        });
     };
 
+
     const handleContinue = () => {
-        const updatedQuery = {
-            ...currentQuery,
-            services: selected.join(','),  // Pass as CSV string
-        };
 
-        const queryString = new URLSearchParams(updatedQuery).toString();
-
-        router.push(`/checkout?${queryString}`);
+        router.push(`/checkout`);
     };
     return (
         <>
@@ -102,34 +92,35 @@ const Page = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center">Select Services</h2>
 
                 <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-                    {services.map((service) => (
+                    {additional?.map((service: Addon) => (
                         <div
-                            key={service.id}
-                            className={`border p-4 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(service.id)
+                            key={service._id}
+                            className={`border p-4 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(String(service._id))}
+
                                 ? "border-blue-600 bg-blue-50"
                                 : "border-gray-300 bg-white"
                                 }`}
                         >
                             <label className="flex items-start gap-3 cursor-pointer">
-
+                                <Checkbox
+                                    checked={selected.includes(String(service._id))}
+                                    onCheckedChange={() => toggleSelection(String(service._id))}
+                                    className="w-5 h-5"
+                                />
                                 <div>
-                                    <Checkbox
-                                        checked={selected.includes(service.id)}
-                                        onCheckedChange={() => toggleSelection(service.id)}
-                                        className='w-5 h-5'
-                                    />
-                                    <h3 className="font-semibold text-lg mb-1 mt-2">{service.title}</h3>
+                                    <h3 className="font-semibold text-lg mb-1 mt-2">{service.name}</h3>
                                     <p className="text-sm text-gray-700 mb-2">{service.description}</p>
                                     <p className="text-sm text-gray-500 mb-1">
                                         <strong>Timeline:</strong> {service.timeline}
                                     </p>
                                     <p className="text-sm font-semibold">
-                                        {service.priceUSD} <span className="text-gray-500">({service.priceLocal})</span>
+                                        {service.price} {service.currency}
                                     </p>
                                 </div>
                             </label>
                         </div>
                     ))}
+
                 </div>
 
                 <div className="mt-8 text-center">
@@ -150,7 +141,7 @@ const Page = () => {
                     highlight="Quartus"
                     align="center"
                 />
-                <TestimonialSlider   />
+                <TestimonialSlider />
             </div>
         </>
     )

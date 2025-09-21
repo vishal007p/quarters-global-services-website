@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-import { useGetPlatformServiceCategoryPackageAddonsQuery } from "@/services/platformCategoryPackageAddonApi";
 import { useSearchParams } from "next/navigation";
-
+import Image from "next/image";
+ 
 const steps = [
   { id: 1, label: "Traveler Info" },
   { id: 2, label: "Shipping/Billing" },
@@ -16,19 +16,9 @@ const steps = [
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<any>({});
-  const searchParams = useSearchParams();
-  const slug = searchParams.get("slug") || "";
-  const { data, isLoading, error } =
-    useGetPlatformServiceCategoryPackageAddonsQuery({
-      platformServiceCategoryPackageSlug: slug,
-    });
-
-    console.log(data,  "datssa")
-
-  const next = (data: any) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
-    setStep((s) => s + 1);
+    const next = (data: any) => {
+      console.log(data)
+     setStep((s) => s + 1);
   };
 
   const back = () => setStep((s) => s - 1);
@@ -89,8 +79,6 @@ const MultiStepForm = () => {
         </div>
       </div>
 
-
-
       {/* Conditional Layout */}
       {step === 4 ? (
         <div className="max-w-3xl mx-auto text-center bg-white p-12 rounded-lg shadow-lg relative">
@@ -106,7 +94,7 @@ const MultiStepForm = () => {
           <div className={`${step === 3 ? "w-full" : "w-1/2"}`}>
             {step === 1 && <Step1 onNext={next} />}
             {step === 2 && <Step2 onNext={next} onBack={back} />}
-            {step === 3 && <Step3 data={formData} />}
+            {step === 3 && <Step3 />}
           </div>
 
           {/* Sticky Order Summary on Step 1 & 2 */}
@@ -121,7 +109,7 @@ const MultiStepForm = () => {
 
                     <div className="flex justify-between items-center py-2">
                       <span className="font-medium text-gray-700 flex items-center gap-2">
-                        <img src="/flag.png" alt="India Flag" className="w-4 h-4 rounded-full" />
+                        <Image width={150} height={150} src="/flag.png" alt="India Flag" className="w-4 h-4 rounded-full" />
                         India Business Visa
                       </span>
                       <span className="text-gray-900">$798.42</span>

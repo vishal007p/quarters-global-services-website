@@ -16,11 +16,9 @@ const Page = () => {
     const country = searchParams.get("toCountrySlug") || "";
     const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
 
-
     const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery({
         platformServiceCategorySlug: platformServiceCategorySlug,
         toCountrySlug: country,
-
     });
     const packages = data?.data?.data;
 
@@ -45,7 +43,7 @@ const Page = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {packages.map((plan:VisaPlan) => (
-                        <PlanCard key={plan.id} plan={plan} />
+                        <PlanCard key={plan._id} plan={plan} type={"passport"} />
                     ))}
                 </div>
             </div>

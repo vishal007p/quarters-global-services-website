@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/popover";
 
 interface DropdownOption {
-  id?: string | number;
+  _id?: string | number;
   code?: string;
   name: string;
   slug: string
@@ -29,7 +29,7 @@ interface DropdownOption {
 
 interface DropdownWrapperProps {
   value: DropdownOption | string | null;
-  setValue: (option: DropdownOption | string) => void;
+  setValue: React.Dispatch<React.SetStateAction<DropdownOption | null>>;
   search: string;
   setSearch: (search: string) => void;
   filteredOptions: DropdownOption[];
@@ -90,14 +90,12 @@ const DropdownWrapper = ({
               <CommandGroup>
                 {filteredOptions.map((option: DropdownOption) => (
                   <CommandItem
-                    key={option.id || option.code}
+                    key={option._id || option.code}
                     value={option.name}
                     className="data-[selected=true]:bg-neutral-900"
                     onSelect={() => {
-                      // For string-based values, pass the option name as string
-                      // For object-based values, pass the entire option object
                       if (typeof value === "string") {
-                        setValue(option.name);
+                        setValue(option);
                       } else {
                         setValue(option);
                       }

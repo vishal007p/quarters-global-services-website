@@ -41,7 +41,7 @@ const Page = () => {
                             key={index}
                             className={`${index % 2 === 1 ? 'mt-4' : 'mt-0'}`} // Apply 16px margin-top to odd-indexed cards
                         >
-                            <PlanCard plan={plan} />
+                            <PlanCard plan={plan} type="visa" />
                         </div>
                     ))}
                 </div>

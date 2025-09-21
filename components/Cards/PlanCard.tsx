@@ -4,26 +4,32 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRouter } from "nextjs-toploader/app";
+import { useSearchParams } from 'next/navigation';
+import { savePlatformServiceStep } from '@/lib/platformServiceStorage';
 
 export interface VisaPlan {
-  id: number;
+  _id: number;
   title: string;
   processingTime: string;
   price: string;
   serviceFee: string;
   isPopular?: boolean;
   isPriority?: boolean;
-  slug:string;
-  name:string;
-  priceDescription:string
+  slug: string;
+  name: string;
+  priceDescription: string
 }
 
-const PlanCard = ({ plan }: { plan: VisaPlan }) => {
+const PlanCard = ({ plan,type }: { plan: VisaPlan,type:string }) => {
   const router = useRouter();
   const primaryColor = '#D20F21';
-
+   const searchParams = useSearchParams();
+  const country = searchParams.get("toCountrySlug") || "";
+  const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
   const handleApplyNow = () => {
-    router.push(`/checkout?slug=${plan.slug}`);
+    router.push(`/${type}/additional-services?slug=${plan.slug}&toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}`);
+      savePlatformServiceStep({ platformServiceCategoryPackageId: String(plan._id) });
+
   };
 
   return (
@@ -69,7 +75,7 @@ const PlanCard = ({ plan }: { plan: VisaPlan }) => {
       </CardContent>
 
       <CardFooter className="px-4 pb-4">
-      
+
         <Button
           onClick={handleApplyNow}
           className="inline-flex items-center px-6 py-3 rounded-full border border-gray-400 bg-transparent hover:text-white text-black font-semibold gap-2 hover:bg-[#D31021] transition-colors duration-200"

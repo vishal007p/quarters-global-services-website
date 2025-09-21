@@ -1,4 +1,5 @@
 "use client";
+
 import {
     Form,
     FormField,
@@ -13,12 +14,35 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { step1Schema, Step1Data } from "@/lib/validationSchemas";
 import { FileEdit } from "lucide-react";
+import { useCreateApplicationMutation } from "@/services/applicationApi";
+import { useEffect } from "react";
+import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+
+// --- Utility to map API response → form fields
+const mapApiToForm = (app: any): Step1Data => {
+    return {
+        firstName: app.firstName || "",
+        lastName: app.lastName || "",
+        phone: app.phone || "",
+        email: app.email || "",
+        company: app.company || "",
+        departureDate: app.departureDate?.split("T")[0] || "",
+        physicalAddress: app.physicalAddress?.addressLine1 || "",
+        legalAddress: app.currentLegalAddress?.addressLine1 || "",
+        zipCode: app.physicalAddress?.zipCode || "",
+        city: app.physicalAddress?.city || "",
+        state: app.physicalAddress?.state || "",
+    };
+};
 
 type Props = {
     onNext: (data: Step1Data) => void;
 };
 
 export default function Step1({ onNext }: Props) {
+    const [createApplication, { data, isLoading, isSuccess }] =
+        useCreateApplicationMutation();
+
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
         defaultValues: {
@@ -36,33 +60,81 @@ export default function Step1({ onNext }: Props) {
         },
     });
 
-    const onSubmit = (data: Step1Data) => {
-        onNext(data);
+    // when API response arrives, reset form values
+    useEffect(() => {
+        if (data?.applications?.[0]) {
+            const app = data.applications[0];
+            form.reset(mapApiToForm(app));
+        }
+    }, [data, form]);
+
+    const onSubmit = async (values: Step1Data) => {
+        try {
+            // Get stored platform services from localStorage
+            const platformServices = getPlatformServices();
+
+            // Prepare payload
+            const payload = {
+                applications: [
+                    {
+                        ...values,
+                        platformServices, // include all stored IDs
+                        status: "Draft",
+                    },
+                ],
+            };
+
+            // Call your API
+            //@ts-ignore
+            const response = await createApplication(payload);
+            //@ts-ignore
+            if (response?.status && response.data?.redirectURL) {
+                // Clear stored platform services if you no longer need them
+                clearPlatformServices();
+
+                // Redirect to the URL from API
+                window.location.href = response.data.redirectURL;
+            } else {
+                console.error("Application created but no redirect URL returned");
+            }
+        } catch (error) {
+            console.error("Error creating application:", error);
+        }
+
+        // Call next step if you have a wizard
+        onNext(values);
     };
+
 
     return (
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
+            {/* Header */}
             <div className="bg-[#00408D] rounded-lg shadow-md p-6 mb-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold bg-[#00408D] text-white">
-                        Visa: Business India{" "}<br></br>
+                    <h2 className="text-2xl font-bold text-white">
+                        Visa: Business India <br />
                         <span className="text-sm font-medium text-white">
                             (Expedited - 20 Processing Days)
                         </span>
                     </h2>
-
-                    {/* Edit Button */}
-                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-2"
+                    >
                         <FileEdit className="w-4 h-4" />
                         Edit
                     </Button>
                 </div>
             </div>
+
             <h3 className="text-xl font-semibold mb-4">Your Information</h3>
 
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
-
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="grid gap-6"
+                >
                     <div className="grid md:grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
@@ -100,7 +172,10 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Phone Number</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="+91 9876543210" {...field} />
+                                    <Input
+                                        placeholder="+91 9876543210"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -114,7 +189,10 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Email Address</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="you@example.com" {...field} />
+                                    <Input
+                                        placeholder="you@example.com"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -128,7 +206,10 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Company</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="ABC Corp." {...field} />
+                                    <Input
+                                        placeholder="ABC Corp."
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -140,14 +221,15 @@ export default function Step1({ onNext }: Props) {
                         name="departureDate"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Departure Date (MM-DD-YYYY)</FormLabel>
+                                <FormLabel>Departure Date</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="12-31-2025" {...field} />
+                                    <Input type="date" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
+
 
                     <FormField
                         control={form.control}
@@ -156,7 +238,10 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Physical Address</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="123 Main Street" {...field} />
+                                    <Input
+                                        placeholder="123 Main Street"
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -170,7 +255,10 @@ export default function Step1({ onNext }: Props) {
                             <FormItem>
                                 <FormLabel>Current Legal Address</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="456 Legal St." {...field} />
+                                    <Input
+                                        placeholder="456 Legal St."
+                                        {...field}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -222,8 +310,12 @@ export default function Step1({ onNext }: Props) {
                     </div>
 
                     <div className="flex justify-between mt-6">
-                        <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
-                            Place Order
+                        <Button
+                            type="submit"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Saving..." : "Place Order"}
                         </Button>
 
                         <Button type="button" variant="outline">

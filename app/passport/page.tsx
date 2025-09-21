@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 
 interface services {
-  id: string,
+  _id: string,
   code: string,
   name: string,
   slug: string
@@ -23,7 +23,7 @@ const Page = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "";
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
-  const { data,   } = useGetPlatformServiceCategoriesQuery({
+  const { data, } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "visa",
     toCountrySlug: country,
   });
@@ -49,6 +49,7 @@ const Page = () => {
                 }`}
             >
               <VisaServiceCard
+                id={service._id}
                 link={`/visa/plan-selection?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`} // ✅ Pass dynamic link here
                 key={index}
                 icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">

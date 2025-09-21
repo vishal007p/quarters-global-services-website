@@ -10,22 +10,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { step2Schema, Step2Data } from "@/lib/validationSchemas";
-import { useCreateApplicationMutation } from "@/services/applicationApi";
-
+ 
 type Props = {
   onNext: (data: Step2Data) => void;
   onBack: () => void;
 };
 
 export default function Step2({ onNext, onBack }: Props) {
-  const [createApplication, { data, isLoading, isSuccess, isError, error }] =
-    useCreateApplicationMutation();
-    console.log(data, isLoading, isSuccess, isError, error)
 
+ 
 
   const form = useForm<Step2Data>({
     resolver: zodResolver(step2Schema),
@@ -40,61 +36,7 @@ export default function Step2({ onNext, onBack }: Props) {
 
   const onSubmit = (data: Step2Data) => {
     onNext(data);
-    const payload = {
-      applications: [
-        {
-          firstName: "Amit",
-          lastName: "Sharma",
-          email: "amit.sharma@example.com",
-          countryCode: "+91",
-          phone: "9876543210",
-          status: "Draft",
-          departureDate: "2025-09-20T10:00:00.000Z",
-          physicalAddress: {
-            addressLine1: "123 MG Road",
-            addressLine2: "Apt 45",
-            city: "Bengaluru",
-            state: "Karnataka",
-            zipCode: "560001",
-            country: "India",
-          },
-          currentLegalAddress: {
-            addressLine1: "45 Residency Road",
-            city: "Bengaluru",
-            state: "Karnataka",
-            zipCode: "560025",
-            country: "India",
-          },
-          platformServices: [
-            {
-              platformServiceId: "66f16c778cf547a24f9e1ab1",
-              platformServiceCategoryId: "66f16c778cf547a24f9e1ab2",
-              platformServiceCategoryPackageId: "66f16c778cf547a24f9e1ab3",
-            },
-          ],
-          serviceSpecificData: {
-            serviceType: "CourierDelivery",
-            senderAddress: "123 MG Road, Bengaluru",
-            stateSender: "Karnataka",
-            recipientName: "Ravi Kumar",
-            recipientAddress: "7th Main Road, Hyderabad",
-            stateRecipient: "Telangana",
-            deliveryType: "Express",
-            preferredCourierCompany: "DHL",
-            phoneSender: "9876543210",
-            citySender: "Bengaluru",
-            countrySender: "India",
-            phoneRecipient: "9988776655",
-            cityRecipient: "Hyderabad",
-            countryRecipient: "India",
-            noOfPagesOrEnvelopes: 10,
-            trackingNumber: "DHL123456789",
-          },
-        },
-      ],
-    };
 
-    createApplication(payload);
   };
 
   return (

@@ -9,12 +9,10 @@ export const step1Schema = z.object({
     .min(10, "Phone number must be at least 10 digits")
     .regex(/^\+?\d{10,15}$/, "Invalid phone number format"),
   company: z.string().min(1, "Company is required"),
-  departureDate: z
-    .string()
-    .regex(
-      /^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])-\d{4}$/,
-      "Date must be in MM-DD-YYYY format"
-    ),
+ departureDate: z.string().regex(
+  /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/,
+  "Date must be in YYYY-MM-DD format"
+),
   physicalAddress: z.string().min(1, "Physical Address is required"),
   legalAddress: z.string().min(1, "Current Legal Address is required"),
   zipCode: z.string().regex(/^\d{5}$/, "ZIP code must be exactly 5 digits"),
