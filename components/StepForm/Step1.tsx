@@ -40,7 +40,7 @@ type Props = {
 };
 
 export default function Step1({ onNext }: Props) {
-    const [createApplication, { data, isLoading, isSuccess }] =
+    const [createApplication, { data, isLoading }] =
         useCreateApplicationMutation();
 
     const form = useForm<Step1Data>({

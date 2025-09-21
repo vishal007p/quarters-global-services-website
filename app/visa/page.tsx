@@ -19,7 +19,6 @@ interface services {
   slug: string
 }
 
-
 const Page = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "";

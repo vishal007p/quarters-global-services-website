@@ -12,6 +12,7 @@ type DropdownOption = {
   id?: string;
   name: string;
   slug: string;
+  code?: string;
 };
 
 export type PlatformServiceStep = {
@@ -22,6 +23,18 @@ export type PlatformServiceStep = {
   apostilleType?: string;
   countryCode: string,
 };
+
+
+type TabType = "visa" | "passport" | "apostille";
+
+interface DropdownFormProps {
+  activeTab: TabType;
+  setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
+}
+
+
+  // --- Tabs ---
+  const tabs: TabType[] = ["visa", "passport", "apostille"];
 
 const STORAGE_KEY = "platformServiceStep";
 
@@ -53,7 +66,7 @@ const GoButton = ({ handleGo }: { handleGo: () => void }) => (
 );
 
 // --- DropdownForm Component ---
-function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
+function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const router = useRouter();
 
   // --- Fetch Countries ---
@@ -207,8 +220,6 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
     }
   };
 
-  // --- Tabs ---
-  const tabs = ["visa", "passport", "apostille"];
   useEffect(() => {
     const saved = loadStep();
     if (saved) {
@@ -217,13 +228,13 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
           id: saved.citizenship,
           name: saved.citizenship,
           slug: saved.citizenship,
-             code:saved.countryCode,
+          code: saved.countryCode,
         });
 
       if (saved.country && saved.countryCode)
         setCountry({
-          id: saved.countryCode, 
-          code:saved.countryCode,
+          id: saved.countryCode,
+          code: saved.countryCode,
           name: saved.country,
           slug: saved.country,
         });
