@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "nextjs-toploader/app";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetCountriesQuery } from "@/services/countryApi";
 import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import DropdownWrapper from "./DropdownWrapper";
@@ -13,6 +13,18 @@ type DropdownOption = {
   name: string;
   slug: string;
 };
+
+export type PlatformServiceStep = {
+  citizenship?: string;
+  country?: string;
+  state?: string;
+  passportType?: string;
+  apostilleType?: string;
+  countryCode: string,
+};
+
+const STORAGE_KEY = "platformServiceStep";
+
 
 // --- Sample States ---
 const states: DropdownOption[] = [
@@ -49,7 +61,7 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
   const apiCountries: DropdownOption[] =
     data?.data?.data?.map((country: any) => ({
       id: country._id,
-      code:country.code,
+      code: country.code,
       name: country.name,
       slug: country.slug,
     })) || [];
@@ -120,6 +132,23 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
     option.name.toLowerCase().includes(apostilleSearch.toLowerCase())
   );
 
+  // --- Save to sessionStorage ---
+  const saveStep = (step: PlatformServiceStep) => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(step));
+    }
+  };
+
+  // --- Load from sessionStorage ---
+  const loadStep = (): PlatformServiceStep | null => {
+    if (typeof window !== "undefined") {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as PlatformServiceStep) : null;
+    }
+    return null;
+  };
+
+
   // --- Validation ---
   const validate = () => {
     let newErrors = { ...errors };
@@ -156,6 +185,15 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
   const handleGo = () => {
     if (!validate()) return;
 
+    const step: PlatformServiceStep = {
+      citizenship: citizenship?.slug,
+      country: country?.slug,
+      countryCode: (country as any)?.code, // ✅ store country.code
+      state: stateOrCountry?.slug,
+      passportType: passportType?.slug,
+      apostilleType: apostilleType?.slug,
+    };
+    saveStep(step);
     if (activeTab === "visa") {
       router.push(`/visa?toCountrySlug=${country?.slug}`);
       savePlatformServiceStep({ platformServiceId: country?.id });
@@ -171,6 +209,47 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
 
   // --- Tabs ---
   const tabs = ["visa", "passport", "apostille"];
+  useEffect(() => {
+    const saved = loadStep();
+    if (saved) {
+      if (saved.citizenship)
+        setCitizenship({
+          id: saved.citizenship,
+          name: saved.citizenship,
+          slug: saved.citizenship,
+             code:saved.countryCode,
+        });
+
+      if (saved.country && saved.countryCode)
+        setCountry({
+          id: saved.countryCode, 
+          code:saved.countryCode,
+          name: saved.country,
+          slug: saved.country,
+        });
+
+      if (saved.state)
+        setStateOrCountry({
+          id: saved.state,
+          name: saved.state,
+          slug: saved.state,
+        });
+
+      if (saved.passportType)
+        setPassportType({
+          id: saved.passportType,
+          name: saved.passportType,
+          slug: saved.passportType,
+        });
+
+      if (saved.apostilleType)
+        setApostilleType({
+          id: saved.apostilleType,
+          name: saved.apostilleType,
+          slug: saved.apostilleType,
+        });
+    }
+  }, [])
 
   return (
     <div>

@@ -29,8 +29,7 @@ const Page = () => {
     toCountrySlug: country,
   });
   const visaService = data?.data?.data
-console.log(visaService,"visaService")
-
+ 
   return (
     <>
       <BannerLayout videoSrc="/homeBg.mp4">
