@@ -157,7 +157,7 @@ function DropdownForm({ activeTab, setActiveTab }: { activeTab: string; setActiv
     if (!validate()) return;
 
     if (activeTab === "visa") {
-      router.push(`/visa?country=${country?.id}`);
+      router.push(`/visa?country=${country?.slug}`);
       savePlatformServiceStep({ platformServiceId: country?.id });
     } else if (activeTab === "passport") {
       router.push(
