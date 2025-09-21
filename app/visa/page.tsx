@@ -39,6 +39,8 @@ const Page = () => {
     dispatch(startApplication({ type: "visa" }));
   }, []);
 
+ 
+ 
   return (
     <>
       <BannerLayout videoSrc="/homeBg.mp4">
