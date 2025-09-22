@@ -124,9 +124,10 @@ const page = () => {
       <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10 items-center">
           {/* Left: Text and Image */}
-          {apostilleServices.map((service, index) => (
+          {apostilleServices.map((service:any, index) => (
             <VisaServiceCard
               key={index}
+              id={service._id}
               icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="74" height="74" rx="16" fill="#96C6FF" />
                 <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />

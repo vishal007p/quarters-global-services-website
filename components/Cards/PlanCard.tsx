@@ -39,7 +39,7 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
   const country = searchParams.get("toCountrySlug") || "";
   const platformServiceCategorySlug =
     searchParams.get("platformServiceCategorySlug") || "";
-     
+
   const handleApplyNow = () => {
     dispatch(
       setPackage({
@@ -62,10 +62,9 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
     <Card
       className={`
         flex flex-col h-full border 
-        ${
-          plan.isPriority
-            ? `border-[${primaryColor}] shadow-lg`
-            : "border-gray-200"
+        ${plan.isPriority
+          ? `border-[${primaryColor}] shadow-lg`
+          : "border-gray-200"
         } 
         rounded-xl 
         hover:shadow-xl 
@@ -94,10 +93,9 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
             variant="outline"
             className={`
               text-sm px-2 py-1 rounded 
-              ${
-                plan.priceDescription
-                  ? "bg-amber-100 text-amber-800 font-medium"
-                  : "bg-gray-100 text-gray-800"
+              ${plan.priceDescription
+                ? "bg-amber-100 text-amber-800 font-medium"
+                : "bg-gray-100 text-gray-800"
               }
             `}
           >

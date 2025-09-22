@@ -5,20 +5,16 @@ export interface PlatformService {
   platformServiceCategoryPackageAddonsId: string[];
 }
 
-/**
- * Save step data for platform service in localStorage
- * @param stepData Partial data of current step
- * @param createNew boolean to push as a new service (default false = merge with last)
- */
 export const savePlatformServiceStep = (
   stepData: Partial<PlatformService>,
   createNew: boolean = false
 ) => {
+  if (typeof window === "undefined") return; // ❌ Skip on server
+
   const existing = localStorage.getItem("platformServices");
   const platformServices: PlatformService[] = existing ? JSON.parse(existing) : [];
 
   if (createNew || platformServices.length === 0) {
-    // Push new object
     platformServices.push({
       platformServiceId: "",
       platformServiceCategoryId: "",
@@ -27,7 +23,6 @@ export const savePlatformServiceStep = (
       ...stepData,
     });
   } else {
-    // Merge with last object
     const lastIndex = platformServices.length - 1;
     platformServices[lastIndex] = {
       ...platformServices[lastIndex],
@@ -38,17 +33,13 @@ export const savePlatformServiceStep = (
   localStorage.setItem("platformServices", JSON.stringify(platformServices));
 };
 
-/**
- * Get all saved platform services from localStorage
- */
 export const getPlatformServices = (): PlatformService[] => {
+  if (typeof window === "undefined") return []; // ❌ Skip on server
   const existing = localStorage.getItem("platformServices");
   return existing ? JSON.parse(existing) : [];
 };
 
-/**
- * Clear all saved platform services
- */
 export const clearPlatformServices = () => {
+  if (typeof window === "undefined") return; // ❌ Skip on server
   localStorage.removeItem("platformServices");
 };

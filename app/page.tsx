@@ -114,8 +114,8 @@ export default function Home() {
             </h2>
             <div className="rounded-xl overflow-hidden w-full max-w-md">
               <Image
-              width={150}
-              height={150}
+                width={150}
+                height={150}
                 src="/home.png" // Replace with your actual image path
                 alt="Travel Passport"
                 className="w-full rounded-xl"
@@ -126,6 +126,7 @@ export default function Home() {
           {/* Right: Cards */}
           <div className="grid sm:grid-cols-2 gap-5">
             <VisaServiceCard
+              id="1"
               icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="74" height="74" rx="16" fill="#96C6FF" />
                 <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />
@@ -141,6 +142,8 @@ export default function Home() {
             />
             <div className="mt-14">
               <VisaServiceCard
+
+                id="1"
                 icon={<svg width="74" height="75" viewBox="0 0 74 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect y="0.5" width="74" height="74" rx="16" fill="#FFA6AE" />
                   <rect x="25" y="28.5" width="24" height="24" rx="3" fill="white" />
@@ -158,6 +161,7 @@ export default function Home() {
             </div>
 
             <VisaServiceCard
+              id="1"
               icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="74" height="74" rx="16" fill="#96C6FF" />
                 <rect x="13" y="20" width="48" height="34" rx="6" fill="white" />
@@ -172,6 +176,7 @@ export default function Home() {
 
             <div className="mt-14">
               <VisaServiceCard
+                id="1"
                 icon={<svg width="74" height="75" viewBox="0 0 74 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect y="0.5" width="74" height="74" rx="16" fill="#FFA6AE" />
                   <path d="M48 33.5C49.2 28.7 47.5 28.1667 46.5 28.5C46.8333 28.3333 47.1 28.1 45.5 28.5C43.9 28.9 44.1667 31 44.5 32L45 36.5L40.5 38V41C44.5 43.4 50.1667 42 52.5 41V37.5L47.5 36.5L48 33.5Z" fill="white" stroke="black" />
@@ -274,8 +279,8 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2 mt-auto">
                   <Image
-                  width={15}
-                  height={15}
+                    width={15}
+                    height={15}
                     src={post.authorImage}
                     alt={post.author}
                     className="w-8 h-8 rounded-full"

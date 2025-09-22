@@ -1,5 +1,5 @@
 import BannerLayout from '@/components/Banner/BannerLayout'
-import PlanCard, { VisaPlan } from '@/components/Cards/PlanCard'
+import PlanCard from '@/components/Cards/PlanCard'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection';
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
@@ -29,16 +29,16 @@ const testimonials = [
     },
 ];
 
-const visaPlans: VisaPlan[] = [
+const visaPlans: any[] = [
     {
-        id: 1,
+        _id: "1",
         title: "Standard Processing",
         processingTime: "15-20 Business Days",
         price: "$420.00",
         serviceFee: "No service fee",
     },
     {
-        id: 2,
+        _id: "2",
         title: "Priority",
         processingTime: "8-10 Processing Days",
         price: "$620.00",
@@ -47,7 +47,7 @@ const visaPlans: VisaPlan[] = [
         isPriority: true,
     },
     {
-        id: 3,
+        _id: "3",
         title: "Express Processing",
         processingTime: "3-5 Business Days",
         price: "$850.00",
@@ -99,7 +99,7 @@ const page = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {visaPlans.map((plan) => (
-                        <PlanCard key={plan.id} plan={plan} />
+                        <PlanCard key={plan.id} plan={plan}  type='e-visa' />
                     ))}
                 </div>
             </div>

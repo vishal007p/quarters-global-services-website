@@ -9,7 +9,7 @@ import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import { startApplication } from "@/store/slices/applicationSlice";
- import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -32,9 +32,11 @@ const Page = () => {
   });
   const dispatch = useDispatch();
   const visaService = data?.data?.data;
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

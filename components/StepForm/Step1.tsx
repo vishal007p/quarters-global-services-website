@@ -150,18 +150,19 @@ export default function Step1({ onNext }: Props) {
                         status: "Draft",
                         "serviceFields": {
                             "serviceType": "CourierDelivery",
-                            "country": "Germany",
-                            "visaCategory": "Tourist",
-                            "passport": "passport_germany.pdf",
-                            "applicationForm": "schengen_visa_form.pdf",
-                            "passportPhotos": ["photo1.jpg", "photo2.jpg"],
-                            "supportingDocs": [
-                                "hotel_booking.pdf",
-                                "travel_itinerary.pdf",
-                                "bank_statement.pdf"
-                            ],
-                            "travelItinerary": "travel_plan.pdf",
-                            "proofOfFunds": "funds_proof.pdf"
+                            "senderAddress": "123 Main St, New York",
+                            "stateSender": "NY",
+                            "recipientName": "Alice Smith",
+                            "recipientAddress": "789 Pine St, Los Angeles",
+                            "stateRecipient": "CA",
+                            "deliveryType": "Express",
+                            "phoneSender": "1234567890",
+                            "citySender": "New York",
+                            "countrySender": "USA",
+                            "phoneRecipient": "9876543210",
+                            "cityRecipient": "Los Angeles",
+                            "countryRecipient": "USA",
+                            "noOfPagesOrEnvelopes": 5
                         }
                     },
                 ],
@@ -181,7 +182,7 @@ export default function Step1({ onNext }: Props) {
                 console.warn("No active application ID found");
             }
 
-            //@ts-ignore
+            // @ts-expect-error: API unwrap typing mismatch with RTK Query
             const response = await createApplication(payload).unwrap();
 
             if (response?.status && response.data?.redirectURL) {
