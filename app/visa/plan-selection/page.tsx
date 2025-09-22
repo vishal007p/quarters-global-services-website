@@ -4,6 +4,7 @@ import PlanCard, { VisaPlan } from "@/components/Cards/PlanCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
+import PlanCardSkeleton from "@/components/Skeletons/PlanCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import { useGetPlatformServiceCategoryPackagesQuery } from "@/services/platformCategoryPackageApi";
 import { useSearchParams } from "next/navigation";
@@ -21,7 +22,6 @@ const Page = () => {
     }
   );
   const packages = data?.data?.data;
-  if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Something went wrong</p>;
 
   return (
@@ -38,14 +38,21 @@ const Page = () => {
       </BannerLayout>
       <div className="max-w-6xl mx-auto my-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {packages.map((plan: VisaPlan, index: number) => (
-            <div
-              key={index}
-              className={`${index % 2 === 1 ? "mt-4" : "mt-0"}`} // Apply 16px margin-top to odd-indexed cards
-            >
-              <PlanCard plan={plan} type="visa" />
-            </div>
-          ))}
+          {
+            isLoading ? <>
+              <PlanCardSkeleton />
+              <PlanCardSkeleton />
+              <PlanCardSkeleton />
+            </> : <>
+              {packages.map((plan: VisaPlan, index: number) => (
+                <div
+                  key={index}
+                  className={`${index % 2 === 1 ? "mt-4" : "mt-0"}`} // Apply 16px margin-top to odd-indexed cards
+                >
+                  <PlanCard plan={plan} type="visa" />
+                </div>
+              ))}</>
+          }
         </div>
       </div>
       <CommitmentSection />

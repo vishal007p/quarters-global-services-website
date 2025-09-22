@@ -1,10 +1,10 @@
 import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
-import { useRouter } from "next/navigation";
-import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
+ import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { setCategory } from "@/store/slices/applicationSlice";
 import { useDispatch, useSelector } from "react-redux";
- 
+import { useRouter } from "nextjs-toploader/app";
+
 interface VisaServiceCardProps {
   id: string;
   icon: React.ReactNode;
@@ -33,6 +33,8 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
       router.push(link);
     }
   };
+
+
   return (
     <div className="max-w-sm p-4 rounded-xl border border-gray-200 h-[320px]  hover:shadow-md transition-shadow  flex items-center">
       <div className="flex flex-col items-start gap-3">

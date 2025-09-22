@@ -5,6 +5,7 @@ import PlanCard, { VisaPlan } from '@/components/Cards/PlanCard'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection';
 import FAQSection from '@/components/FAQSection';
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
+import PlanCardSkeleton from '@/components/Skeletons/PlanCardSkeletons';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import { useGetPlatformServiceCategoryPackagesQuery } from '@/services/platformCategoryPackageApi';
 import { useSearchParams } from 'next/navigation';
@@ -22,7 +23,6 @@ const Page = () => {
     });
     const packages = data?.data?.data;
 
-    if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Something went wrong</p>;
 
     return (
@@ -42,9 +42,17 @@ const Page = () => {
                 <h2 className="text-3xl font-bold text-center mb-12">Our Visa Processing Plans</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {packages.map((plan:VisaPlan) => (
-                        <PlanCard key={plan._id} plan={plan} type={"passport"} />
-                    ))}
+                    {
+                        isLoading ? <>
+                            <PlanCardSkeleton />
+                            <PlanCardSkeleton />
+                            <PlanCardSkeleton />
+                        </> : <>
+                            {packages.map((plan: VisaPlan) => (
+                                <PlanCard key={plan._id} plan={plan} type={"passport"} />
+                            ))}</>
+                    }
+
                 </div>
             </div>
 

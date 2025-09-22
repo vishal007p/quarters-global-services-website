@@ -14,7 +14,6 @@ import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 
-
 const blogPosts = [
   {
     tag: "Visa",

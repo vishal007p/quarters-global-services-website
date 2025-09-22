@@ -6,6 +6,7 @@ import { useGetCountriesQuery } from "@/services/countryApi";
 import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
+import Skeleton from "react-loading-skeleton";
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -33,8 +34,8 @@ interface DropdownFormProps {
 }
 
 
-  // --- Tabs ---
-  const tabs: TabType[] = ["visa", "passport", "apostille"];
+// --- Tabs ---
+const tabs: TabType[] = ["visa", "passport", "apostille"];
 
 const STORAGE_KEY = "platformServiceStep";
 
@@ -70,7 +71,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const router = useRouter();
 
   // --- Fetch Countries ---
-  const { data } = useGetCountriesQuery();
+  const { data, isLoading: countryLoading } = useGetCountriesQuery();
   const apiCountries: DropdownOption[] =
     data?.data?.data?.map((country: any) => ({
       id: country._id,
@@ -80,12 +81,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     })) || [];
 
   // --- Fetch Passport & Apostille Options ---
-  const { data: passportList } = useGetPlatformServiceCategoriesQuery({
+  const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "passport",
     toCountrySlug: "", // updated dynamically later
   });
 
-  const { data: apostilleOptions } = useGetPlatformServiceCategoriesQuery({
+  const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "apostilleOptions",
     toCountrySlug: "",
   });
@@ -261,6 +262,25 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         });
     }
   }, [])
+
+  if (countryLoading || passportLoading || apostilleLoading) { // your loading condition
+    return (
+      <div className="max-w-4xl mx-auto p-6 flex flex-row gap-4">
+        {[...Array(3)].map((_, i) => (
+          <Skeleton
+            key={i}
+            height={40}
+            width={250}
+            borderRadius={6}
+            baseColor="#e0e0e0"       // optional: background color
+            highlightColor="#f0f0f0"  // optional: animation highlight
+            enableAnimation={true}     // ensures animation runs
+          />
+        ))}
+      </div>
+    );
+  }
+
 
   return (
     <div>
