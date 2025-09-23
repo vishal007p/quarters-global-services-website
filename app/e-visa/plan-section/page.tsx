@@ -79,7 +79,6 @@ const faqData = [
     },
 ];
 
-
 const page = () => {
     return (
         <>
@@ -92,8 +91,6 @@ const page = () => {
                     work visas—accurately, securely, and on time.
                 </h1>
             </BannerLayout>
-
-
             <div className="max-w-6xl mx-auto my-16 px-4">
                 <h2 className="text-3xl font-bold text-center mb-12">Our Visa Processing Plans</h2>
 
@@ -103,10 +100,7 @@ const page = () => {
                     ))}
                 </div>
             </div>
-
-
             <CommitmentSection />
-
             <div className="max-w-7xl mx-auto px-10 py-12  ">
                 <SectionTitle
                     subtitle="Our Testimonials"
@@ -116,7 +110,6 @@ const page = () => {
                 />
                 <TestimonialSlider testimonials={testimonials} />
             </div>
-
             <FAQSection items={faqData} />
         </>
     )

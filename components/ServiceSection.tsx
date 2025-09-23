@@ -16,7 +16,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   imagePosition,
 }) => {
   return (
-    <section className="py-16 px-4 lg:px-8 bg-white">
+    <section className="py-16 px-4 lg:px-8  ">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
         {/* Image on left, text on right */}
         {imagePosition === "left" && (
