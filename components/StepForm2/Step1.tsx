@@ -200,7 +200,7 @@ export default function Step1({ onNext }: Props) {
 
 
     return (
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-full mx-auto">
             {/* Header */}
             <div className="bg-[#00408D] rounded-lg shadow-md p-6 mb-6">
                 <div className="flex items-center justify-between">
