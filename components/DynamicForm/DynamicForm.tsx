@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm, SubmitHandler, Path } from "react-hook-form";
+import { useForm,  Path, DefaultValues } from "react-hook-form";
 import { z, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -47,14 +47,21 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
   fields,
   onSubmit,
 }: DynamicFormProps<TSchema>) {
-  type FormValues = z.infer<TSchema>;
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: Object.fromEntries(fields.map(f => [f.name, ""])) as FormValues,
+  type FormValues = z.input<TSchema>;
+  type InputValues = z.input<TSchema>;   // raw form values
+  type OutputValues = z.output<TSchema>; // parsed values
+
+  const form = useForm<InputValues>({
+    resolver: zodResolver(schema) as any, // cast to avoid TS mismatch
+    defaultValues: Object.fromEntries(
+      fields.map(f => [f.name, ""])
+    ) as DefaultValues<InputValues>,
   });
 
-  const handleSubmit: SubmitHandler<FormValues> = (values) => {
-    onSubmit(values);
+
+  const handleSubmit = (values: InputValues) => {
+    // zodResolver guarantees values are already parsed to OutputValues
+    onSubmit(values as unknown as OutputValues);
   };
 
   return (
