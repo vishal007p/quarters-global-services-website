@@ -9,7 +9,7 @@ export const savePlatformServiceStep = (
   stepData: Partial<PlatformService>,
   createNew: boolean = false
 ) => {
-  if (typeof window === "undefined") return; // ❌ Skip on server
+  if (typeof window === "undefined") return; 
 
   const existing = localStorage.getItem("platformServices");
   const platformServices: PlatformService[] = existing ? JSON.parse(existing) : [];
@@ -34,12 +34,12 @@ export const savePlatformServiceStep = (
 };
 
 export const getPlatformServices = (): PlatformService[] => {
-  if (typeof window === "undefined") return []; // ❌ Skip on server
+  if (typeof window === "undefined") return []; 
   const existing = localStorage.getItem("platformServices");
   return existing ? JSON.parse(existing) : [];
 };
 
 export const clearPlatformServices = () => {
-  if (typeof window === "undefined") return; // ❌ Skip on server
+  if (typeof window === "undefined") return; 
   localStorage.removeItem("platformServices");
 };

@@ -1,5 +1,4 @@
-import MultiStepForm from "@/components/StepForm/MultiStepForm";
-import MultiStepForm2 from "@/components/StepForm2/MultiStepForm2";
+ import MultiStepForm2 from "@/components/StepForm2/MultiStepForm2";
 
 export default function CheckoutPage() {
   return (
