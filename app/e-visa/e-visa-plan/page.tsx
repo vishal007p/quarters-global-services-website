@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import EVisaPlan from "./EVisaPlan";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <EVisaPlan />
+    <Suspense fallback={<FullScreenLoader />}>      <EVisaPlan />
     </Suspense>
   );
 }

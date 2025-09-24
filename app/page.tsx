@@ -13,7 +13,7 @@ import SectionHeading from "@/components/SectionTitle/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
-
+ 
 const blogPosts = [
   {
     tag: "Visa",
@@ -52,6 +52,7 @@ export default function Home() {
 
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
 
+ 
   return (
     <>
       <BannerLayout bg={activeTab === "visa" ? "/visa.jpg" : "/password.jpg"}>

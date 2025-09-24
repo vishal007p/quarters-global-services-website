@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import PlanSection from "./PlanSection";
+import FullScreenLoader from "@/components/FullScreenLoader";
 
 export default function Page() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <PlanSection />
+  <Suspense fallback={<FullScreenLoader/>}>            <PlanSection />
         </Suspense>
     );
 }
