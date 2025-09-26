@@ -22,7 +22,7 @@ export const commonApplicantFields: FieldConfig[] = [
 
 // ---------- OCI ----------
 export const ociSchema = z.object({
-  serviceType: z.literal("OCI"),
+  serviceType: z.string(),
   applicationType: z.string(),
   maritalStatus: z.string().optional(),
   nationality: z.string(),
@@ -95,8 +95,7 @@ export const ociFieldsWithCommon = [...commonApplicantFields, ...ociFields];
 
 // ---------- Visa ----------
 export const visaSchema = z.object({
-  serviceType: z.literal("Visa"),
-  supportingDocs: z.array(z.string()),
+  serviceType: z.string(),  supportingDocs: z.array(z.string()),
   company: z.string().optional(),
 });
 export const visaFields: FieldConfig[] = [
@@ -109,7 +108,7 @@ export const visaFieldsWithCommon = [...commonApplicantFields, ...visaFields];
 
 // ---------- Apostille ----------
 export const apostilleSchema = z.object({
-  serviceType: z.literal("Apostille"),
+    serviceType: z.string(),
   destinationCountry: z.string(),
   documentCount: z.number(),
 });
@@ -122,7 +121,7 @@ export const apostilleFieldsWithCommon = [...commonApplicantFields, ...apostille
 
 // ---------- Courier ----------
 export const courierSchema = z.object({
-  serviceType: z.literal("CourierDelivery"),
+  serviceType: z.string(),
   senderAddress: z.string(),
   stateSender: z.string(),
   citySender: z.string(),
@@ -136,7 +135,7 @@ export const courierSchema = z.object({
   phoneRecipient: z.string(),
   deliveryType: z.string(),
   preferredCourierCompany: z.string(),
-  noOfPagesOrEnvelopes: z.number(),
+  noOfPagesOrEnvelopes: z.string(),
   trackingNumber: z.string(),
 });
 export const courierFields: FieldConfig[] = [
@@ -161,13 +160,13 @@ export const courierFieldsWithCommon = [...commonApplicantFields, ...courierFiel
 
 // ---------- Vehicle ----------
 export const vehicleSchema = z.object({
-  serviceType: z.literal("Vehicle"),
+  serviceType: z.string(),
   vehicleType: z.string(),
   pickupDate: z.string(),
   dropDate: z.string(),
   pickupLocation: z.string(),
   dropLocation: z.string(),
-  numberOfPassengers: z.number(),
+  numberOfPassengers: z.string(),
   purpose: z.string(),
   preferredDriver: z.string(),
 });
@@ -186,7 +185,7 @@ export const vehicleFieldsWithCommon = [...commonApplicantFields, ...vehicleFiel
 
 // ---------- Flight Charter ----------
 export const flightCharterSchema = z.object({
-  serviceType: z.literal("FlightCharter"),
+    serviceType: z.string(),
   charterType: z.string(),
   numberOfPassengers: z.number(),
   date: z.string(),
@@ -213,7 +212,7 @@ export const flightCharterFieldsWithCommon = [...commonApplicantFields, ...fligh
 
 // ---------- Event ----------
 export const eventSchema = z.object({
-  serviceType: z.literal("Event"),
+   serviceType: z.string(),
   eventType: z.string(),
   organizerName: z.string(),
   eventDate: z.string(),
@@ -230,7 +229,7 @@ export const eventFieldsWithCommon = [...commonApplicantFields, ...eventFields];
 
 // ---------- Consultancy ----------
 export const consultancySchema = z.object({
-  serviceType: z.literal("Consultancy"),
+   serviceType: z.string(),
   inquiryType: z.string(),
   purpose: z.string(),
 });
@@ -243,7 +242,7 @@ export const consultancyFieldsWithCommon = [...commonApplicantFields, ...consult
 
 // ---------- Miscellaneous ----------
 export const miscellaneousSchema = z.object({
-  serviceType: z.literal("Miscellaneous"),
+    serviceType: z.string(),
   miscServiceType: z.string(),
   nationality: z.string(),
 });
@@ -256,7 +255,7 @@ export const miscellaneousFieldsWithCommon = [...commonApplicantFields, ...misce
 
 // ---------- Driver ----------
 export const driverSchema = z.object({
-  serviceType: z.literal("Driver"),
+   serviceType: z.string(),
   licenseNumber: z.string(),
   drivingExperienceYears: z.number(),
 });

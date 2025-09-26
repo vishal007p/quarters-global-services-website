@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "../ui/checkbox";
 
 // ---------- TYPES ----------
 export type FieldType = "text" | "number" | "select" | "email" | "textarea" | "checkbox" | "date";
@@ -39,6 +40,7 @@ export interface DynamicFormProps<TSchema extends ZodObject<any>> {
   schema: TSchema;
   fields: FieldConfig[];
   onSubmit: (values: z.infer<TSchema>) => void;
+  serviceType: string
 }
 
 // ---------- COMPONENT ----------
@@ -46,6 +48,7 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
   schema,
   fields,
   onSubmit,
+  serviceType,
 }: DynamicFormProps<TSchema>) {
   type FormValues = z.input<TSchema>;
   type InputValues = z.input<TSchema>;   // raw form values
@@ -53,12 +56,13 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
 
   const form = useForm<InputValues>({
     resolver: zodResolver(schema) as any, // cast to avoid TS mismatch
-    defaultValues: Object.fromEntries(
-      fields.map(f => [f.name, ""])
-    ) as DefaultValues<InputValues>,
+    defaultValues: {
+      ...Object.fromEntries(fields.map(f => [f.name, ""])),
+      serviceType: "OCI", // ensure required hidden field
+    } as unknown as DefaultValues<InputValues>,
   });
 
-
+ 
   const handleSubmit = (values: InputValues) => {
     // zodResolver guarantees values are already parsed to OutputValues
     onSubmit(values as unknown as OutputValues);
@@ -102,15 +106,23 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
                       <Textarea
                         placeholder={field.placeholder}
                         {...f}
-                        value={f.value as unknown as string} // ✅ cast value to string
+                        value={f.value as unknown as string}
                         className="border rounded-lg p-2 w-full min-h-[80px]"
+                      />
+                    ) : field.type === "checkbox" ? (
+                      <Checkbox
+                        checked={!!f.value}                 // convert value to boolean
+                        onCheckedChange={(checked) => f.onChange(checked)}
+                        onBlur={f.onBlur}
+                        name={f.name}
+                        ref={f.ref}
                       />
                     ) : (
                       <Input
-                        type={field.type}
+                        type={field.type}                    // text, number, email, date
                         placeholder={field.placeholder}
                         {...f}
-                        value={f.value as unknown as string} // ✅ cast value to string
+                        value={f.value as unknown as string}
                         className="border rounded-lg p-2 w-full"
                       />
                     )}

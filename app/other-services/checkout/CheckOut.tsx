@@ -5,13 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { DynamicForm } from "@/components/DynamicForm/DynamicForm";
 import { serviceForms } from "@/lib/serviceForms";
 import { useCreateApplication2Mutation } from "@/services/applicationApi2";
- 
+
 export default function CreateApplication() {
   const params = useSearchParams();
   const type = params.get("type") as keyof typeof serviceForms | null;
 
   const [createApplication, { isLoading, isError, isSuccess, error }] =
     useCreateApplication2Mutation();
+
+  console.log(error, "error")
 
   const [showAlert, setShowAlert] = useState(false);
 
@@ -67,7 +69,7 @@ export default function CreateApplication() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold mb-4 capitalize">{type} Form</h1>
 
       {showAlert && (
@@ -76,10 +78,35 @@ export default function CreateApplication() {
         </div>
       )}
 
-      <DynamicForm schema={schema} fields={fields} onSubmit={handleSubmit} />
+      <DynamicForm schema={schema} fields={fields} onSubmit={handleSubmit} serviceType={type} />
 
       {isLoading && <p className="text-blue-600 mt-2">Submitting...</p>}
-      {isError && <p className="text-red-600 mt-2">❌ {error?.toString()}</p>}
+      {isError && (() => {
+        if (typeof error === "string") return <p className="text-red-600 mt-2">❌ {error}</p>;
+
+        // RTK Query often returns error as { data: {...}, status: number }
+        if (typeof error === "object" && error !== null && "data" in error) {
+          const e = error as { data?: any }; // narrow to 'any' safely
+          return (
+            <div className="text-red-600 mt-2">
+              ❌ {e.data?.message || "Unknown error"}
+              {e.data?.errors && (
+                <ul className="ml-4 list-disc">
+                  {Object.entries(e.data.errors).map(([field, msg]) => (
+                    <li key={field}>
+                      {field}: {String(msg)}  {/* Cast unknown to string */}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+            </div>
+          );
+        }
+
+        return <p className="text-red-600 mt-2">❌ Unknown error</p>;
+      })()}
+
     </div>
   );
 }
