@@ -1,4 +1,6 @@
+"use client"
 import Image from "next/image";
+import { useRouter } from "nextjs-toploader/app";
 
 
 interface ServiceSectionProps {
@@ -15,6 +17,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   buttonText,
   imagePosition,
 }) => {
+  const router = useRouter()
   return (
     <section className="py-16 px-4 lg:px-8  ">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12">
@@ -34,7 +37,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => router.push(`/other-services/${title}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}
@@ -49,7 +52,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => router.push(`/other-services/${title}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}

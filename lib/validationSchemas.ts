@@ -27,24 +27,61 @@ export const step1Schema = z.object({
 });
 
 export const step2Schema = z.object({
-  cardNumber: z
-    .string()
-    .min(16, "Card Number must be 16 digits")
-    .max(16, "Card Number must be 16 digits")
-    .regex(/^\d+$/, "Card Number must contain only digits"),
-  expiry: z
-    .string()
-    .min(5, "Expiry must be in MM/YY format")
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Expiry must be in MM/YY format"),
-  cvv: z
-    .string()
-    .min(3, "CVV must be 3 digits")
-    .max(4, "CVV must be 3 or 4 digits")
-    .regex(/^\d+$/, "CVV must contain only digits"),
-  billingAddress: z.string().min(1, "Billing Address is required"),
+  applicationType: z.string().min(1, "Application type is required"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  dateOfBirth: z.string().min(1, "Date of birth is required"),
+  gender: z.string().min(1, "Gender is required"),
+  maritalStatus: z.string().min(1, "Marital status is required"),
+  nationality: z.string().min(1, "Nationality is required"),
+  phone: z.string().min(5, "Contact number is required"),
+  email: z.string().email("Invalid email address"),
+  usPassportNumber: z.string().min(1, "Passport number is required"),
+  placeOfIssue: z.string().min(1, "Place of issue is required"),
+  dateOfIssue: z.string().min(1, "Date of issue is required"),
+  dateOfExpiry: z.string().min(1, "Date of expiry is required"),
 });
 
+
+export const stepOtherDetailsSchema = z.object({
+  // Yes/No Questions
+  appliedEarlier: z.boolean(),
+  surrenderedOci: z.boolean(),
+  citizenOfPakBangladesh: z.boolean(),
+  parentsFromPakBangladesh: z.boolean(),
+  workedInForces: z.boolean(),
+
+  // Text fields
+  presentNationality: z.string().min(2, "Nationality is required"),
+  referenceName: z.string().min(2, "Name is required"),
+  referenceAddress: z.string().min(5, "Address is required"),
+  referenceRelationship: z.string().min(2, "Relationship is required"),
+  referenceAge: z
+    .string()
+    .regex(/^\d+$/, "Age must be numeric")
+    .optional(),
+
+  // Family details checkboxes
+  familyDetails: z.array(z.enum(["Birth", "Descent", "Registration", "Naturalisation"])),
+
+  // More Yes/No
+  soughtAsylum: z.boolean(),
+  convicted: z.boolean(),
+  refusedEntry: z.boolean(),
+  ngoViolation: z.boolean(),
+  humanTrafficking: z.boolean(),
+  cybercrime: z.boolean(),
+  glorifyTerrorism: z.boolean(),
+  criminalPending: z.boolean(),
+
+  // OCI Card holder family member
+  familyFullName: z.string().optional(),
+  ociCardRefNo: z.string().optional(),
+  placeOfIssue: z.string().optional(),
+});
 
 
 export type Step1Data = z.infer<typeof step1Schema>;
 export type Step2Data = z.infer<typeof step2Schema>;
+export type StepOtherDetailsData = z.infer<typeof stepOtherDetailsSchema>;
+

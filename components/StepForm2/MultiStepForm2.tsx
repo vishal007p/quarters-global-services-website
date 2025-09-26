@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Step1 from "./Step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
- 
+
 const steps = [
   { id: 1, label: "Traveler Info" },
   { id: 2, label: "Shipping/Billing" },
@@ -20,6 +20,28 @@ const MultiStepForm2 = () => {
   const next = (data: any) => {
     setFormData((prev: any) => ({ ...prev, ...data }));
     setStep((s) => s + 1);
+  };
+
+  const handleStep2Submit = async () => {
+    try {
+      const response = await fetch("/api/submit-oci", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("API call failed");
+      }
+
+      const result = await response.json();
+      console.log("API Success:", result);
+
+      // Move to Step 3
+      setStep((s) => s + 1);
+    } catch (error) {
+      console.error("Step 2 API Error:", error);
+    }
   };
 
   const back = () => setStep((s) => s - 1);
@@ -96,7 +118,7 @@ const MultiStepForm2 = () => {
           {/* Form Steps */}
           <div className={`${step === 3 ? "w-full" : "w-full"}`}>
             {step === 1 && <Step1 onNext={next} />}
-            {step === 2 && <Step2 onNext={next} onBack={back} />}
+            {step === 2 && <Step2 onNext={handleStep2Submit} onBack={back} />}
             {step === 3 && <Step3 />}
           </div>
         </div>

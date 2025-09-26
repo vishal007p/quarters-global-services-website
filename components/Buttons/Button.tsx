@@ -1,18 +1,23 @@
+import { useRouter } from "nextjs-toploader/app";
 import React, { ReactNode } from "react";
 
 interface ButtonProps {
   name: string;
   icon?: ReactNode;
   iconPosition?: "left" | "right"; // optional prop, default to "left"
+  link?: string
 }
 
 const Button: React.FC<ButtonProps> = ({
   name,
   icon,
   iconPosition = "left",
+  link
 }) => {
+  const router = useRouter()
   return (
     <button
+      onClick={() => { if (link) router.push(link) }}
       style={{
         display: "inline-flex",
         alignItems: "center",
