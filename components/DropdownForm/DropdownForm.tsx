@@ -272,7 +272,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     if (currentPath === "visa" || currentPath === "passport" || currentPath === "apostille") {
       setActiveTab(currentPath as TabType);
     }
-  }, [])
+  }, [currentPath,setActiveTab])
 
 
 

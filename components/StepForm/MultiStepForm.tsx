@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
+ import Step3 from "./Step3";
 
 import Image from "next/image";
 
@@ -100,7 +99,6 @@ const MultiStepForm = () => {
           {/* Form Steps */}
           <div className={`${step === 3 ? "w-full" : "w-1/2"}`}>
             {step === 1 && <Step1 onNext={next} />}
-            {step === 2 && <Step2 onNext={next} onBack={back} />}
             {step === 3 && <Step3 />}
           </div>
 

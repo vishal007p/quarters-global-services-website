@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -13,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {  Step1Data, Step2Data, step2Schema } from "@/lib/validationSchemas";
+import {   Step2Data, step2Schema } from "@/lib/validationSchemas";
 
 type Props = {
   onNext: (data: Step2Data) => void;

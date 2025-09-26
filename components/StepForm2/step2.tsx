@@ -190,8 +190,7 @@ export default function StepOtherDetails({ onNext, onBack }: Props) {
                       <label key={opt} className="flex items-center gap-2">
                         <input
                           type="checkbox"
-                          //@ts-ignore
-                          checked={field.value?.includes(opt)}
+                          checked={field.value?.includes(opt as any)}
                           onChange={(e) => {
                             if (e.target.checked) {
                               field.onChange([...field.value, opt]);
