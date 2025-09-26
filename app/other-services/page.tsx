@@ -16,7 +16,7 @@ const services = [
             "We provide secure and timely courier services for your documents and packages. Track your shipments easily and ensure prompt delivery with our reliable service.",
         buttonText: "Learn More",
         imageSrc: "/images/courier.jpg",
-        
+
     },
     {
         title: "Vehicle Booking",
@@ -87,10 +87,11 @@ const ServicesPage = () => {
         <div className="min-h-screen bg-gray-50">
             {/* Hero Banner */}
             <BannerLayout bg="/service.jpg">
-                <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
+                <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
                     Other Services
                 </h4>
             </BannerLayout>
+
 
             <div className="bg-gradient-to-b from-[#DEEBFF] to-[#FFE3E3] py-10 w-full">
                 <div className="flex justify-center gap-24 w-full">
@@ -194,7 +195,7 @@ const ServicesPage = () => {
                                     imageSrc={"/service.png"}
                                     imagePosition={index % 2 === 0 ? "left" : "right"}
                                 />
-                             </div>
+                            </div>
                         ))}
                     </div>
                 </div>

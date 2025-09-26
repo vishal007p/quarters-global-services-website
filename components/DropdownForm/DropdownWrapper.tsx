@@ -59,9 +59,9 @@ const DropdownWrapper = ({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-[250px] justify-between bg-[#161616CC]/80 hover:bg-unset hover:text-white"
+            className="md:w-[250px] w-full justify-between bg-[#161616CC]/80 hover:bg-unset hover:text-white"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 capitalize">
               {value && type === "flag" && typeof value === "object" && (
                 <Flags code={value.code} style={{ width: 20, height: 15 }} />
               )}

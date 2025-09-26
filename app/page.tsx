@@ -13,7 +13,7 @@ import SectionHeading from "@/components/SectionTitle/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
- 
+
 const blogPosts = [
   {
     tag: "Visa",
@@ -48,25 +48,48 @@ const blogPosts = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa"); 
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
   return (
     <>
-      <BannerLayout bg={activeTab === "visa" ? "/visa.jpg" : activeTab==="apostille"?"/services/apostille.png":"/password.jpg"}>
-        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4 text-white text-center">
+      <BannerLayout
+        bg={
+          activeTab === "visa"
+            ? "/visa.jpg"
+            : activeTab === "apostille"
+              ? "/services/apostille.png"
+              : "/password.jpg"
+        }
+      >
+        {/* Heading Overlay */}
+        <h4 className="bg-black/40 py-2 px-4 sm:py-3 sm:px-6 w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white text-center font-bold mb-4 text-[clamp(1.25rem,2vw,2.5rem)]">
           Quartus Global Service
         </h4>
-        <h1 className="text-4xl font-bold text-white text-center mb-4">
+
+        <h1 className="text-white text-center font-bold mb-6 text-[clamp(1.5rem,3vw,3.5rem)]">
           Smart Travel Starts Here – Fast, Secure, Digital
         </h1>
 
-        <div className="flex items-center gap-4 justify-center py-6">
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center py-6">
           <Button
             iconPosition="right"
             name={"Book a consultation"}
             icon={
-              <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-                <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             }
           />
@@ -75,16 +98,30 @@ export default function Home() {
             iconPosition="right"
             name={"Book a consultation"}
             icon={
-              <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-                <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             }
           />
         </div>
 
-
-        <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
+        {/* Dropdown Form */}
+        <div className="px-4 sm:px-6 md:px-8">
+          <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
+        </div>
 
         {/* Floating Chat Bubble */}
         <div className="fixed bottom-4 right-4 z-50">
@@ -98,6 +135,8 @@ export default function Home() {
           </div>
         </div>
       </BannerLayout>
+
+
 
       <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
@@ -198,27 +237,64 @@ export default function Home() {
         </div>
       </section>
 
-      <div className=" bg-[url('/img.jpg')] bg-cover bg-center p-16 max-w-7xl mx-auto my-10 rounded-3xl  text-white">
-        <h3>Ready to Start Your Visa or Immigration Process?</h3>
-        <p>Get expert guidance, track your application in real time, and submit <br />  everything securely right from your device.</p>
+      <div className="bg-[url('/img.jpg')] bg-cover bg-center p-6 sm:p-10 md:p-16 max-w-7xl mx-auto my-10 rounded-3xl text-white">
+        <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4">
+          Ready to Start Your Visa or Immigration Process?
+        </h3>
+        <p className="text-sm sm:text-base md:text-lg mb-6 leading-relaxed">
+          Get expert guidance, track your application in real time, and submit <br className="hidden sm:inline" />
+          everything securely right from your device.
+        </p>
 
-        <div className="flex items-center gap-4 justify-start py-6">
-          <ButtonTwo iconPosition="right" name={"Log in to portal"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12.5" r="12" fill="white" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <ButtonTwo
+            iconPosition="right"
+            name={"Log in to portal"}
+             icon={
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12.5" r="12" fill="white" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="#022146"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
+          />
 
-
-          } />
-
-          <ButtonTwo iconPosition="right" name={"Track Application"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12.5" r="12" fill="white" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="#022146" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-
-          } />
+          <ButtonTwo
+            iconPosition="right"
+            name={"Track Application"}
+             icon={
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12.5" r="12" fill="white" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="#022146"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
+          />
         </div>
       </div>
+
 
       <WhyChoose />
 
@@ -240,7 +316,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-10 py-12  ">
+      <div className="md:max-w-7xl w-full mx-auto md:px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"
           title="Real Stories. Real Success."
@@ -250,53 +326,70 @@ export default function Home() {
         <TestimonialSlider />
       </div>
 
-      <div className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]   py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-center gap-6">
+      <div className="bg-[linear-gradient(180deg,#DEEBFF_0%,#FFE3E3_100%)] py-12 px-4">
+        <div className="max-w-8xl mx-auto flex flex-wrap justify-center gap-6">
           {blogPosts.map((post, index) => (
             <div
               key={index}
-              className="w-[464px] h-[500px] bg-white rounded-[36px] p-4 flex flex-col gap-10 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-[#E7000B] transition-all duration-300 ease-in-out cursor-pointer"
+              className="w-full sm:w-[300px] md:w-[360px] lg:w-[420px] xl:w-[464px] h-auto bg-white rounded-[36px] p-4 flex flex-col gap-6 sm:gap-8 border border-[#F2F2F2] shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:border-[#E7000B] transition-all duration-300 ease-in-out cursor-pointer"
             >
               <Image
                 width={150}
-                height={15}
+                height={150}
                 src={"/img.jpg"}
                 alt={post.title}
-                className="w-full h-48 object-cover rounded-[20px]"
+                className="w-full h-48 sm:h-40 md:h-44 lg:h-48 object-cover rounded-[20px]"
               />
               <div className="flex flex-col justify-between flex-grow">
                 <div>
-                  <p className="text-sm text-blue-600 font-semibold mb-1">{post.tag}</p>
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">{post.title}</h3>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm sm:text-xs md:text-sm text-blue-600 font-semibold mb-1">{post.tag}</p>
+                  <h3 className="font-bold text-lg sm:text-base md:text-lg lg:text-xl text-gray-900 mb-2">{post.title}</h3>
+                  <p className="text-sm sm:text-xs md:text-sm text-gray-600 mb-3">
                     {post.description}{" "}
                     <span className="text-red-600 font-semibold">Read More</span>
                   </p>
                 </div>
                 <div className="flex items-center gap-2 mt-auto">
                   <Image
-                    width={15}
-                    height={15}
+                    width={32}
+                    height={32}
                     src={post.authorImage}
                     alt={post.author}
                     className="w-8 h-8 rounded-full"
                   />
-                  <div className="text-sm text-gray-700">
+                  <div className="text-sm sm:text-xs text-gray-700">
                     <p className="font-medium">{post.author}</p>
                     <p className="text-gray-500 text-xs">{post.date}</p>
                   </div>
                 </div>
               </div>
             </div>
-
           ))}
         </div>
+
         <div className="flex items-center justify-center my-10">
-          <Button iconPosition="right" name={"  Explore All Blogs"} icon={<svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-            <path d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          } />
+          <Button
+            iconPosition="right"
+            name={"Explore All Blogs"}
+            icon={
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12.5" r="12" fill="#D31021" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
+          />
         </div>
       </div>
 
@@ -309,7 +402,7 @@ export default function Home() {
           rightColor="text-black"
         />
 
-        <div className=" max-w-7xl mx-auto  flex flex-col lg:flex-row items-center justify-between gap-8 px-6 lg:px-16 py-12 bg-white">
+        <div className=" w-full md:max-w-7xl mx-auto  flex flex-col lg:flex-row items-center justify-between gap-8 px-6 lg:px-16 py-12 bg-white">
           {/* Left Form */}
 
           <div className="w-full lg:w-1/2 space-y-4">
@@ -348,7 +441,6 @@ export default function Home() {
               </div>
             </div>
 
-
             <div >
               <select
                 title="aa"
@@ -384,8 +476,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
     </>
-
   );
 }

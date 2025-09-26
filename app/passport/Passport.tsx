@@ -30,15 +30,23 @@ const Passport = () => {
   const visaService = data?.data?.data
   return (
     <>
-      <BannerLayout bg="/services/passport.png">
-        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
-          Fast, Secure {country} Passport Services
-        </h4>
-        <h1 className="text-4xl font-bold mb-4">
-          We Handle Everything
-        </h1>
-        <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
-      </BannerLayout>
+     <BannerLayout bg="/services/passport.png">
+  {/* Overlay Heading */}
+  <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
+    Fast, Secure {country} Passport Services
+  </h4>
+
+  {/* Main Heading */}
+  <h1 className="font-bold mb-6 text-center text-[clamp(1.75rem,3.5vw,3rem)] sm:text-[clamp(2rem,4vw,3.5rem)] md:text-[clamp(2.25rem,4vw,3.75rem)] leading-snug">
+    We Handle Everything
+  </h1>
+
+  {/* Dropdown Form */}
+  <div className="px-4 sm:px-6 md:px-8">
+    <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
+  </div>
+</BannerLayout>
+
       <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10 items-center">
           {/* Left: Text and Image */}

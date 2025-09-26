@@ -114,15 +114,23 @@ const features = [
 const page = () => {
   return (
     <>
-      <BannerLayout bg="/services/apostille.jpg">
-        <h4 className=" bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">Fast, Secure Apostille &
-          <br></br>Document Legalization Services
-        </h4>
-        <h1 className=" text-4xl font-bold mb-4">We legalize your U.S. documents for international use with complete handling—no stress, no delays.</h1>
-      </BannerLayout>
+<BannerLayout bg="/services/apostille.jpg">
+  {/* Overlay Heading */}
+  <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
+    Fast, Secure Apostille & <br className="hidden sm:inline" />
+    Document Legalization Services
+  </h4>
+
+  {/* Main Heading */}
+  <h1 className="font-bold mb-6 text-center text-[clamp(1.75rem,3.5vw,3rem)] sm:text-[clamp(2rem,4vw,3.5rem)] md:text-[clamp(2.25rem,4vw,3.75rem)] leading-snug">
+    We legalize your U.S. documents for international use with complete handling—<br className="hidden sm:inline" />
+    no stress, no delays.
+  </h1>
+</BannerLayout>
+
 
       <section className="py-12 px-4 lg:px-28  ">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10 items-center">
+        <div className="max-w-7xl mx-auto grid   grid-cols-1  lg:grid-cols-3 gap-10 items-center">
           {/* Left: Text and Image */}
           {apostilleServices.map((service:any, index) => (
             <VisaServiceCard

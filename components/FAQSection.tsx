@@ -43,26 +43,28 @@ interface FAQSectionProps {
   items?: FAQItem[];
 }
 
-export default function FAQSection({
-  items = defaultFaqData,
-}: FAQSectionProps) {
+export default function FAQSection({ items = defaultFaqData }: FAQSectionProps) {
   return (
-    <div className="w-full mx-auto p-6 bg-gradient-to-b from-blue-50 to-pink-50 rounded-lg shadow">
-      <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">
+    <div className="w-full mx-auto p-4 sm:p-6 md:p-8 bg-gradient-to-b from-blue-50 to-pink-50 rounded-lg shadow">
+      <h2 className="text-center text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6">
         <span className="text-blue-600">Most</span> Asked Questions
       </h2>
 
-      <Accordion type="single" collapsible className="w-[60%] m-auto space-y-2">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full sm:w-[80%] md:w-[60%] m-auto space-y-2"
+      >
         {items.map((faq, idx) => (
           <AccordionItem
             key={idx}
             value={`item-${idx}`}
-            className="border rounded-md px-4 bg-white"
+            className="border rounded-md px-3 sm:px-4 py-2 bg-white"
           >
-            <AccordionTrigger className="text-left font-medium text-gray-900 hover:no-underline">
+            <AccordionTrigger className="text-left font-medium text-gray-900 hover:no-underline text-sm sm:text-base">
               {faq.question}
             </AccordionTrigger>
-            <AccordionContent className="text-gray-600">
+            <AccordionContent className="text-gray-600 text-sm sm:text-base">
               {faq.answer}
             </AccordionContent>
           </AccordionItem>

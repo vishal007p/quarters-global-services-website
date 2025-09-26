@@ -42,7 +42,7 @@ const features = [
 
 export const WhyChoose = () => {
   return (
-    <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  p-20 flex items-center flex-col justify-center">
+    <section className="bg-[linear-gradient(180deg,_#DEEBFF_0%,_#FFE3E3_100%)]  md:p-20 p-4 flex items-center flex-col justify-center">
       <SectionTitle
         subtitle="Our services"
         title="Why Choose Quartus Global Service"
