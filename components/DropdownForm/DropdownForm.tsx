@@ -7,6 +7,7 @@ import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategor
 import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
+import { usePathname } from "next/navigation";
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -120,6 +121,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
   const [apostilleSearch, setApostilleSearch] = useState("");
+  const pathname = usePathname(); // ✅ gives current route like "/visa" or "/passport"
+  const currentPath = pathname === "/" ? "" : pathname.replace("/", "");
+  const visibleTabs = currentPath === "" ? tabs : tabs.filter((tab) => tab === currentPath);
+
+
+
 
   const [errors, setErrors] = useState({
     citizenship: "",
@@ -261,7 +268,13 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           slug: saved.apostilleType,
         });
     }
+
+    if (currentPath === "visa" || currentPath === "passport" || currentPath === "apostille") {
+      setActiveTab(currentPath as TabType);
+    }
   }, [])
+
+
 
   if (countryLoading || passportLoading || apostilleLoading) { // your loading condition
     return (
@@ -285,8 +298,9 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   return (
     <div>
       {/* Tabs */}
+      {/* Tabs */}
       <div className="flex justify-center space-x-8 text-sm font-medium mt-10 text-white mb-6">
-        {tabs.map((tab) => (
+        {visibleTabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -303,6 +317,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           </button>
         ))}
       </div>
+
 
       {/* Visa Form */}
       {activeTab === "visa" && (

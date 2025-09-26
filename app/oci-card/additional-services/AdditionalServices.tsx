@@ -71,7 +71,7 @@ const AdditionalServices = () => {
   };
 
   const handleContinue = () => {
-    router.push(`/checkout`);
+    router.push(`/checkout?type=oci-card`);
   };
   return (
     <>

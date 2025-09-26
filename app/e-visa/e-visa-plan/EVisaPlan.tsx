@@ -63,17 +63,23 @@ const EVisaPlan = () => {
       {/* E-Visa Services */}
       <section className="py-12 px-4 lg:px-28">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-10 items-center">
-          {eVisaServices.map((service, index) => (
-            <VisaServiceCard
+          {eVisaServices && eVisaServices.length > 0 ? (
+            eVisaServices.map((service, index) => (
+              <VisaServiceCard
+                key={index}
+                id={service.title}
+                icon={<div className="w-16 h-16 bg-blue-200 rounded-lg"></div>}
+                title={service.title}
+                description={service.description}
+                link={service.link}
+              />
+            ))
+          ) : (
+            <div className="text-center py-10 text-gray-500 text-lg">
+              No Services Available
+            </div>
+          )}
 
-              key={index}
-              id={service.title}
-              icon={<div className="w-16 h-16 bg-blue-200 rounded-lg"></div>}
-              title={service.title}
-              description={service.description}
-              link={service.link}
-            />
-          ))}
         </div>
 
         <div className="mt-6 text-center">

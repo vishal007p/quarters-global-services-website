@@ -38,21 +38,28 @@ const PlanSelection = () => {
       </BannerLayout>
       <div className="max-w-6xl mx-auto my-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {
-            isLoading ? <>
+          {isLoading ? (
+            <>
               <PlanCardSkeleton />
               <PlanCardSkeleton />
               <PlanCardSkeleton />
-            </> : <>
+            </>
+          ) : packages && packages.length > 0 ? (
+            <>
               {packages.map((plan: VisaPlan, index: number) => (
                 <div
                   key={index}
-                  className={`${index % 2 === 1 ? "mt-4" : "mt-0"}`} // Apply 16px margin-top to odd-indexed cards
+                  className={`${index % 2 === 1 ? "mt-4" : "mt-0"}`} // 16px margin-top for odd cards
                 >
-                  <PlanCard plan={plan} type="visa" />
+                  <PlanCard plan={plan} type="oci-card" />
                 </div>
-              ))}</>
-          }
+              ))}
+            </>
+          ) : (
+            <div className="col-span-1 md:col-span-3 text-center py-10 text-gray-500 text-lg">
+              No Plans Available
+            </div>
+          )}
         </div>
       </div>
       <CommitmentSection />

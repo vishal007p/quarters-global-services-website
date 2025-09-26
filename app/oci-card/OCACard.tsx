@@ -28,13 +28,13 @@ const OCACard = () => {
     "visa"
   );
   const { data, isLoading } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: "visa",
+    platformServiceSlug: "oci-card",
     toCountrySlug: country,
   });
   const dispatch = useDispatch();
   const visaService = data?.data?.data;
 
-   useEffect(() => {
+  useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
   }, [dispatch]);
 
@@ -71,7 +71,7 @@ const OCACard = () => {
                 >
                   <VisaServiceCard
                     id={service._id}
-                    link={`/visa/plan-selection?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`} // ✅ Pass dynamic link here
+                    link={`/oci-card/plan-selection?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`} // ✅ Pass dynamic link here
                     key={index}
 
                     icon={

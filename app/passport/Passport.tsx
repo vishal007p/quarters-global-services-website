@@ -30,7 +30,7 @@ const Passport = () => {
   const visaService = data?.data?.data
   return (
     <>
-      <BannerLayout videoSrc="/homeBg.mp4">
+      <BannerLayout bg="/services/passport.png">
         <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
           Fast, Secure {country} Passport Services
         </h4>

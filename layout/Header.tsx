@@ -8,14 +8,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 import GoogleTranslate from "@/components/GoogleTranslate";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
-import { useGetPlatformServicesQuery } from "@/services/platformApi";
+import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
 
 const Header = () => {
-  const { data, isLoading, isError } = useGetPlatformServicesQuery({
-    page: 1,
-    limit: 20,
-    category: 1,
-  });
+ 
+  const { data, isError, isLoading } = useGetNavbarServicesQuery();
 
   const [showTranslate, setShowTranslate] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,9 +20,7 @@ const Header = () => {
   const router = useRouter();
   const currentPath = usePathname();
 
-  const services = data?.data?.data?.filter(
-    (service: any) => service.isDisplayedOnNavbar === true
-  );
+  const services = data?.data?.data
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -57,14 +52,14 @@ const Header = () => {
             services?.map((service: any) => (
               <button
                 key={service._id}
-                onClick={() => router.push(`/service/${service._id}`)}
+                onClick={() => router.push(`/${service.slug}`)}
                 className={`${
                   currentPath === `/service/${service._id}`
                     ? "text-blue-600 font-semibold"
                     : "hover:text-blue-600"
                 } transition cursor-pointer`}
               >
-                {service.displayName}
+                {service.name}
               </button>
             ))}
         </nav>
@@ -123,7 +118,7 @@ const Header = () => {
               <button
                 key={service._id}
                 onClick={() => {
-                  router.push(`/service/${service._id}`);
+                  router.push(`/${service.slug}`);
                   setMobileMenuOpen(false);
                 }}
                 className={`block w-full text-left py-2 ${
@@ -132,7 +127,7 @@ const Header = () => {
                     : "hover:text-blue-600"
                 }`}
               >
-                {service.displayName}
+                {service.name}
               </button>
             ))}
 
