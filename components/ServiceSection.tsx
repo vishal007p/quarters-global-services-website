@@ -9,6 +9,7 @@ interface ServiceSectionProps {
   buttonText?: string;
   imageSrc: string;
   imagePosition: "left" | "right";
+  slug?: string
 }
 
 const ServiceSection: React.FC<ServiceSectionProps> = ({
@@ -16,6 +17,8 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   description,
   buttonText,
   imagePosition,
+  imageSrc,
+  slug
 }) => {
   const router = useRouter()
   return (
@@ -26,18 +29,28 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
           <>
             <div className="lg:w-1/2 w-full">
               <Image
-                width={150}
-                height={150}
-                src={"/service.jpg"}
+                width={400}
+                height={400}
+                src={imageSrc || "/service.jpg"}
                 alt={title}
-                className="w-full h-auto rounded-xl shadow-lg object-cover transition-transform duration-300 hover:scale-105"
+                className="
+      w-full 
+      h-auto 
+      rounded-xl 
+      shadow-lg 
+      object-cover 
+      transition-transform 
+      duration-300 
+      hover:scale-105 
+      lg:h-[400px]   
+    "
               />
             </div>
             <div className="lg:w-1/2 w-full">
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button onClick={() => router.push(`/other-services/${title}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => router.push(`/other-services/${slug}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}
@@ -52,18 +65,28 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button onClick={() => router.push(`/other-services/${title}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => router.push(`/other-services/${slug}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}
             </div>
             <div className="lg:w-1/2 w-full order-1 lg:order-2">
               <Image
-                width={150}
-                height={150}
-                src={"/service.jpg"}
+                width={400}
+                height={400}
+                src={imageSrc || "/service.jpg"}
                 alt={title}
-                className="w-full h-auto rounded-xl shadow-lg object-cover transition-transform duration-300 hover:scale-105"
+                className="
+      w-full 
+      h-auto 
+      rounded-xl 
+      shadow-lg 
+      object-cover 
+      transition-transform 
+      duration-300 
+      hover:scale-105 
+      lg:h-[400px]   
+    "
               />
             </div>
           </>

@@ -1,41 +1,85 @@
 "use client";
 
-import React from "react";
-import { z } from "zod";
-import { DynamicForm, FieldConfig } from "@/components/DynamicForm/DynamicForm";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { DynamicForm } from "@/components/DynamicForm/DynamicForm";
+import { serviceForms } from "@/lib/serviceForms";
+import { useCreateApplication2Mutation } from "@/services/applicationApi2";
+ 
+export default function CreateApplication() {
+  const params = useSearchParams();
+  const type = params.get("type") as keyof typeof serviceForms | null;
 
-// ---------- Zod Schema ----------
-const courierSchema = z.object({
-  senderName: z.string().min(3, "Sender name must be at least 3 characters"),
-  phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits"),
-  email: z.string().email("Invalid email"),
-  country: z.string().min(1, "Country is required"),
-  message: z.string().max(200, "Message too long"),
-});
+  const [createApplication, { isLoading, isError, isSuccess, error }] =
+    useCreateApplication2Mutation();
 
-// ---------- Field Configuration ----------
-const fieldConfig: FieldConfig[] = [
-  { name: "senderName", label: "Sender Name", type: "text", placeholder: "Enter sender name" },
-  { name: "phone", label: "Phone", type: "number", placeholder: "Enter phone number" },
-  { name: "email", label: "Email", type: "email", placeholder: "Enter email" },
-  {
-    name: "country",
-    label: "Country",
-    type: "select",
-    placeholder: "Select country",
-    options: [
-      { label: "India", value: "india" },
-      { label: "USA", value: "usa" },
-      { label: "UK", value: "uk" },
-    ],
-  },
-  { name: "message", label: "Message", type: "textarea", placeholder: "Enter message" },
-];
+  const [showAlert, setShowAlert] = useState(false);
 
-export default function CheckOut() {
-  const handleSubmit = (values: z.infer<typeof courierSchema>) => {
-    console.log("Form Values:", values);
+  useEffect(() => {
+    if (isSuccess) {
+      setShowAlert(true);
+      const timer = setTimeout(() => setShowAlert(false), 4000); // hide after 4s
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
+
+  if (!type || !serviceForms[type]) {
+    return (
+      <div className="p-6 text-red-600 text-center">
+        ❌ Invalid or missing service type
+      </div>
+    );
+  }
+
+  const { schema, fields } = serviceForms[type];
+
+  const handleSubmit = async (values: any) => {
+    const payload = {
+      applications: [
+        {
+          platformServices: [
+            {
+              platformServiceId: "123",
+              platformServiceCategoryId: "abc",
+              platformServiceCategoryPackageId: "pkg1",
+              platformServiceCategoryPackageAddonsId: ["addon1"],
+            },
+          ],
+          firstName: "John",
+          lastName: "Doe",
+          email: "john@example.com",
+          countryCode: "+1",
+          phone: "1234567890",
+          status: "Submitted",
+          serviceFields: {
+            ...values,
+            serviceType: type,
+          },
+        },
+      ],
+    };
+
+    try {
+      await createApplication(payload).unwrap();
+    } catch (err) {
+      console.error("Failed to create application:", err);
+    }
   };
 
-  return <DynamicForm schema={courierSchema} fields={fieldConfig} onSubmit={handleSubmit} />;
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 capitalize">{type} Form</h1>
+
+      {showAlert && (
+        <div className="mb-4 p-3 rounded bg-green-100 text-green-800 border border-green-300">
+          ✅ Application submitted successfully!
+        </div>
+      )}
+
+      <DynamicForm schema={schema} fields={fields} onSubmit={handleSubmit} />
+
+      {isLoading && <p className="text-blue-600 mt-2">Submitting...</p>}
+      {isError && <p className="text-red-600 mt-2">❌ {error?.toString()}</p>}
+    </div>
+  );
 }

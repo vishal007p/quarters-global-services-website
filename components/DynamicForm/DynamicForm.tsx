@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm,  Path, DefaultValues } from "react-hook-form";
+import { useForm, Path, DefaultValues } from "react-hook-form";
 import { z, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 // ---------- TYPES ----------
-export type FieldType = "text" | "number" | "select" | "email" | "textarea";
+export type FieldType = "text" | "number" | "select" | "email" | "textarea" | "checkbox" | "date";
 
 export interface FieldConfig {
   name: string;
@@ -65,7 +65,7 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="w-full max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg my-10">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}

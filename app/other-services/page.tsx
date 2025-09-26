@@ -4,84 +4,30 @@
 
 import BannerLayout from "@/components/Banner/BannerLayout";
 import ServiceSection from "@/components/ServiceSection";
+import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
 import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
-
-
-// Array of service data
-const services = [
-    {
-        title: "Courier & Document Delivery",
-        description:
-            "We provide secure and timely courier services for your documents and packages. Track your shipments easily and ensure prompt delivery with our reliable service.",
-        buttonText: "Learn More",
-        imageSrc: "/images/courier.jpg",
-
-    },
-    {
-        title: "Vehicle Booking",
-        description:
-            "Book vehicles for personal or corporate travel. Our fleet includes a range of cars and vans for short or long-term rentals, ensuring comfort and safety.",
-        buttonText: "Book Now",
-        imageSrc: "/images/vehicle.jpg",
-    },
-    {
-        title: "Flight Charter Services",
-        description:
-            "Experience personalized air travel with our flight charter services. Enjoy flexibility, convenience, and premium service tailored to your schedule.",
-        buttonText: "Book Flight",
-        imageSrc: "/images/flight.jpg",
-    },
-    {
-        title: "Concert, Wedding, Private Tour, Corporate Ground Transport",
-        description:
-            "We provide luxury ground transport for events, weddings, corporate tours, and private travel. Arrive in style and comfort with our professional drivers.",
-        buttonText: "Learn More",
-        imageSrc: "/images/ground-transport.jpg",
-    },
-    {
-        title: "Travel Insurance",
-        description:
-            "Protect your trips with our comprehensive travel insurance plans. Enjoy peace of mind knowing you're covered for medical emergencies, cancellations, and lost luggage.",
-        buttonText: "Get Insured",
-        imageSrc: "/images/travel-insurance.jpg",
-    },
-    {
-        title: "Consultancy Service",
-        description:
-            "Professional consultancy services to help you navigate complex processes. Receive expert advice and solutions tailored to your business or personal needs.",
-        buttonText: "Consult Now",
-        imageSrc: "/images/consultancy.jpg",
-    },
-    {
-        title: "IDP (International Driving License)",
-        description:
-            "Obtain your International Driving Permit quickly and easily. Drive legally and safely across multiple countries with our hassle-free process.",
-        buttonText: "Apply Now",
-        imageSrc: "/images/idp.jpg",
-    },
-    {
-        title: "Indian PAN Card",
-        description:
-            "Apply for your PAN card with ease. Essential for tax filing, banking, and financial transactions in India.",
-        buttonText: "Apply Now",
-        imageSrc: "/images/pan-card.jpg",
-    },
-    {
-        title: "Fast Track Immigration (FIT-ITP)",
-        description:
-            "Skip long queues with our fast track immigration services. Efficient, reliable, and designed to save you time.",
-        buttonText: "Learn More",
-        imageSrc: "/images/fast-track.jpg",
-    },
-];
+type Service = {
+    _id: string;
+    parentServiceId: string;
+    name: string;
+    displayName: string;
+    iconUrl: string;
+    slug: string;
+    buttonText?: string; // optional
+};
 
 const ServicesPage = () => {
-    const [isVisible, setIsVisible] = useState(false);
+    const { data, isLoading } = useGetNavbarServicesQuery();
+    const services: any[] = data?.data?.data?.filter((item: Service) => item.slug === "other-services") || []; const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         setIsVisible(true);
     }, []);
+
+    const skeletons = Array.from({ length: 1 });
+
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -94,7 +40,7 @@ const ServicesPage = () => {
 
 
             <div className="bg-gradient-to-b from-[#DEEBFF] to-[#FFE3E3] py-10 w-full">
-                <div className="flex justify-center gap-24 w-full">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:justify-center lg:gap-24 w-full gap-8 text-center">
 
                     {/* Passports */}
                     <div className="flex flex-col items-center">
@@ -182,22 +128,54 @@ const ServicesPage = () => {
             <div className="py-12 px-4 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="space-y-4">
-                        {services.map((service, index) => (
-                            <div
-                                key={index}
-                                className={`transition-opacity duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-                                style={{ transitionDelay: `${index * 100}ms` }}
-                            >
-                                <ServiceSection
-                                    title={service.title}
-                                    description={service.description}
-                                    buttonText={service.buttonText}
-                                    imageSrc={"/service.png"}
-                                    imagePosition={index % 2 === 0 ? "left" : "right"}
-                                />
+                        {isLoading ? (
+                            skeletons.map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="flex flex-col lg:flex-row items-center gap-12 p-4 border rounded-lg"
+                                >
+                                    {/* Skeleton image */}
+                                    <Skeleton
+                                        circle={false}
+                                        height={400}
+                                        width={400}
+                                        className="lg:w-1/2 w-full rounded-xl"
+                                    />
+
+                                    {/* Skeleton text */}
+                                    <div className="lg:w-1/2 w-full space-y-4">
+                                        <Skeleton height={40} width={`60%`} />
+                                        <Skeleton height={20} width={`80%`} />
+                                        <Skeleton height={20} width={`70%`} />
+                                        <Skeleton height={40} width={150} />
+                                    </div>
+                                </div>
+                            ))
+                        ) : services && services[0]?.subServices.length > 0 ? (
+                            services[0].subServices.map((service: Service, index: number) => (
+                                <div
+                                    key={index}
+                                    className={`transition-opacity duration-700 ${isVisible ? "opacity-100" : "opacity-0"
+                                        }`}
+                                    style={{ transitionDelay: `${index * 100}ms` }}
+                                >
+                                    <ServiceSection
+                                        title={service.name}
+                                        description={service.displayName}
+                                        buttonText="Learn More"
+                                        imageSrc={service.iconUrl}
+                                        imagePosition={index % 2 === 0 ? "left" : "right"}
+                                        slug={service.slug}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-12 text-gray-500 text-xl font-medium">
+                                ❌ No Service Available
                             </div>
-                        ))}
+                        )}
                     </div>
+
                 </div>
             </div>
 
