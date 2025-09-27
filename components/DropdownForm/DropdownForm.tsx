@@ -83,15 +83,19 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       slug: country.slug,
     })) || [];
 
+  const [country, setCountry] = useState<DropdownOption | null>(null);
+
   // --- Fetch Passport & Apostille Options ---
   const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "passport",
-    toCountrySlug: "", // updated dynamically later
+    toCountrySlug: country?.slug || "",
+    fromCountrySlug: country?.slug || ""
   });
 
   const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "apostilleOptions",
-    toCountrySlug: "",
+    toCountrySlug: country?.slug || "",
+    fromCountrySlug: country?.slug || ""
   });
 
   const apiPassport: DropdownOption[] =
@@ -112,7 +116,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const [citizenship, setCitizenship] = useState<DropdownOption | null>(null);
   const [citizenshipSearch, setCitizenshipSearch] = useState("");
 
-  const [country, setCountry] = useState<DropdownOption | null>(null);
+
   const [countrySearch, setCountrySearch] = useState("");
 
   const [stateOrCountry, setStateOrCountry] = useState<DropdownOption | null>(null);
@@ -123,12 +127,9 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
   const [apostilleSearch, setApostilleSearch] = useState("");
-  const pathname = usePathname(); // ✅ gives current route like "/visa" or "/passport"
+  const pathname = usePathname();
   const currentPath = pathname === "/" ? "" : pathname.replace("/", "");
   const visibleTabs = currentPath === "" ? tabs : tabs.filter((tab) => tab === currentPath);
-
-
-
 
   const [errors, setErrors] = useState({
     citizenship: "",
@@ -219,15 +220,15 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     };
     saveStep(step);
     if (activeTab === "visa") {
-      router.push(`/visa?toCountrySlug=${country?.slug}`);
+      router.push(`/visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
       savePlatformServiceStep({ platformServiceId: country?.id });
     } else if (activeTab === "passport") {
       router.push(
-        `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}`
+        `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}&fromCountrySlug=${citizenship?.slug}`
       );
       savePlatformServiceStep({ platformServiceId: country?.id });
     } else if (activeTab === "apostille") {
-      router.push(`/apostille?type=${apostilleType?.slug}`);
+      router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     }
   };
 
@@ -305,8 +306,8 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-2 border-b-2 transition ${activeTab === tab
-                  ? "border-blue-500 text-blue-400 font-semibold"
-                  : "border-transparent hover:text-blue-300"
+                ? "border-blue-500 text-blue-400 font-semibold"
+                : "border-transparent hover:text-blue-300"
                 }`}
             >
               {tab === "visa"

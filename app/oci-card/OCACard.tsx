@@ -27,9 +27,12 @@ const OCACard = () => {
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">(
     "visa"
   );
+  const fromCountrySlug = searchParams.get("fromCountrySlug") || "united-states";
+
   const { data, isLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "oci-card",
     toCountrySlug: country,
+    fromCountrySlug: fromCountrySlug
   });
   const dispatch = useDispatch();
   const visaService = data?.data?.data;
