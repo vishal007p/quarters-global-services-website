@@ -26,16 +26,27 @@ const PlanSelection = () => {
 
   return (
     <>
-      <BannerLayout videoSrc="/homeBg.mp4">
-        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
+      <BannerLayout  bg="/services/visa.png">
+        {/* Overlay Heading */}
+        <h4
+          className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
+               m-auto rounded-lg font-bold mb-4 text-center text-white 
+               text-[clamp(1rem,1.8vw,2rem)]"
+        >
           Fast, Hassle-Free Visa Services
         </h4>
-        <h1 className="text-4xl font-bold mb-4">
+
+        {/* Main Heading */}
+        <h1
+          className="font-bold mb-6 text-center text-white 
+               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug"
+        >
           We help U.S. citizens apply for tourist, business, student, and
-          <br />
+          <br className="hidden sm:inline" />
           work visas—accurately, securely, and on time.
         </h1>
       </BannerLayout>
+
       <div className="max-w-6xl mx-auto my-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {

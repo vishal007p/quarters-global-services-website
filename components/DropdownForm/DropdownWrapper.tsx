@@ -130,7 +130,7 @@ const DropdownWrapper = ({
           </Command>
         </PopoverContent>
       </Popover>
-      {errors && <span className="text-red-500 mt-1 text-sm">{errors}</span>}
+      {errors && <span className="text-red-500 mt-1 text-sm text-left">{errors}</span>}
     </div>
   );
 };

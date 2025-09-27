@@ -123,17 +123,7 @@ export default function Home() {
           <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
         </div>
 
-        {/* Floating Chat Bubble */}
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="relative group">
-            <button className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center">
-              <span className="text-black font-bold">K</span>
-            </button>
-            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-white text-black text-xs px-2 py-1 rounded shadow-md">
-              Need Help? Chat with us
-            </div>
-          </div>
-        </div>
+         
       </BannerLayout>
 
 

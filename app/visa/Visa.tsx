@@ -40,23 +40,30 @@ const Visa = () => {
 
   return (
     <>
-      <BannerLayout bg="/services/visa.png">
-        {/* Overlay Heading */}
-        <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1rem,2.5vw,2.75rem)]">
-          Fast, Hassle-Free {country} Visa Services
-        </h4>
+   <BannerLayout bg="/services/visa.png">
+  {/* Overlay Heading */}
+  <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center 
+                 text-[clamp(1rem,1.8vw,2rem)]">
+    Fast, Hassle-Free {country} Visa Services
+  </h4>
 
-        {/* Main Heading */}
-        <h1 className="font-bold mb-6 text-center text-[clamp(1rem,4vw,3rem)] sm:text-[clamp(2rem,4vw,3.5rem)] md:text-[clamp(2.5rem,4vw,4rem)] leading-snug">
-          We help U.S. citizens apply for tourist, business, student, and <br className="hidden sm:inline" />
-          work visas—accurately, securely, and on time.
-        </h1>
+  {/* Main Heading */}
+  <h1 className="font-bold mb-6 text-center 
+                 text-[clamp(1.5rem,2.5vw,2.75rem)] 
+                 sm:text-[clamp(1.75rem,2.5vw,3rem)] 
+                 md:text-[clamp(2rem,2.2vw,3.25rem)] 
+                 leading-snug">
+    We help U.S. citizens apply for tourist, business, student, and 
+    <br className="hidden sm:inline" />
+    work visas—accurately, securely, and on time.
+  </h1>
 
-        {/* Dropdown Form */}
-        <div className="px-4 sm:px-6 md:px-8">
-          <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
-        </div>
-      </BannerLayout>
+  {/* Dropdown Form */}
+  <div className="px-4 sm:px-6 md:px-8">
+    <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
+  </div>
+</BannerLayout>
+
 
 
       <section className="py-12 px-4 lg:px-28  ">

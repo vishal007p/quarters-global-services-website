@@ -21,7 +21,7 @@ export type CountryApiResponse = {
 export const countryApi = emptySplitApi.injectEndpoints({
   endpoints: (build) => ({
     getCountries: build.query<CountryApiResponse, void>({
-      query: () => "/country/get-country",
+      query: () => "/country/get-country?page=1&pageSize=256",
     }),
   }),
   overrideExisting: false,
