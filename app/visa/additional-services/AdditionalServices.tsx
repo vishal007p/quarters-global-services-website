@@ -106,37 +106,40 @@ const AdditionalServices = () => {
               <AdditionalServiceSkeleton />
               <AdditionalServiceSkeleton />
             </> : <>
-              {additional?.map((service: Addon) => (
-                <div
-                  key={service._id}
-                  className={`border p-5 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(String(service._id))} ? "border-blue-600 bg-blue-50"
-                                : "border-gray-300 bg-white"
-                                }`}
-                >
-                  <label className="flex items-start gap-3 cursor-pointer">
-
-                    <div>
-                      <Checkbox
-                        checked={selected.includes(String(service._id))}
-                        onCheckedChange={() => toggleSelection(String(service._id))}
-                        className="w-5 h-5"
-                      />
-                      <h3 className="font-semibold text-lg mb-1 mt-2">
-                        {service.name}
-                      </h3>
-                      <p className="text-sm text-gray-700 mb-2">
-                        {service.description}
-                      </p>
-                      <p className="text-sm text-gray-500 mb-1">
-                        <strong>Timeline:</strong> {service.timeline}
-                      </p>
-                      <p className="text-sm font-semibold">
-                        {service.price} {service.currency}
-                      </p>
-                    </div>
-                  </label>
+              {additional && additional.length > 0 ? (
+                additional.map((service: Addon) => (
+                  <div
+                    key={service._id}
+                    className={`border p-5 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(String(service._id))
+                        ? "border-blue-600 bg-blue-50"
+                        : "border-gray-300 bg-white"
+                      }`}
+                  >
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <div>
+                        <Checkbox
+                          checked={selected.includes(String(service._id))}
+                          onCheckedChange={() => toggleSelection(String(service._id))}
+                          className="w-5 h-5"
+                        />
+                        <h3 className="font-semibold text-lg mb-1 mt-2">{service.name}</h3>
+                        <p className="text-sm text-gray-700 mb-2">{service.description}</p>
+                        <p className="text-sm text-gray-500 mb-1">
+                          <strong>Timeline:</strong> {service.timeline}
+                        </p>
+                        <p className="text-sm font-semibold">
+                          {service.price} {service.currency}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-6 text-gray-500 text-lg">
+                  No Add-ons Available
                 </div>
-              ))}
+              )}
+
             </>
           }
 
