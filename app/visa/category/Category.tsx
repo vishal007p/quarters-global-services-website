@@ -70,7 +70,7 @@ const Category = () => {
                                         link={
                                             service.subCategories && service.subCategories.length > 1
                                                 ? `/visa/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
-                                                : `/visa/plan-selection?toCountrySlug=${country}&Slug=${platformServiceCategorySlug}`
+                                                : `/visa/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
                                         }
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
