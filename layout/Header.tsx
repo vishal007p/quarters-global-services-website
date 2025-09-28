@@ -29,7 +29,6 @@ const Header = () => {
       try {
         const parsed = JSON.parse(saved);
 
-        // check inside applications array
         if (Array.isArray(parsed.applications)) {
           const validApps = parsed.applications.filter(
             (app: any) =>
@@ -37,7 +36,7 @@ const Header = () => {
               app.platformServiceCategoryId.trim() !== ""
           );
 
-          setCartCount(validApps.length); // ✅ set the badge count
+          setCartCount(validApps.length);
         } else {
           setCartCount(0);
         }
@@ -69,54 +68,77 @@ const Header = () => {
               <Skeleton key={i} width={100} height={20} />
             ))}
 
-          {isError && <span className="text-red-500">Error loading services</span>}
-          {!isLoading &&
-            !isError &&
-            (
-              <>
-                {services?.map((service: any) => (
+          {isError && (
+            <span className="text-red-500">Error loading services</span>
+          )}
+
+          {!isLoading && !isError && (
+            <>
+              {services
+                ?.filter(
+                  (service: any) =>
+                    service.name !== "OCI Card" &&
+                    service.name !== "Indian PAN"
+                )
+                .map((service: any) => (
                   <button
                     key={service._id}
                     onClick={() => router.push(`/${service.slug}`)}
-                    className={`${currentPath === `/${service.slug}`
+                    className={`${
+                      currentPath === `/${service.slug}`
                         ? "text-blue-600 font-semibold"
                         : "hover:text-blue-600"
-                      } transition cursor-pointer`}
+                    } transition cursor-pointer`}
                   >
                     {service.name}
                   </button>
                 ))}
 
-                {/* Static Pages */}
-                <button
-                  onClick={() => router.push("/about-us")}
-                  className={`${currentPath === "/about-us"
-                      ? "text-blue-600 font-semibold"
-                      : "hover:text-blue-600"
-                    } transition cursor-pointer`}
-                >
-                  About Us
-                </button>
+              {/* Add E-Visa */}
+              <button
+                onClick={() => router.push("/e-visa")}
+                className={`${
+                  currentPath === "/e-visa"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
+                } transition cursor-pointer`}
+              >
+                E-Visa
+              </button>
 
-                <button
-                  onClick={() => router.push("/contact-us")}
-                  className={`${currentPath === "/contact-us"
-                      ? "text-blue-600 font-semibold"
-                      : "hover:text-blue-600"
-                    } transition cursor-pointer`}
-                >
-                  Contact Us
-                </button>
-              </>
-            )
-          }
+              {/* Static Pages */}
+              <button
+                onClick={() => router.push("/about-us")}
+                className={`${
+                  currentPath === "/about-us"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
+                } transition cursor-pointer`}
+              >
+                About Us
+              </button>
 
+              <button
+                onClick={() => router.push("/contact-us")}
+                className={`${
+                  currentPath === "/contact-us"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
+                } transition cursor-pointer`}
+              >
+                Contact Us
+              </button>
+            </>
+          )}
         </nav>
 
         {/* Right Section */}
         <div className="hidden md:flex items-center gap-6 text-sm text-gray-700">
           {/* Cart */}
-          <div className="relative cursor-pointer" onClick={() => router.push("/checkout")}>
+          <div
+            className="relative cursor-pointer"
+            onClick={() => router.push("/checkout")}
+          >
             <MdShoppingCart className="text-2xl text-gray-800 hover:text-blue-600 transition" />
             {cartCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
@@ -171,59 +193,85 @@ const Header = () => {
               <Skeleton key={i} width={`100%`} height={20} className="mb-2" />
             ))}
 
-          {isError && <span className="text-red-500">Error loading services</span>}
+          {isError && (
+            <span className="text-red-500">Error loading services</span>
+          )}
 
-          {!isLoading &&
-            !isError &&
-            services?.map((service: any) => (
+          {!isLoading && !isError && (
+            <>
+              {services
+                ?.filter(
+                  (service: any) =>
+                    service.name !== "OCI Card" &&
+                    service.name !== "Indian PAN"
+                )
+                .map((service: any) => (
+                  <button
+                    key={service._id}
+                    onClick={() => {
+                      router.push(`/${service.slug}`);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`block w-full text-left py-2 ${
+                      currentPath === `/${service.slug}`
+                        ? "text-blue-600 font-semibold"
+                        : "hover:text-blue-600"
+                    }`}
+                  >
+                    {service.name}
+                  </button>
+                ))}
+
+              {/* Add E-Visa */}
               <button
-                key={service._id}
                 onClick={() => {
-                  router.push(`/${service.slug}`);
+                  router.push("/e-visa");
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left py-2 ${currentPath === `/${service.slug}`
+                className={`block w-full text-left py-2 ${
+                  currentPath === "/e-visa"
                     ? "text-blue-600 font-semibold"
                     : "hover:text-blue-600"
-                  }`}
+                }`}
               >
-                {service.name}
+                E-Visa
               </button>
-            ))}
 
-          {/* Mobile Cart */}
-          <div
-            className="flex items-center gap-2 mt-4 cursor-pointer"
-            onClick={() => {
-              router.push("/cart");
-              setMobileMenuOpen(false);
-            }}
-          >
-            <MdShoppingCart className="text-xl text-gray-800" />
-            <span className="text-sm">Cart ({cartCount})</span>
-          </div>
-
-          {/* Translate */}
-          <div className="mt-4">
-            <button
-              onClick={() => setShowTranslate(!showTranslate)}
-              className="flex items-center gap-2 w-full px-4 py-2 text-xs border border-[#BFBFBF] rounded-md bg-white hover:bg-gray-100"
-            >
-              <MdGTranslate />
-              Translate
-            </button>
-
-            {showTranslate && (
-              <div className="mt-2">
-                <GoogleTranslate />
+              {/* Mobile Cart */}
+              <div
+                className="flex items-center gap-2 mt-4 cursor-pointer"
+                onClick={() => {
+                  router.push("/cart");
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <MdShoppingCart className="text-xl text-gray-800" />
+                <span className="text-sm">Cart ({cartCount})</span>
               </div>
-            )}
-          </div>
 
-          {/* Login */}
-          <button className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
-            Login
-          </button>
+              {/* Translate */}
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowTranslate(!showTranslate)}
+                  className="flex items-center gap-2 w-full px-4 py-2 text-xs border border-[#BFBFBF] rounded-md bg-white hover:bg-gray-100"
+                >
+                  <MdGTranslate />
+                  Translate
+                </button>
+
+                {showTranslate && (
+                  <div className="mt-2">
+                    <GoogleTranslate />
+                  </div>
+                )}
+              </div>
+
+              {/* Login */}
+              <button className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
+                Login
+              </button>
+            </>
+          )}
         </div>
       )}
     </header>

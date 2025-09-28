@@ -7,7 +7,7 @@ const page = () => {
     return (
         <div>
 
-            <BannerLayout bg="/img.png">
+            <BannerLayout bg="/service.jpg">
                 {/* Overlay Heading */}
                 <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
                     Contact Us        </h4>

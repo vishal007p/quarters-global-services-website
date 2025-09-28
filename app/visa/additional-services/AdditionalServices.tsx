@@ -75,7 +75,7 @@ const AdditionalServices = () => {
   };
   return (
     <>
-      <BannerLayout bg="/home.png">
+      <BannerLayout bg="/service.jpg">
         {/* Overlay Heading */}
         <h4
           className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
@@ -111,8 +111,8 @@ const AdditionalServices = () => {
                   <div
                     key={service._id}
                     className={`border p-5 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(String(service._id))
-                        ? "border-blue-600 bg-blue-50"
-                        : "border-gray-300 bg-white"
+                      ? "border-blue-600 bg-blue-50"
+                      : "border-gray-300 bg-white"
                       }`}
                   >
                     <label className="flex items-start gap-3 cursor-pointer">
@@ -135,8 +135,28 @@ const AdditionalServices = () => {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-6 text-gray-500 text-lg">
-                  No Add-ons Available
+                <div className="col-span-full flex flex-col items-center justify-center py-10 px-6 bg-blue-50 border border-blue-200 rounded-lg shadow-sm">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-12 w-12 text-blue-500 mb-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M12 18.5a6.5 6.5 0 100-13 6.5 6.5 0 000 13z"
+                    />
+                  </svg>
+                  <h3 className="text-lg font-semibold text-blue-700 mb-2">
+                    No Add-ons Available
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Currently, there are no extra packages or add-ons for this service.
+                    Please proceed with the main package.
+                  </p>
                 </div>
               )}
 

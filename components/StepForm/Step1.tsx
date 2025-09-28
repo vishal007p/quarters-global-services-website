@@ -198,6 +198,7 @@ export default function Step1() {
 
             if (response?.status && response.data?.redirectURL) {
                 clearPlatformServices();
+                localStorage.removeItem("applications");      
                 window.location.href = response.data.redirectURL;
             } else {
                 toast.error("Application created but no redirect URL returned");
