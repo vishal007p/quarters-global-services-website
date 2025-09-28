@@ -9,6 +9,7 @@ import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
 import { usePathname } from "next/navigation";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
+ 
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -130,7 +131,8 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [passportType, setPassportType] = useState<DropdownOption | null>(null);
   const [passportSearch, setPassportSearch] = useState("");
-
+  
+ 
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
   const [apostilleSearch, setApostilleSearch] = useState("");
   const pathname = usePathname();
@@ -229,10 +231,11 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       router.push(`/visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
       savePlatformServiceStep({ platformServiceId: country?.id });
     } else if (activeTab === "passport") {
+        
       router.push(
         `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}&fromCountrySlug=${citizenship?.slug}`
       );
-      savePlatformServiceStep({ platformServiceId: country?.id });
+      savePlatformServiceStep({ platformServiceId: "68d839bc2ea0a4e770b07e8f" ,platformServiceCategoryId: passportType?.id });
     } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     }

@@ -8,8 +8,10 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import PlanCardSkeleton from '@/components/Skeletons/PlanCardSkeletons';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import { useGetPlatformServiceCategoryPackagesQuery } from '@/services/platformCategoryPackageApi';
+import { startApplication } from '@/store/slices/applicationSlice';
 import { useSearchParams } from 'next/navigation';
 import React from 'react'
+import { useDispatch } from 'react-redux';
 
 const PlanSection = () => {
     const searchParams = useSearchParams();
@@ -22,6 +24,9 @@ const PlanSection = () => {
         toCountrySlug: country,
     });
     const packages = data?.data?.data;
+      const dispatch = useDispatch();
+
+    dispatch(startApplication({ type: "passport" }));
 
     if (error) return <p>Something went wrong</p>;
 
