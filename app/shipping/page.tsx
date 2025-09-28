@@ -58,12 +58,11 @@ const Page = () => {
   const router = useRouter();
 
   const onSubmit = (values: FormValues) => {
-    console.log("Form submitted:", values);
-
+ 
     if (values.documentMethod === "shipping") {
       router.push("/shipping/summary");
     } else {
-      router.push("/upload");
+      router.push("/login");
     }
   };
 
@@ -177,7 +176,10 @@ const Page = () => {
             type="submit"
             className="bg-blue-700 hover:bg-blue-800 mt-4"
           >
-            Next
+            {
+              form.watch("documentMethod") === "shipping" ? "Next" : "Login to Coustomer"
+            }
+             
           </Button>
         </form>
       </Form>

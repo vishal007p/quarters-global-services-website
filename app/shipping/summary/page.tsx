@@ -12,7 +12,7 @@ const page = () => {
             <Image src={"/image.png"} width={600} height={600} alt='sss'></Image>
 
             <div className="mt-6">
-                <Button className="bg-blue-700 text-white rounded-md">
+                <Button className="bg-blue-700 text-white rounded-md" onClick={() => { window.location.href = '/login' }}>
                     Track your Order
                 </Button>
             </div>

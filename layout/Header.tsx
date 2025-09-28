@@ -169,7 +169,7 @@ const Header = () => {
           </div>
 
           {/* Login */}
-          <button className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
+          <button onClick={()=> window.location.href ="/login"} className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
             Login
           </button>
         </div>
