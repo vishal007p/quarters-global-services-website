@@ -24,8 +24,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   const dispatch = useDispatch();
   const { activeId } = useSelector((state: any) => state.application);
   const handleApplyNow = () => {
-    console.log(id, activeId, title, "activeId");
-
+ 
     dispatch(
       setCategory({ id: activeId, name: title, platformServiceCategoryId: id })
     );
