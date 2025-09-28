@@ -20,7 +20,8 @@ type Service = {
 
 const ServicesPage = () => {
     const { data, isLoading } = useGetNavbarServicesQuery();
-    const services: any[] = data?.data?.data?.filter((item: Service) => item.slug === "other-services") || []; const [isVisible, setIsVisible] = useState(false);
+    const services: any[] = data?.data?.data?.filter((item: Service) => item.slug === "other-services") || [];
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         setIsVisible(true);

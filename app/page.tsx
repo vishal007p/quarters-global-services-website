@@ -48,7 +48,7 @@ const blogPosts = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" |"e-visa">("visa");
   return (
     <>
       <BannerLayout

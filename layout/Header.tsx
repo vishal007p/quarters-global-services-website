@@ -23,29 +23,29 @@ const Header = () => {
   const services = data?.data?.data;
 
   // ✅ Fetch cart count from localStorage
-useEffect(() => {
-  const saved = localStorage.getItem("applications");
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
+  useEffect(() => {
+    const saved = localStorage.getItem("applications");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
 
-      // check inside applications array
-      if (Array.isArray(parsed.applications)) {
-        const validApps = parsed.applications.filter(
-          (app: any) =>
-            typeof app?.platformServiceCategoryId === "string" &&
-            app.platformServiceCategoryId.trim() !== ""
-        );
+        // check inside applications array
+        if (Array.isArray(parsed.applications)) {
+          const validApps = parsed.applications.filter(
+            (app: any) =>
+              typeof app?.platformServiceCategoryId === "string" &&
+              app.platformServiceCategoryId.trim() !== ""
+          );
 
-        setCartCount(validApps.length); // ✅ set the badge count
-      } else {
+          setCartCount(validApps.length); // ✅ set the badge count
+        } else {
+          setCartCount(0);
+        }
+      } catch {
         setCartCount(0);
       }
-    } catch {
-      setCartCount(0);
     }
-  }
-}, []);
+  }, []);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -70,22 +70,47 @@ useEffect(() => {
             ))}
 
           {isError && <span className="text-red-500">Error loading services</span>}
-
           {!isLoading &&
             !isError &&
-            services?.map((service: any) => (
-              <button
-                key={service._id}
-                onClick={() => router.push(`/${service.slug}`)}
-                className={`${
-                  currentPath === `/${service.slug}`
-                    ? "text-blue-600 font-semibold"
-                    : "hover:text-blue-600"
-                } transition cursor-pointer`}
-              >
-                {service.name}
-              </button>
-            ))}
+            (
+              <>
+                {services?.map((service: any) => (
+                  <button
+                    key={service._id}
+                    onClick={() => router.push(`/${service.slug}`)}
+                    className={`${currentPath === `/${service.slug}`
+                        ? "text-blue-600 font-semibold"
+                        : "hover:text-blue-600"
+                      } transition cursor-pointer`}
+                  >
+                    {service.name}
+                  </button>
+                ))}
+
+                {/* Static Pages */}
+                <button
+                  onClick={() => router.push("/about-us")}
+                  className={`${currentPath === "/about-us"
+                      ? "text-blue-600 font-semibold"
+                      : "hover:text-blue-600"
+                    } transition cursor-pointer`}
+                >
+                  About Us
+                </button>
+
+                <button
+                  onClick={() => router.push("/contact-us")}
+                  className={`${currentPath === "/contact-us"
+                      ? "text-blue-600 font-semibold"
+                      : "hover:text-blue-600"
+                    } transition cursor-pointer`}
+                >
+                  Contact Us
+                </button>
+              </>
+            )
+          }
+
         </nav>
 
         {/* Right Section */}
@@ -157,11 +182,10 @@ useEffect(() => {
                   router.push(`/${service.slug}`);
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left py-2 ${
-                  currentPath === `/${service.slug}`
+                className={`block w-full text-left py-2 ${currentPath === `/${service.slug}`
                     ? "text-blue-600 font-semibold"
                     : "hover:text-blue-600"
-                }`}
+                  }`}
               >
                 {service.name}
               </button>

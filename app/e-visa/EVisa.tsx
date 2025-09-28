@@ -21,7 +21,7 @@ interface services {
   slug: string;
 }
 
-const Visa = () => {
+const EVisa = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "united-states";
   const fromCountrySlug = searchParams.get("fromCountrySlug") || "united-states";
@@ -29,7 +29,7 @@ const Visa = () => {
     "visa"
   );
   const { data, isLoading } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: country == "india" ? "visa" : country == "united-states" ? "us-visa" : "visa",
+    platformServiceSlug: "e-visa",
     toCountrySlug: country,
     fromCountrySlug: fromCountrySlug
   });
@@ -46,7 +46,7 @@ const Visa = () => {
         {/* Overlay Heading */}
         <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center 
                  text-[clamp(1rem,1.8vw,2rem)]">
-          Fast, Hassle-Free {country} Visa Services
+          Fast, Hassle-Free {country} E-Visa Services
         </h4>
 
         {/* Main Heading */}
@@ -57,7 +57,7 @@ const Visa = () => {
                  leading-snug">
           We help U.S. citizens apply for tourist, business, student, and
           <br className="hidden sm:inline" />
-          work visas—accurately, securely, and on time.
+          work E-visa, securely, and on time.
         </h1>
 
         {/* Dropdown Form */}
@@ -129,4 +129,4 @@ const Visa = () => {
     </>
   );
 };
-export default Visa;
+export default EVisa;

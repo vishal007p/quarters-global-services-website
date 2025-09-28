@@ -9,7 +9,7 @@ import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
 import { usePathname } from "next/navigation";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
- 
+
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -30,7 +30,7 @@ export type PlatformServiceStep = {
 };
 
 
-type TabType = "visa" | "passport" | "apostille";
+type TabType = "visa" | "passport" | "apostille" | "e-visa";
 
 interface DropdownFormProps {
   activeTab: TabType;
@@ -39,7 +39,7 @@ interface DropdownFormProps {
 
 
 // --- Tabs ---
-const tabs: TabType[] = ["visa", "passport", "apostille"];
+const tabs: TabType[] = ["visa", "passport", "apostille", "e-visa"];
 
 const STORAGE_KEY = "platformServiceStep";
 
@@ -131,8 +131,8 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [passportType, setPassportType] = useState<DropdownOption | null>(null);
   const [passportSearch, setPassportSearch] = useState("");
-  
- 
+
+
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
   const [apostilleSearch, setApostilleSearch] = useState("");
   const pathname = usePathname();
@@ -146,6 +146,14 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     passport: "",
     apostille: "",
   });
+
+  const { data: visamain, isLoading } = useGetPlatformServiceCategoriesQuery({
+    platformServiceSlug: country?.slug == "india" ? "visa" : country?.slug == "united-states" ? "us-visa" : "visa",
+    toCountrySlug: country?.slug || "united-states",
+    fromCountrySlug: citizenship?.slug || "united-states"
+  });
+
+  const visaService = visamain?.data?.data;
 
   // --- Filter Options ---
   const filteredCountries = apiCountries.filter((option) =>
@@ -208,6 +216,14 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         passport: "",
         apostille: apostilleType ? "" : "Please select apostille type",
       };
+    } else if (activeTab === "e-visa") {
+      newErrors = {
+        citizenship: citizenship ? "" : "Please select citizenship",
+        country: country ? "" : "Please select travel country",
+        state: "",
+        passport: "",
+        apostille: "",
+      };
     }
     setErrors(newErrors);
     return Object.values(newErrors).every((err) => err === "");
@@ -216,28 +232,29 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   // --- Handle Go ---
   const handleGo = () => {
     if (!validate()) return;
-
     const step: PlatformServiceStep = {
       citizenship: citizenship?.slug,
       citizenship_code: citizenship?.code,
       country: country?.slug,
-      countryCode: (country as any)?.code, // ✅ store country.code
+      countryCode: (country as any)?.code, 
       state: stateOrCountry?.slug,
       passportType: passportType?.slug,
       apostilleType: apostilleType?.slug,
     };
     saveStep(step);
     if (activeTab === "visa") {
-      router.push(`/visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
-      savePlatformServiceStep({ platformServiceId: country?.id });
+      router.push(`/visa/category?toCountrySlug=${country?.slug}&&platformServiceCategorySlug=${ country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
+      savePlatformServiceStep({ platformServiceId: country?.id , platformServiceCategoryId: visaService[0]._id   });
     } else if (activeTab === "passport") {
-        
       router.push(
         `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}&fromCountrySlug=${citizenship?.slug}`
       );
-      savePlatformServiceStep({ platformServiceId: country?.slug == "india" ? "68d839bd2ea0a4e770b07ec7" : country?.slug == "united-states" ? "68d839bc2ea0a4e770b07e91" : "68d839bc2ea0a4e770b07e8f" ,platformServiceCategoryId: passportType?.id });
+      savePlatformServiceStep({ platformServiceId: country?.slug == "india" ? "68d839bd2ea0a4e770b07ec7" : country?.slug == "united-states" ? "68d839bc2ea0a4e770b07e91" : "68d839bc2ea0a4e770b07e8f", platformServiceCategoryId: passportType?.id });
     } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
+    } else if (activeTab === "e-visa") {
+      router.push(`/e-visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
+      savePlatformServiceStep({ platformServiceId: country?.id });
     }
   };
 
@@ -282,7 +299,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         });
     }
 
-    if (currentPath === "visa" || currentPath === "passport" || currentPath === "apostille") {
+    if (currentPath === "visa" || currentPath === "passport" || currentPath === "apostille" || currentPath === "e-visa") {
       setActiveTab(currentPath as TabType);
     }
   }, [currentPath, setActiveTab])
@@ -323,7 +340,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
                 ? "Expedited Visas"
                 : tab === "passport"
                   ? "Expedited Passport"
-                  : "Apostille & Legalization"}
+                  : tab === "apostille"
+                    ? "Apostille & Legalization"
+                    : tab === "e-visa"
+                      ? "E-Visa"
+                      : ""}
+
             </button>
           ))}
         </div>
@@ -418,6 +440,35 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           <GoButton handleGo={handleGo} />
         </div>
       )}
+
+      {/* E-Visa Form */}
+      {activeTab === "e-visa" && (
+        <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center">
+          <DropdownWrapper
+            value={citizenship}
+            setValue={setCitizenship}
+            search={citizenshipSearch}
+            setSearch={setCitizenshipSearch}
+            filteredOptions={filteredCitizenships}
+            errors={errors.citizenship}
+            placeholder="Select Citizenship"
+            type="flag"
+          />
+          <DropdownWrapper
+            value={country}
+            setValue={setCountry}
+            search={countrySearch}
+            setSearch={setCountrySearch}
+            filteredOptions={filteredCountries}
+            errors={errors.country}
+            placeholder="Select Travel Country"
+            type="flag"
+          />
+          <GoButton handleGo={handleGo} />
+        </div>
+      )}
+
+
     </div>
   );
 }

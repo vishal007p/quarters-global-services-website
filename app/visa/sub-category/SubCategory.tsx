@@ -24,7 +24,7 @@ interface services {
 const SubCategory = () => {
   const searchParams = useSearchParams();
   const subCategorySlug = searchParams.get("subCategorySlug");
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">(
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" | "e-visa">(
     "visa"
   );
   const country = searchParams.get("toCountrySlug") || "";

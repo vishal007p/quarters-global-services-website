@@ -24,7 +24,7 @@ const Passport = () => {
   const country = searchParams.get("toCountrySlug") || "";
   const fromCountrySlug = searchParams.get("fromCountrySlug") || "united-states";
 
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">("visa");
+  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" | "e-visa">("visa");
   const { data, } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "visa",
     toCountrySlug: country,
