@@ -163,7 +163,7 @@ export default function Home() {
               }
               title="Visa Services"
               description="Travel, study, work, or reunite with family abroad."
-              link="#"
+              link="/visa"
             />
             <div className="mt-14">
               <VisaServiceCard
@@ -181,7 +181,7 @@ export default function Home() {
                 }
                 title="Passport Services"
                 description="Quick support for new or renewed passports."
-                link="#"
+                link="/passport"
               />
             </div>
 
@@ -196,7 +196,7 @@ export default function Home() {
               }
               title="E-Visas"
               description="Hassle-free application or reissue process."
-              link="#"
+               link="/e-visa"
             />
 
             <div className="mt-14">
@@ -219,7 +219,7 @@ export default function Home() {
                 }
                 title="Apostille & Legalization"
                 description="Make your documents valid internationally."
-                link="#"
+                link="/apostille"
               />
             </div>
 
