@@ -84,11 +84,10 @@ const Header = () => {
                   <button
                     key={service._id}
                     onClick={() => router.push(`/${service.slug}`)}
-                    className={`${
-                      currentPath === `/${service.slug}`
-                        ? "text-blue-600 font-semibold"
-                        : "hover:text-blue-600"
-                    } transition cursor-pointer`}
+                    className={`${currentPath === `/${service.slug}`
+                      ? "text-blue-600 font-semibold"
+                      : "hover:text-blue-600"
+                      } transition cursor-pointer`}
                   >
                     {service.name}
                   </button>
@@ -97,11 +96,10 @@ const Header = () => {
               {/* Add E-Visa */}
               <button
                 onClick={() => router.push("/e-visa")}
-                className={`${
-                  currentPath === "/e-visa"
-                    ? "text-blue-600 font-semibold"
-                    : "hover:text-blue-600"
-                } transition cursor-pointer`}
+                className={`${currentPath === "/e-visa"
+                  ? "text-blue-600 font-semibold"
+                  : "hover:text-blue-600"
+                  } transition cursor-pointer`}
               >
                 E-Visa
               </button>
@@ -109,22 +107,20 @@ const Header = () => {
               {/* Static Pages */}
               <button
                 onClick={() => router.push("/about-us")}
-                className={`${
-                  currentPath === "/about-us"
-                    ? "text-blue-600 font-semibold"
-                    : "hover:text-blue-600"
-                } transition cursor-pointer`}
+                className={`${currentPath === "/about-us"
+                  ? "text-blue-600 font-semibold"
+                  : "hover:text-blue-600"
+                  } transition cursor-pointer`}
               >
                 About Us
               </button>
 
               <button
                 onClick={() => router.push("/contact-us")}
-                className={`${
-                  currentPath === "/contact-us"
-                    ? "text-blue-600 font-semibold"
-                    : "hover:text-blue-600"
-                } transition cursor-pointer`}
+                className={`${currentPath === "/contact-us"
+                  ? "text-blue-600 font-semibold"
+                  : "hover:text-blue-600"
+                  } transition cursor-pointer`}
               >
                 Contact Us
               </button>
@@ -169,7 +165,7 @@ const Header = () => {
           </div>
 
           {/* Login */}
-          <button onClick={()=> window.location.href ="/login"} className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
+          <button onClick={() => router.push("/login")}  className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
             Login
           </button>
         </div>
@@ -212,11 +208,10 @@ const Header = () => {
                       router.push(`/${service.slug}`);
                       setMobileMenuOpen(false);
                     }}
-                    className={`block w-full text-left py-2 ${
-                      currentPath === `/${service.slug}`
-                        ? "text-blue-600 font-semibold"
-                        : "hover:text-blue-600"
-                    }`}
+                    className={`block w-full text-left py-2 ${currentPath === `/${service.slug}`
+                      ? "text-blue-600 font-semibold"
+                      : "hover:text-blue-600"
+                      }`}
                   >
                     {service.name}
                   </button>
@@ -228,11 +223,10 @@ const Header = () => {
                   router.push("/e-visa");
                   setMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left py-2 ${
-                  currentPath === "/e-visa"
-                    ? "text-blue-600 font-semibold"
-                    : "hover:text-blue-600"
-                }`}
+                className={`block w-full text-left py-2 ${currentPath === "/e-visa"
+                  ? "text-blue-600 font-semibold"
+                  : "hover:text-blue-600"
+                  }`}
               >
                 E-Visa
               </button>
@@ -267,7 +261,7 @@ const Header = () => {
               </div>
 
               {/* Login */}
-              <button className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
+              <button onClick={() => router.push("/login")} className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
                 Login
               </button>
             </>

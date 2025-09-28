@@ -44,8 +44,8 @@ const ShippingPage = () => {
   const router = useRouter();
 
   const onSubmit = (values: FormValues) => {
-    console.log("Selected documents:", values.documents);
     router.push("/shipping/summary");
+
   };
 
   return (
