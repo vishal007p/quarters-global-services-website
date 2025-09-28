@@ -235,7 +235,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       router.push(
         `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}&fromCountrySlug=${citizenship?.slug}`
       );
-      savePlatformServiceStep({ platformServiceId: "68d839bc2ea0a4e770b07e8f" ,platformServiceCategoryId: passportType?.id });
+      savePlatformServiceStep({ platformServiceId: country?.slug == "india" ? "68d839bd2ea0a4e770b07ec7" : country?.slug == "united-states" ? "68d839bc2ea0a4e770b07e91" : "68d839bc2ea0a4e770b07e8f" ,platformServiceCategoryId: passportType?.id });
     } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     }
