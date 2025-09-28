@@ -40,9 +40,9 @@ const AdditionalServices = () => {
             }
 
             // Save updated addons to localStorage
-            savePlatformServiceStep({
-                platformServiceCategoryPackageAddonsId: updated,
-            });
+            // savePlatformServiceStep({
+            //     platformServiceCategoryPackageAddonsId: updated,
+            // });
 
             return updated;
         });
