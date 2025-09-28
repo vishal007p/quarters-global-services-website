@@ -8,6 +8,7 @@ import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
 import { usePathname } from "next/navigation";
+import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -86,10 +87,15 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const [country, setCountry] = useState<DropdownOption | null>(null);
 
   // --- Fetch Passport & Apostille Options ---
-  const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: "passport",
+  // const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceCategoriesQuery({
+  //   platformServiceSlug: "us-passport", // change will in feature
+  //   toCountrySlug: country?.slug || "",
+  //   fromCountrySlug: country?.slug || ""
+  // });
+
+  const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceSubCategoriesQuery({
+    platformServiceSlug: country?.slug == "india" ? "indian-possport" : country?.slug == "united-states" ? "us-passport" : "visa",
     toCountrySlug: country?.slug || "",
-    fromCountrySlug: country?.slug || ""
   });
 
   const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({

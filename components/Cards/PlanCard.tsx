@@ -45,6 +45,7 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
       setPackage({
         id: activeId,
         package: plan.name,
+        price: plan.price,
         platformServiceCategoryPackageId: plan._id,
         platformServiceId: plan.platformServiceId,
         platformServiceCategoryId: plan.platformServiceCategoryId,

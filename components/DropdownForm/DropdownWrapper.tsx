@@ -88,9 +88,9 @@ const DropdownWrapper = ({
             <CommandList className="bg-black custom-scrollbar">
               <CommandEmpty>No options found.</CommandEmpty>
               <CommandGroup>
-                {filteredOptions.map((option: DropdownOption) => (
+                {filteredOptions.map((option: DropdownOption, index:number) => (
                   <CommandItem
-                    key={option._id || option.code}
+                    key={index}
                     value={option.name}
                     className="data-[selected=true]:bg-neutral-900"
                     onSelect={() => {

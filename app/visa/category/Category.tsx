@@ -8,8 +8,7 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import PlanCardSkeleton from "@/components/Skeletons/PlanCardSkeletons";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
-import { useGetPlatformServiceCategoryPackagesQuery } from "@/services/platformCategoryPackageApi";
-import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
+ import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -24,8 +23,7 @@ const Category = () => {
         }
     );
     const packages = data?.data?.data;
-    console.log(packages, "packages")
-    if (error) return <p>Something went wrong</p>;
+     if (error) return <p>Something went wrong</p>;
 
     return (
         <>
@@ -68,7 +66,7 @@ const Category = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
-                                        link={`/visa/plan-selection?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`}
+                                        link={`/visa/sub-category?toCountrySlug=${country}&&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`}
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
                                             <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />

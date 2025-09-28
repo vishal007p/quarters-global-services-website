@@ -43,7 +43,7 @@ const OCACard = () => {
 
   return (
     <>
-      <BannerLayout videoSrc="/homeBg.mp4">
+      <BannerLayout bg="/services/apostille.png">
         {/* Overlay Heading */}
         <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
           Fast, Hassle-Free {country} Visa Services
@@ -55,10 +55,7 @@ const OCACard = () => {
           work visas—accurately, securely, and on time.
         </h1>
 
-        {/* Dropdown Form */}
-        <div className="px-4 sm:px-6 md:px-8">
-          <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
-        </div>
+
       </BannerLayout>
 
 

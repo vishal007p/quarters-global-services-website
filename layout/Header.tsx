@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { MdGTranslate, MdMenu, MdClose } from "react-icons/md";
+import { MdGTranslate, MdMenu, MdClose, MdShoppingCart } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import GoogleTranslate from "@/components/GoogleTranslate";
@@ -11,21 +11,45 @@ import { useRouter } from "nextjs-toploader/app";
 import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
 
 const Header = () => {
- 
   const { data, isError, isLoading } = useGetNavbarServicesQuery();
 
   const [showTranslate, setShowTranslate] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const router = useRouter();
   const currentPath = usePathname();
 
-  const services = data?.data?.data
+  const services = data?.data?.data;
+
+  // ✅ Fetch cart count from localStorage
+useEffect(() => {
+  const saved = localStorage.getItem("applications");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+
+      // check inside applications array
+      if (Array.isArray(parsed.applications)) {
+        const validApps = parsed.applications.filter(
+          (app: any) =>
+            typeof app?.platformServiceCategoryId === "string" &&
+            app.platformServiceCategoryId.trim() !== ""
+        );
+
+        setCartCount(validApps.length); // ✅ set the badge count
+      } else {
+        setCartCount(0);
+      }
+    } catch {
+      setCartCount(0);
+    }
+  }
+}, []);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="w-[85%] gap-4 mx-auto px-4 py-4 flex items-center justify-between">
-
         {/* Logo */}
         <div className="flex items-center">
           <Image
@@ -54,7 +78,7 @@ const Header = () => {
                 key={service._id}
                 onClick={() => router.push(`/${service.slug}`)}
                 className={`${
-                  currentPath === `/service/${service._id}`
+                  currentPath === `/${service.slug}`
                     ? "text-blue-600 font-semibold"
                     : "hover:text-blue-600"
                 } transition cursor-pointer`}
@@ -64,18 +88,19 @@ const Header = () => {
             ))}
         </nav>
 
-        {/* Mobile Hamburger Menu Button */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-2xl"
-          >
-            {mobileMenuOpen ? <MdClose /> : <MdMenu />}
-          </button>
-        </div>
-
         {/* Right Section */}
-        <div className="hidden md:flex items-center gap-4 text-sm text-gray-700">
+        <div className="hidden md:flex items-center gap-6 text-sm text-gray-700">
+          {/* Cart */}
+          <div className="relative cursor-pointer" onClick={() => router.push("/checkout")}>
+            <MdShoppingCart className="text-2xl text-gray-800 hover:text-blue-600 transition" />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
+          </div>
+
+          {/* Translate */}
           <div className="relative">
             <button
               onClick={() => setShowTranslate(!showTranslate)}
@@ -96,8 +121,19 @@ const Header = () => {
             </span>
           </div>
 
+          {/* Login */}
           <button className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
             Login
+          </button>
+        </div>
+
+        {/* Mobile Hamburger Menu Button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-2xl"
+          >
+            {mobileMenuOpen ? <MdClose /> : <MdMenu />}
           </button>
         </div>
       </div>
@@ -122,7 +158,7 @@ const Header = () => {
                   setMobileMenuOpen(false);
                 }}
                 className={`block w-full text-left py-2 ${
-                  currentPath === `/service/${service._id}`
+                  currentPath === `/${service.slug}`
                     ? "text-blue-600 font-semibold"
                     : "hover:text-blue-600"
                 }`}
@@ -131,6 +167,19 @@ const Header = () => {
               </button>
             ))}
 
+          {/* Mobile Cart */}
+          <div
+            className="flex items-center gap-2 mt-4 cursor-pointer"
+            onClick={() => {
+              router.push("/cart");
+              setMobileMenuOpen(false);
+            }}
+          >
+            <MdShoppingCart className="text-xl text-gray-800" />
+            <span className="text-sm">Cart ({cartCount})</span>
+          </div>
+
+          {/* Translate */}
           <div className="mt-4">
             <button
               onClick={() => setShowTranslate(!showTranslate)}
@@ -147,6 +196,7 @@ const Header = () => {
             )}
           </div>
 
+          {/* Login */}
           <button className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
             Login
           </button>
@@ -156,5 +206,4 @@ const Header = () => {
   );
 };
 
- 
-export default Header
+export default Header;

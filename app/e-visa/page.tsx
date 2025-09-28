@@ -1,5 +1,4 @@
 "use client"
-
 import BannerLayout from '@/components/Banner/BannerLayout'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import DropdownForm from '@/components/DropdownForm/DropdownForm'

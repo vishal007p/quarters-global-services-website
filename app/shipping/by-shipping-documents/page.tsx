@@ -15,15 +15,14 @@ import {
 } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "nextjs-toploader/app";
 
-// ✅ Zod schema
 const formSchema = z.object({
   documents: z.array(z.string()).nonempty("Select at least one document"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-// ✅ document checklist
 const DOCUMENT_LIST = [
   "Passport",
   "Photograph",
@@ -42,9 +41,11 @@ const ShippingPage = () => {
       documents: DOCUMENT_LIST, // pre-checked
     },
   });
+  const router = useRouter();
 
   const onSubmit = (values: FormValues) => {
     console.log("Selected documents:", values.documents);
+    router.push("/shipping/billing");
   };
 
   return (
@@ -99,8 +100,8 @@ const ShippingPage = () => {
                                     return checked
                                       ? field.onChange([...field.value, item])
                                       : field.onChange(
-                                          field.value?.filter((v) => v !== item)
-                                        );
+                                        field.value?.filter((v) => v !== item)
+                                      );
                                   }}
                                 />
                               </FormControl>

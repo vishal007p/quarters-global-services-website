@@ -8,7 +8,7 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
-import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
+import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { startApplication } from "@/store/slices/applicationSlice";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -21,24 +21,28 @@ interface services {
   slug: string;
 }
 
-const Visa = () => {
+const SubCategory = () => {
   const searchParams = useSearchParams();
-  const country = searchParams.get("toCountrySlug") || "united-states";
-  const fromCountrySlug = searchParams.get("fromCountrySlug") || "united-states";
+  const subCategorySlug = searchParams.get("subCategorySlug");
   const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille">(
     "visa"
   );
-  const { data, isLoading } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: country == "india" ? "visa" : country == "united-states" ? "us-visa" : "visa",
-    toCountrySlug: country,
-    fromCountrySlug: fromCountrySlug
-  });
+  const country = searchParams.get("toCountrySlug") || "";
+  const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
+  const { data, error, isLoading } = useGetPlatformServiceSubCategoriesQuery(
+    {
+      platformServiceSlug: platformServiceCategorySlug,
+      toCountrySlug: country,
+    }
+  );
   const dispatch = useDispatch();
-  const visaService = data?.data?.data;
+  const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
+
+  console.log(visaService, "visaServicess");
 
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -78,7 +82,7 @@ const Visa = () => {
             </>
           ) : visaService && visaService.length > 0 ? (
             <>
-              {visaService.map((service: services, index: number) => (
+              {visaService[0]?.subCategories?.map((service: services, index: number) => (
                 <div
                   key={index}
                   className={`transform transition-transform duration-500 ${index % 2 === 0 ? "translate-y-0" : "translate-y-8"
@@ -86,7 +90,7 @@ const Visa = () => {
                 >
                   <VisaServiceCard
                     id={service._id}
-                    link={`/visa/category?toCountrySlug=${country}&&platformServiceCategorySlug=${service.slug}`}
+                    link={`/visa/plan-selection?toCountrySlug=${country}&&platformService&Category&Slug=${service.slug}`}
                     icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="74" height="74" rx="16" fill="#96C6FF" />
                       <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />
@@ -129,4 +133,4 @@ const Visa = () => {
     </>
   );
 };
-export default Visa;
+export default SubCategory;

@@ -17,7 +17,7 @@ const PlanSelection = () => {
     searchParams.get("platformServiceCategorySlug") || "";
   const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery(
     {
-      platformServiceCategorySlug: platformServiceCategorySlug,
+      platformServiceCategorySlug:platformServiceCategorySlug,
       toCountrySlug: country,
     }
   );

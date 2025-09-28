@@ -20,8 +20,7 @@ const MultiStepForm = () => {
     setStep((s) => s + 1);
   };
 
-  const back = () => setStep((s) => s - 1);
-
+ 
   return (
     <div className="w-full mx-auto">
       {/* Step Indicator */}
@@ -97,8 +96,8 @@ const MultiStepForm = () => {
       ) : (
         <div className="flex gap-8 justify-between mt-6">
           {/* Form Steps */}
-          <div className={`${step === 3 ? "w-full" : "w-1/2"}`}>
-            {step === 1 && <Step1 onNext={next} />}
+          <div className={`${step === 3 ? "w-full" : "w-1/2 ml-4"}`}>
+            {step === 1 && <Step1   />}
             {step === 3 && <Step3 />}
           </div>
 
@@ -194,7 +193,6 @@ const MultiStepForm = () => {
             </div>
           )}
 
-          {/* Static Order Summary on Step 3 */}
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,6 +20,8 @@ import { clearPlatformServices, getPlatformServices } from "@/lib/platformServic
 import { useDispatch } from "react-redux";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { store } from "@/store/store";
+import { useRouter } from "nextjs-toploader/app";
+import { toast } from "sonner";
 
 // --- Types for API ---
 interface Address {
@@ -70,53 +72,62 @@ const mapApiToForm = (app: Application): Step1Data => ({
 
 });
 
-type Props = {
-    onNext: (data: Step1Data) => void;
-};
 
-export default function Step1({ onNext }: Props) {
-    const [createApplication, { data, isLoading }] = useCreateApplicationMutation();
+export default function Step1() {
+    const [createApplication, { data, isLoading }] =
+        useCreateApplicationMutation();
     const dispatch = useDispatch();
+    const router = useRouter()
+    const [applications, setApplications] = useState<Application[]>([]);
+    console.log(applications, "applications")
+    const [activeIndex, setActiveIndex] = useState(0);
+
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
-        defaultValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone: "",
-            company: "",
-            departureDate: "",
-            physicalAddress: {
-                addressLine1: "",
-                addressLine2: "",
-                city: "",
-                state: "",
-                zipCode: "",
-                country: "",
-            },
-            currentLegalAddress: {
-                addressLine1: "",
-                addressLine2: "",
-                city: "",
-                state: "",
-                zipCode: "",
-                country: "",
-            },
-        },
+        defaultValues: mapApiToForm({}),
     });
 
-    // Prefill form when API response arrives
+
+    // --- Prefill from API ---
     useEffect(() => {
-        if (data?.applications?.[0]) {
+        if (data?.applications?.length) {
+            setApplications(data.applications);
             form.reset(mapApiToForm(data.applications[0]));
+            setActiveIndex(0);
         }
     }, [data, form]);
 
-    // Prefill form from local storage (previous step)
+    // --- Prefill from localStorage ---
     useEffect(() => {
-        const savedStep = localStorage.getItem("step1Data");
-        if (savedStep) {
-            form.reset(JSON.parse(savedStep));
+        const saved = localStorage.getItem("applications");
+
+        if (!saved) return;
+
+        try {
+            const parsed = JSON.parse(saved);
+
+            if (Array.isArray(parsed.applications)) {
+                // ✅ Keep only apps where platformServiceCategoryId is a non-empty string
+                const validApps = parsed.applications.filter(
+                    (app: any) =>
+                        typeof app?.platformServiceCategoryId === "string" &&
+                        app.platformServiceCategoryId.trim() !== ""
+                );
+
+                if (validApps.length > 0) {
+                    setApplications(validApps);
+
+                    const firstFormData = validApps[0]?.form?.applications?.[0] || {};
+                    form.reset(mapApiToForm(firstFormData));
+                } else {
+                    setApplications([]);
+                    form.reset(mapApiToForm({}));
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse applications from localStorage", e);
+            setApplications([]);
+            form.reset(mapApiToForm({}));
         }
     }, [form]);
 
@@ -124,99 +135,136 @@ export default function Step1({ onNext }: Props) {
         try {
             const platformServices = getPlatformServices() || [];
 
-            // Split phone input if it includes country code
-            let countryCode = "+1"; // default fallback
+            let countryCode = "+1";
             let phone = values.phone || "";
 
+            // 📱 Normalize phone number and country code
             if (phone.startsWith("+")) {
                 const parts = phone.split(" ");
                 if (parts.length === 2) {
                     countryCode = parts[0];
                     phone = parts[1];
                 } else {
-                    // If no space, take first 3 characters as country code (adjust as needed)
                     countryCode = phone.slice(0, 3);
                     phone = phone.slice(3);
                 }
             }
 
+            // ✅ Build payload in the new format
             const payload = {
                 applications: [
                     {
                         ...values,
                         phone,
                         countryCode,
-                        platformServices,
-                        status: "Draft",
-                        "serviceFields": {
-                            "serviceType": "CourierDelivery",
-                            "senderAddress": "123 Main St, New York",
-                            "stateSender": "NY",
-                            "recipientName": "Alice Smith",
-                            "recipientAddress": "789 Pine St, Los Angeles",
-                            "stateRecipient": "CA",
-                            "deliveryType": "Express",
-                            "phoneSender": "1234567890",
-                            "citySender": "New York",
-                            "countrySender": "USA",
-                            "phoneRecipient": "9876543210",
-                            "cityRecipient": "Los Angeles",
-                            "countryRecipient": "USA",
-                            "noOfPagesOrEnvelopes": 5
-                        }
+                        platformServices: platformServices.map((s:any) => ({
+                            platformServiceId: s.platformServiceId || s.id,
+                            platformServiceCategoryId: s.platformServiceCategoryId,
+                            platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
+                            platformServiceCategoryPackageAddonsId:
+                                s.platformServiceCategoryPackageAddonsId || s.addons || [],
+                        })),
+                        status: "Draft",         // must match your backend enum
+                        // supportingDocs: [
+                        //     {
+                        //         name: "passport.pdf",
+                        //         type: "application/pdf",
+                        //         size: 204800,
+                        //         url: "https://example.com/docs/passport.pdf",
+                        //     },
+                        // ],
+                        serviceFields: {
+                            someServiceSpecificField: "example value",
+                        },
                     },
                 ],
             };
 
-            // Get the current active application ID from Redux
+            // 🔄 Save form in redux store (if editing existing app)
             const activeId = store.getState().application.activeId;
-
             if (activeId) {
                 dispatch(
                     setFormData({
                         id: activeId,
-                        form: payload, // save payload in Redux
+                        form: payload,
                     })
                 );
-            } else {
-                console.warn("No active application ID found");
             }
 
-            // @ts-expect-error: API unwrap typing mismatch with RTK Query
+            // 🚀 Send to backend
+            // @ts-expect-error mismatch RTK
             const response = await createApplication(payload).unwrap();
+            console.log(response, "responsess");
 
             if (response?.status && response.data?.redirectURL) {
                 clearPlatformServices();
                 window.location.href = response.data.redirectURL;
             } else {
-                console.error("Application created but no redirect URL returned");
+                toast.error("Application created but no redirect URL returned");
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error creating application:", error);
-        }
 
-        onNext(values);
+            if (error?.data?.message) {
+                toast.error(error.data.message);
+            } else {
+                toast.error("Something went wrong while creating application");
+            }
+        }
     };
+
+
+
 
 
     return (
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
             {/* Header */}
-            <div className="bg-[#00408D] rounded-lg shadow-md p-6 mb-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-white">
-                        Visa: Business India <br />
-                        <span className="text-sm font-medium text-white">
-                            (Expedited - 20 Processing Days)
-                        </span>
-                    </h2>
-                    <Button variant="outline" size="sm" className="flex items-center gap-2">
-                        <FileEdit className="w-4 h-4" /> Edit
-                    </Button>
+            <div className="w-full overflow-x-auto scrollbar-hide">
+                <div className="flex gap-4 px-2 sm:px-4 md:px-2">
+                    {applications.map((app: any, index) => (
+                        <div
+                            key={index}
+                            onClick={() => {
+                                setActiveIndex(index);
+                                // Each card has its own form.applications[0]
+
+                                const formData = app.form?.applications?.[activeIndex];
+                            
+
+                                if (formData) {
+                                    form.reset(mapApiToForm(formData));
+                                }
+                            }}
+                            className={`min-w-[220px] sm:min-w-[250px] md:min-w-[280px] rounded-2xl shadow-lg p-4 sm:p-5 flex-shrink-0 cursor-pointer transition-transform duration-300 
+              ${activeIndex === index
+                                    ? "bg-blue-800 scale-105"
+                                    : "bg-[#00408D] hover:scale-105"
+                                }`}
+                        >
+                            <div className="flex items-start justify-between">
+                                <h2 className="text-base sm:text-lg font-bold text-white leading-snug">
+                                    {app.firstName || "New"} {app.type || "Traveller"} <br />
+                                    <span className="text-xs sm:text-sm font-medium text-white/80">
+                                        {app.email || "No email"}
+                                    </span>
+                                </h2>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="flex items-center gap-1 sm:gap-2 text-black border-black hover:bg-white hover:text-[#00408D] transition"
+                                >
+                                    <FileEdit className="w-4 h-4" /> Edit
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            <h3 className="text-xl font-semibold mb-4">Your Information</h3>
+
+
+            <h3 className="text-xl font-semibold mb-4 mt-4">Your Information</h3>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">
@@ -480,7 +528,7 @@ export default function Step1({ onNext }: Props) {
                             {isLoading ? "Saving..." : "Place Order"}
                         </Button>
 
-                        <Button type="button" variant="outline">
+                        <Button type="button" variant="outline" onClick={() => router.push("/")} >
                             Add Another Traveller
                         </Button>
                     </div>

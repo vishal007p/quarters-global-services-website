@@ -58,7 +58,7 @@ export function DynamicForm<TSchema extends ZodObject<any>>({
     resolver: zodResolver(schema) as any, // cast to avoid TS mismatch
     defaultValues: {
       ...Object.fromEntries(fields.map(f => [f.name, ""])),
-      serviceType: "OCI", // ensure required hidden field
+      serviceType:serviceType
     } as unknown as DefaultValues<InputValues>,
   });
 

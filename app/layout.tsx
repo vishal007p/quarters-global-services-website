@@ -5,6 +5,7 @@ import Header from "@/layout/Header";
 import { Footer } from "@/layout/Footer";
 import NextTopLoader from 'nextjs-toploader';
 import ReduxProvider from "@/providers/ReduxProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -30,6 +31,7 @@ export default function RootLayout({
             <Header />
           {children}
               <Footer />
+            <Toaster />
         </ReduxProvider>
         <NextTopLoader />
       </body>

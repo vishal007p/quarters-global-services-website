@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
  import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useRouter } from "nextjs-toploader/app";
 
 
 // ✅ Zod schema
@@ -36,8 +37,11 @@ const Page = () => {
     },
   });
 
+  const router = useRouter();
   const onSubmit = (values: FormValues) => {
     console.log(values);
+    router.push("/shipping/by-shipping-documents")
+  
   };
 
   return (

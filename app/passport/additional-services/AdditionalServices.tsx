@@ -20,10 +20,11 @@ const AdditionalServices = () => {
     const country = searchParams.get("toCountrySlug") || "";
     const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
 
-    const { data,isLoading } = useGetPlatformServiceCategoryPackageAddonQuery({
-        platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
-        toCountrySlug: country, // ← must not be empty
-    });
+   const { data, isLoading, error } =
+     useGetPlatformServiceCategoryPackageAddonQuery({
+       platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
+       toCountrySlug: country, // ← must not be empty
+     });
     const additional = data?.data?.data
 
     const toggleSelection = (id: string) => {
