@@ -14,7 +14,7 @@ const PlanSelection = () => {
   const searchParams = useSearchParams();
   const country = searchParams.get("toCountrySlug") || "";
   const platformServiceCategorySlug =
-    searchParams.get("platformServiceCategorySlug") || "";
+    searchParams.get("Slug") || "";
   const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery(
     {
       platformServiceCategorySlug:platformServiceCategorySlug,
