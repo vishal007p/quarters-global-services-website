@@ -20,7 +20,7 @@ const Visa = () => {
  
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

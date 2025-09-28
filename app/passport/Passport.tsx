@@ -8,13 +8,7 @@ import TestimonialSlider from '@/components/TestimonialSlider ';
 import WhyChoose from '@/components/WhyChoose/WhyChoose';
 import React, { useState } from 'react'
 
-interface services {
-  _id: string,
-  code: string,
-  name: string,
-  slug: string
-}
-
+ 
 
 const Passport = () => {
   

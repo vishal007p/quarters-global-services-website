@@ -43,7 +43,7 @@ const ShippingPage = () => {
   });
   const router = useRouter();
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = () => {
     router.push("/shipping/summary");
 
   };

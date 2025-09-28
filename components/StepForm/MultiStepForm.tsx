@@ -14,12 +14,8 @@ const steps = [
 ];
 
 const MultiStepForm = () => {
-  const [step, setStep] = useState(1);
-  const next = (data: any) => {
-    console.log(data);
-    setStep((s) => s + 1);
-  };
-
+  const [step, ] = useState(1);
+ 
  
   return (
     <div className="w-full mx-auto">

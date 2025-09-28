@@ -6,8 +6,7 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle'
 import AdditionalServiceSkeleton from '@/components/Skeletons/AdditionalServiceSkeleton'
 import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
-import { savePlatformServiceStep } from '@/lib/platformServiceStorage'
-import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
+ import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 
@@ -20,7 +19,7 @@ const AdditionalServices = () => {
     const country = searchParams.get("toCountrySlug") || "";
     const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
 
-   const { data, isLoading, error } =
+   const { data, isLoading } =
      useGetPlatformServiceCategoryPackageAddonQuery({
        platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
        toCountrySlug: country, // ← must not be empty

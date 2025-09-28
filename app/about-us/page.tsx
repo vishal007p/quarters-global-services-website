@@ -1,4 +1,5 @@
 import BannerLayout from '@/components/Banner/BannerLayout'
+import Image from 'next/image'
 import React from 'react'
 
 const Page = () => {
@@ -33,10 +34,13 @@ const Page = () => {
 
         {/* Image / Visual */}
         <div>
-          <img
+          <Image
             src="/img.jpg"
             alt="About illustration"
             className="rounded-2xl shadow-lg"
+            width={600}
+            height={400}
+            priority
           />
         </div>
       </section>

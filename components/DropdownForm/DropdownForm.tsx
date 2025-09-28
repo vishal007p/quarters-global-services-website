@@ -147,7 +147,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     apostille: "",
   });
 
-  const { data: visamain, isLoading } = useGetPlatformServiceCategoriesQuery({
+  const { data: visamain } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: country?.slug == "india" ? "visa" : country?.slug == "united-states" ? "us-visa" : "visa",
     toCountrySlug: country?.slug || "united-states",
     fromCountrySlug: citizenship?.slug || "united-states"

@@ -29,7 +29,7 @@ const SubCategory = () => {
   );
   const country = searchParams.get("toCountrySlug") || "";
   const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
-  const { data, error, isLoading } = useGetPlatformServiceSubCategoriesQuery(
+  const { data,  isLoading } = useGetPlatformServiceSubCategoriesQuery(
     {
       platformServiceSlug: platformServiceCategorySlug,
       toCountrySlug: country,

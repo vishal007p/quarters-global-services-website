@@ -15,8 +15,7 @@ import { useDispatch } from 'react-redux';
 
 const PlanSection = () => {
     const searchParams = useSearchParams();
-    const fromCountrySlug = searchParams.get("fromCountrySlug") || "united-states";
-    const country = searchParams.get("toCountrySlug") || "";
+     const country = searchParams.get("toCountrySlug") || "";
     const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
 
     const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery({

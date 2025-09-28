@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'nextjs-toploader/app';
 import React from 'react'
 
-const page = () => {
+const Page = () => {
     const router = useRouter();     
     return (
         <div className=" bg-white flex flex-col items-center p-10">
@@ -25,4 +25,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

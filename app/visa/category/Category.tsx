@@ -1,12 +1,10 @@
 "use client";
 import BannerLayout from "@/components/Banner/BannerLayout";
-import PlanCard, { VisaPlan } from "@/components/Cards/PlanCard";
-import VisaServiceCard from "@/components/Cards/VisaServiceCard";
+ import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
-import PlanCardSkeleton from "@/components/Skeletons/PlanCardSkeletons";
-import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
+ import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useSearchParams } from "next/navigation";
