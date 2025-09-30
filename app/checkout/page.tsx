@@ -4,7 +4,8 @@ import CheckoutPage from "./CheckOut";
 
 export default function Page() {
   return (
-    <Suspense fallback={<FullScreenLoader />}>      <CheckoutPage />
+    <Suspense fallback={<FullScreenLoader />}>
+      <CheckoutPage />
     </Suspense>
   );
 }

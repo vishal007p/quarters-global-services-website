@@ -20,6 +20,7 @@ import { clearPlatformServices, getPlatformServices } from "@/lib/platformServic
 import { useDispatch } from "react-redux";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { store } from "@/store/store";
+import EmailOTPVerification from "./EmailOTPVerification";
 
 // --- Types for API ---
 interface Address {
@@ -197,6 +198,10 @@ export default function Step1({ onNext }: Props) {
 
         onNext(values);
     };
+
+    // if(true){
+    //     return <EmailOTPVerification open={true} email="test@gmail.com" onVerified={() => {}} />
+    // }
 
 
     return (
