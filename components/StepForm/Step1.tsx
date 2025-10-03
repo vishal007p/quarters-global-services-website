@@ -22,6 +22,7 @@ import { setFormData } from "@/store/slices/applicationSlice";
 import { store } from "@/store/store";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
+import EmailVerifyDialog from "./EmailVerifyDialog";
 
 // --- Types for API ---
 interface Address {
@@ -214,7 +215,10 @@ export default function Step1() {
         }
     };
 
+// if(true){
 
+//     return  <EmailVerifyDialog/>
+// }
 
 
 

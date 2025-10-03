@@ -30,7 +30,7 @@ export type PlatformServiceStep = {
 };
 
 
-type TabType = "visa" | "passport" | "apostille" | "e-visa";
+type TabType =  "Services" | "apostille" | "e-visa";
 
 interface DropdownFormProps {
   activeTab: TabType;
@@ -39,7 +39,7 @@ interface DropdownFormProps {
 
 
 // --- Tabs ---
-const tabs: TabType[] = ["visa", "passport", "apostille", "e-visa"];
+const tabs: TabType[] = ["Services",  "apostille", "e-visa"];
 
 const STORAGE_KEY = "platformServiceStep";
 
@@ -192,7 +192,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   // --- Validation ---
   const validate = () => {
     let newErrors = { ...errors };
-    if (activeTab === "visa") {
+    if (activeTab === "Services") {
       newErrors = {
         citizenship: citizenship ? "" : "Please select citizenship",
         country: country ? "" : "Please select country",
@@ -200,15 +200,10 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         passport: "",
         apostille: "",
       };
-    } else if (activeTab === "passport") {
-      newErrors = {
-        citizenship: "",
-        country: country ? "" : "Please select country",
-        state: "",
-        passport: passportType ? "" : "Please select passport type",
-        apostille: "",
-      };
-    } else if (activeTab === "apostille") {
+    }
+    
+    
+    else if (activeTab === "apostille") {
       newErrors = {
         citizenship: "",
         country: country ? "" : "Please select country",
@@ -242,15 +237,10 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       apostilleType: apostilleType?.slug,
     };
     saveStep(step);
-    if (activeTab === "visa") {
-      router.push(`/visa/category?toCountrySlug=${country?.slug}&&platformServiceCategorySlug=${ country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
+    if (activeTab === "Services") {
+      router.push(`/services?toCountrySlug=${country?.slug}&&fromCountrySlug=${ country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
       savePlatformServiceStep({ platformServiceId: country?.id , platformServiceCategoryId: visaService[0]._id   });
-    } else if (activeTab === "passport") {
-      router.push(
-        `/passport/plan-section?toCountrySlug=${country?.slug}&platformServiceCategorySlug=${passportType?.slug}&fromCountrySlug=${citizenship?.slug}`
-      );
-      savePlatformServiceStep({ platformServiceId: country?.slug == "india" ? "68d839bd2ea0a4e770b07ec7" : country?.slug == "united-states" ? "68d839bc2ea0a4e770b07e91" : "68d839bc2ea0a4e770b07e8f", platformServiceCategoryId: passportType?.id });
-    } else if (activeTab === "apostille") {
+    }   else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     } else if (activeTab === "e-visa") {
       router.push(`/e-visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
@@ -336,11 +326,10 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
                 : "border-transparent hover:text-blue-300"
                 }`}
             >
-              {tab === "visa"
-                ? "Expedited Visas"
-                : tab === "passport"
-                  ? "Expedited Passport"
-                  : tab === "apostille"
+              {tab === "Services"
+                ? "Services"
+                : 
+                  tab === "apostille"
                     ? "Apostille & Legalization"
                     : tab === "e-visa"
                       ? "E-Visa"
@@ -354,7 +343,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
 
       {/* Visa Form */}
-      {activeTab === "visa" && (
+      {activeTab === "Services" && (
         <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center">
           <DropdownWrapper
             value={citizenship}
@@ -388,33 +377,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           <GoButton handleGo={handleGo} />
         </div>
       )}
-
-      {/* Passport Form */}
-      {activeTab === "passport" && (
-        <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center">
-          <DropdownWrapper
-            value={country}
-            setValue={setCountry}
-            search={countrySearch}
-            setSearch={setCountrySearch}
-            filteredOptions={filteredCountries}
-            errors={errors.country}
-            placeholder="Select Country"
-            type="flag"
-          />
-          <DropdownWrapper
-            value={passportType}
-            setValue={setPassportType}
-            search={passportSearch}
-            setSearch={setPassportSearch}
-            filteredOptions={apiPassport}
-            errors={errors.passport}
-            placeholder="Select Passport Type"
-          />
-          <GoButton handleGo={handleGo} />
-        </div>
-      )}
-
+ 
       {/* Apostille Form */}
       {activeTab === "apostille" && (
         <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center">

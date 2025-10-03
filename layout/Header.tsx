@@ -143,26 +143,7 @@ const Header = () => {
             )}
           </div>
 
-          {/* Translate */}
-          <div className="relative">
-            <button
-              onClick={() => setShowTranslate(!showTranslate)}
-              className="flex items-center gap-[6px] w-[123px] h-[30px] px-[6px] py-[3px] text-xs border border-[#BFBFBF] text-center rounded-[6px] bg-white hover:bg-gray-100 transition"
-            >
-              <MdGTranslate className="text-base" />
-              Translate
-            </button>
-
-            {showTranslate && (
-              <div className="absolute z-50 mt-2">
-                <GoogleTranslate />
-              </div>
-            )}
-
-            <span className="text-xs text-gray-400 block mt-1">
-              Powered by Google Translate
-            </span>
-          </div>
+         
 
           {/* Login */}
           <button onClick={() => router.push("/login")}  className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
@@ -242,24 +223,7 @@ const Header = () => {
                 <MdShoppingCart className="text-xl text-gray-800" />
                 <span className="text-sm">Cart ({cartCount})</span>
               </div>
-
-              {/* Translate */}
-              <div className="mt-4">
-                <button
-                  onClick={() => setShowTranslate(!showTranslate)}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-xs border border-[#BFBFBF] rounded-md bg-white hover:bg-gray-100"
-                >
-                  <MdGTranslate />
-                  Translate
-                </button>
-
-                {showTranslate && (
-                  <div className="mt-2">
-                    <GoogleTranslate />
-                  </div>
-                )}
-              </div>
-
+ 
               {/* Login */}
               <button onClick={() => router.push("/login")} className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
                 Login

@@ -1,9 +1,11 @@
-import React from 'react'
+import DashboardLayout from "@/layout/DashboardLayout";
 
-const page = () => {
+ 
+export default function DashboardPage() {
   return (
-    <div>page</div>
-  )
+    <DashboardLayout>
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <p>Welcome back! Here’s your overview.</p>
+    </DashboardLayout>
+  );
 }
-
-export default page
