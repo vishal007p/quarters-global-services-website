@@ -13,7 +13,7 @@ import React, { useState } from 'react'
 const Passport = () => {
   
 
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" | "e-visa">("visa");
+  const [activeTab, setActiveTab] = useState<"Services" | "apostille" |  "e-visa">("Services");
  
   return (
     <>

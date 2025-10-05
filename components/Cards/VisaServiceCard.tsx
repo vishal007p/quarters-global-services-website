@@ -1,7 +1,7 @@
 import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
- import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
-import { setCategory } from "@/store/slices/applicationSlice";
+import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
+import { setCategory, startApplication } from "@/store/slices/applicationSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "nextjs-toploader/app";
 
@@ -11,6 +11,7 @@ interface VisaServiceCardProps {
   title: string;
   description: string;
   link?: string;
+  shouldStartApplication?: boolean; // ✅ renamed
 }
 
 const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
@@ -19,12 +20,14 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   description,
   link,
   id,
+  shouldStartApplication
+
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { activeId } = useSelector((state: any) => state.application);
   const handleApplyNow = () => {
- 
+
     dispatch(
       setCategory({ id: activeId, name: title, platformServiceCategoryId: id })
     );
@@ -68,8 +71,10 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
           }
           onClick={() => {
             // Save the step in localStorage first
+            if (shouldStartApplication) {
+              dispatch(startApplication({ type: title ?? "" }));
+            }
             savePlatformServiceStep({ platformServiceCategoryId: String(id) });
-
             // Then navigate
             handleApplyNow();
           }}

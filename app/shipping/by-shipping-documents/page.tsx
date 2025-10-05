@@ -1,145 +1,117 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "nextjs-toploader/app";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormField,
   FormItem,
-  FormLabel,
   FormControl,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "nextjs-toploader/app";
-
+import { CHECKLISTS } from "@/app/data/checklists";
+ 
 const formSchema = z.object({
   documents: z.array(z.string()).nonempty("Select at least one document"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const DOCUMENT_LIST = [
-  "Passport",
-  "Photograph",
-  "DS-160 Form",
-  "Proof of residence",
-  "Proof of financial capability",
-  "Proof of employment/business",
-  "Travel itinerary",
-  "Invitation letter from U.S. company (for B1 Business Visa)",
-];
+interface ChecklistPageProps {
+  country: string;
+  service: string; // e.g. "oci" or "passport"
+  subServiceId: string; // e.g. "oci-adult" or "passport-minor"
+}
 
-const ShippingPage = () => {
+const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) => {
+  const router = useRouter();
+  const serviceData = CHECKLISTS[country]?.[service]?.find(
+    (item) => item.id === subServiceId
+  );
+
+  if (!serviceData)
+    return <p className="text-center text-gray-500">Checklist not found.</p>;
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      documents: DOCUMENT_LIST, // pre-checked
+      documents: [],
     },
   });
-  const router = useRouter();
 
-  const onSubmit = () => {
-    router.push("/shipping/summary");
-
-  };
+  const onSubmit = () => router.push("/shipping/summary");
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
-      <h2 className="text-xl font-bold mb-6">Document Process</h2>
-      <p className="mb-4 text-gray-600">
-        How would you like to send documents to us for further process?
-      </p>
+      <h2 className="text-2xl font-bold mb-6">{serviceData.title}</h2>
 
-      {/* Fake radio (read-only, since this is shipping page) */}
-      <div className="flex gap-8 border-b border-dashed pb-4 mb-6">
-        <div className="flex items-center space-x-2">
-          <input title="ss" type="radio" checked={false} readOnly />
-          <label className="text-gray-600">By Uploading documents</label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <input title="ss" type="radio" checked readOnly />
-          <label className="font-semibold">By Shipping Documents</label>
-        </div>
+      {/* Document Checklist */}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="documents"
+            render={() => (
+              <FormItem>
+                {serviceData.documents.map((doc) => (
+                  <FormField
+                    key={doc}
+                    control={form.control}
+                    name="documents"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center space-x-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value?.includes(doc)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, doc])
+                                : field.onChange(field.value?.filter((v) => v !== doc));
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal">{doc}</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                ))}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="bg-blue-700 hover:bg-blue-800 mt-4">
+            Next
+          </Button>
+        </form>
+      </Form>
+
+      {/* Fees */}
+      <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+        <h3 className="font-semibold mb-2">Fees</h3>
+        <ul className="list-disc pl-6 text-gray-700">
+          {serviceData.fees.map((f, i) => (
+            <li key={i}>{f}</li>
+          ))}
+        </ul>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 border-b border-dashed pb-6 mb-6">
-        {/* Left Side - Checklist */}
-        <div>
-          <p className="mb-4 font-medium text-gray-700">
-            For Visa Shipment process you need to Ship these documents on below
-            address to complete Process
-          </p>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              <FormField
-                control={form.control}
-                name="documents"
-                render={() => (
-                  <FormItem>
-                    {DOCUMENT_LIST.map((item) => (
-                      <FormField
-                        key={item}
-                        control={form.control}
-                        name="documents"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={item}
-                              className="flex items-center space-x-2"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(item)}
-                                  onCheckedChange={(checked) => {
-                                    return checked
-                                      ? field.onChange([...field.value, item])
-                                      : field.onChange(
-                                        field.value?.filter((v) => v !== item)
-                                      );
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                {item}
-                              </FormLabel>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    ))}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                className="bg-blue-700 hover:bg-blue-800 mt-4"
-              >
-                Next
-              </Button>
-            </form>
-          </Form>
-        </div>
-
-        {/* Right Side - Address */}
-        <div className="bg-blue-200 p-6 rounded-lg">
-          <h3 className="font-semibold mb-2">
-            Ship your document to below address.
-          </h3>
-          <p>Carlos Sebastian</p>
-          <p>47 W, 13th Street,</p>
-          <p>New York, NY 10011</p>
-        </div>
+      {/* FAQ */}
+      <div className="mt-6 bg-blue-50 p-4 rounded-lg">
+        <h3 className="font-semibold mb-2">FAQ / Notes</h3>
+        <ul className="list-disc pl-6 text-gray-700">
+          {serviceData.faq.map((f, i) => (
+            <li key={i}>{f}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 };
 
-export default ShippingPage;
+export default ChecklistPage;

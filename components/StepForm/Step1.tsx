@@ -235,7 +235,7 @@ export default function Step1() {
                                 // Each card has its own form.applications[0]
 
                                 const formData = app.form?.applications?.[activeIndex];
-                            
+                            console.log(formData, "formData")
 
                                 if (formData) {
                                     form.reset(mapApiToForm(formData));
@@ -249,9 +249,9 @@ export default function Step1() {
                         >
                             <div className="flex items-start justify-between">
                                 <h2 className="text-base sm:text-lg font-bold text-white leading-snug">
-                                    {app.firstName || "New"} {app.type || "Traveller"} <br />
+                                    {app.name} <br />
                                     <span className="text-xs sm:text-sm font-medium text-white/80">
-                                        {app.email || "No email"}
+                                        {app.type || "No "}
                                     </span>
                                 </h2>
                                 <Button

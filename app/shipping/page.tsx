@@ -111,29 +111,7 @@ const Page = () => {
             )}
           />
 
-          {/* Step 2A: If upload → file input */}
-          {form.watch("documentMethod") === "upload" && (
-            <FormField
-              control={form.control}
-              name="uploadFiles"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">Upload Documents</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      multiple
-                      onChange={(e) => {
-                        field.onChange(e.target.files);
-                      }}
-                      className="mt-2"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+        
 
           {/* Step 2B: If shipping → checklist */}
           {form.watch("documentMethod") === "shipping" && (
@@ -152,7 +130,7 @@ const Page = () => {
                     >
                       <FormControl>
                         <Checkbox
-                          checked={field.value?.includes(item)}
+                          checked={true}
                           onCheckedChange={(checked) => {
                             return checked
                               ? field.onChange([...(field.value || []), item])

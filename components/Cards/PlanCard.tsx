@@ -52,10 +52,12 @@ const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
       })
     );
     router.push(
-      `/${type}/additional-services?slug=${plan.slug}&toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}`
+      `/additional-services?slug=${plan.slug}&toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}`
     );
     savePlatformServiceStep({
       platformServiceCategoryPackageId: String(plan._id),
+      price: Number(plan.price),
+      currency: "USD",
     });
   };
 

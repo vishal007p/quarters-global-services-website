@@ -1,49 +1,53 @@
-"use client"
-import BannerLayout from '@/components/Banner/BannerLayout'
-import VisaServiceCard from '@/components/Cards/VisaServiceCard';
-import CommitmentSection from '@/components/CommitmentSection/CommitmentSection';
-import DropdownForm from '@/components/DropdownForm/DropdownForm';
-import FAQSection from '@/components/FAQSection';
-import SectionTitle from '@/components/SectionTitle/SectionTitle';
-import VisaServiceCardSkeletons from '@/components/Skeletons/VisaServiceCardSkeletons';
-import TestimonialSlider from '@/components/TestimonialSlider ';
-import WhyChoose from '@/components/WhyChoose/WhyChoose';
-import { useGetPlatformServiceByIdQuery, useGetPlatformServicesQuery } from '@/services/platformApi';
-import { useGetPlatformServiceCategoriesQuery } from '@/services/platformCategoryApi';
-import { startApplication } from '@/store/slices/applicationSlice';
-import { useSearchParams } from 'next/navigation';
-import React, { useState } from 'react'
+"use client";
+import BannerLayout from "@/components/Banner/BannerLayout";
+ import VisaServiceCard from "@/components/Cards/VisaServiceCard";
+import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import FAQSection from "@/components/FAQSection";
+import SectionTitle from "@/components/SectionTitle/SectionTitle";
+ import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
+import TestimonialSlider from "@/components/TestimonialSlider ";
+import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
+import { useSearchParams } from "next/navigation";
+import React from "react";
 
-const Passport = () => {
+const Category = () => {
     const searchParams = useSearchParams();
     const country = searchParams.get("toCountrySlug") || "";
-    const citizenship = searchParams.get("fromCountrySlug") || "";
-    const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
-    const { data, isLoading } = useGetPlatformServiceByIdQuery("india");
+    const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
+    const { data, error, isLoading } = useGetPlatformServiceSubCategoriesQuery(
+        {
+            platformServiceSlug: platformServiceCategorySlug,
+            toCountrySlug: country,
+        }
+    );
     const packages = data?.data?.data;
-    
-  
+    console.log("packages", packages);
+    if (error) return <p>Something went wrong</p>;
+
     return (
         <>
-            <BannerLayout bg="/services/passport.png">
+            <BannerLayout bg="/services/visa.png">
                 {/* Overlay Heading */}
-                <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
-                    Fast, Secure Passport Services
+                <h4
+                    className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
+               m-auto rounded-lg font-bold mb-4 text-center text-white 
+               text-[clamp(1rem,1.8vw,2rem)]"
+                >
+                    Fast, Hassle-Free Visa Services
                 </h4>
 
                 {/* Main Heading */}
-                <h1 className="font-bold mb-6 text-center text-[clamp(1.75rem,3.5vw,3rem)] sm:text-[clamp(2rem,4vw,3.5rem)] md:text-[clamp(2.25rem,4vw,3.75rem)] leading-snug">
-                    We Handle Everything
+                <h1
+                    className="font-bold mb-6 text-center text-white 
+               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug"
+                >
+                    We help U.S. citizens apply for tourist, business, student, and
+                    <br className="hidden sm:inline" />
+                    work visas—accurately, securely, and on time.
                 </h1>
-
-                {/* Dropdown Form */}
-                <div className="px-4 sm:px-6 md:px-8">
-                    <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
-                </div>
             </BannerLayout>
-            <div className="max-w-6xl mx-auto my-16 px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Our Passport Processing Plans</h2>
 
+            <div className="max-w-6xl mx-auto my-16 px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {isLoading ? (
                         <>
@@ -61,12 +65,11 @@ const Passport = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
-                                        // link={
-                                        //     service.subCategories && service.subCategories.length > 1
-                                        //         ? `/visa/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${citizenship}&subCategorySlug=${service.slug}`
-                                        //         : `/visa/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
-                                        // }
-                                        link={`/category?toCountrySlug=${country}&Slug=${service.slug}`}
+                                        link={
+                                            service.subCategories && service.subCategories.length > 1
+                                                ? `/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
+                                                : `/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
+                                        }
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
                                             <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />
@@ -78,7 +81,6 @@ const Passport = () => {
                                         }
                                         title={service.name}
                                         description={service.name}
-                                        shouldStartApplication={true}
                                     />
                                 </div>
                             ))}
@@ -90,7 +92,6 @@ const Passport = () => {
                     )}
                 </div>
             </div>
-            <WhyChoose />
             <CommitmentSection />
             <div className="max-w-7xl mx-auto px-10 py-12  ">
                 <SectionTitle
@@ -101,10 +102,9 @@ const Passport = () => {
                 />
                 <TestimonialSlider />
             </div>
-
             <FAQSection />
-
         </>
-    )
-}
-export default Passport
+    );
+};
+
+export default Category;
