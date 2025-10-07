@@ -122,12 +122,7 @@ export default function Home() {
         <div className="px-4 sm:px-6 md:px-8">
           <DropdownForm setActiveTab={setActiveTab} activeTab={activeTab} />
         </div>
-
-         
       </BannerLayout>
-
-
-
       <section className="py-12 px-4 lg:px-28  ">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
           {/* Left: Text and Image */}

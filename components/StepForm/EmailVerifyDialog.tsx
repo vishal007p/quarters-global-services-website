@@ -11,9 +11,18 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useValidateOtpMutation } from "@/services/validateOtpApi";
 
-export default function EmailVerifyDialog() {
+type EmailVerifyDialogProps = {
+  email: string;
+  handleSubmite: () => void;
+};
+
+
+export default function EmailVerifyDialog({ email, handleSubmite }:EmailVerifyDialogProps) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [validateOtp, { data, isLoading, error }] = useValidateOtpMutation();
+
 
   const handleChange = (value: string, index: number) => {
     if (value.length > 1) return; // only single digit
@@ -28,11 +37,13 @@ export default function EmailVerifyDialog() {
     }
   };
 
-  const handleVerify = () => {
-    const code = otp.join("");
-    console.log("Entered OTP:", code);
-    // TODO: Call API verify
-  };
+  const handleVerify = async () => {
+  const code = otp.join(""); // convert ["1","2","3","4","5","6"] → "123456"
+
+  const res = await validateOtp({ email: email, otp: code }).unwrap();
+  console.log("Entered OTP:", code);
+  handleSubmite();
+};
 
   return (
     <Dialog>

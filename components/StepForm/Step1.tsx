@@ -23,6 +23,7 @@ import { store } from "@/store/store";
 import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import EmailVerifyDialog from "./EmailVerifyDialog";
+import { useVerifyEmailMutation } from "@/services/verifyEmail";
 
 // --- Types for API ---
 interface Address {
@@ -80,8 +81,10 @@ export default function Step1() {
     const dispatch = useDispatch();
     const router = useRouter()
     const [applications, setApplications] = useState<Application[]>([]);
-    console.log(applications, "applications")
     const [activeIndex, setActiveIndex] = useState(0);
+    const [verifyEmail] = useVerifyEmailMutation();
+    const [emailOtpVerify, setEmailVerify] = useState(false)
+    const [payload, setPayload] = useState()
 
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
@@ -135,53 +138,54 @@ export default function Step1() {
     const onSubmit = async (values: Step1Data) => {
         try {
             const platformServices = getPlatformServices() || [];
-
-            let countryCode = "+1";
-            let phone = values.phone || "";
-
-            // 📱 Normalize phone number and country code
-            if (phone.startsWith("+")) {
-                const parts = phone.split(" ");
-                if (parts.length === 2) {
-                    countryCode = parts[0];
-                    phone = parts[1];
-                } else {
-                    countryCode = phone.slice(0, 3);
-                    phone = phone.slice(3);
-                }
-            }
-
-            // ✅ Build payload in the new format
+            //  Build one common address object from currentLegalAddress
+            const fullAddress = {
+                addressLine1: values.currentLegalAddress?.addressLine1 || "",
+                addressLine2: values.currentLegalAddress?.addressLine2 || "",
+                city: values.currentLegalAddress?.city || "",
+                state: values.currentLegalAddress?.state || "",
+                zipCode: values.currentLegalAddress?.zipCode || "",
+                country: values.currentLegalAddress?.country || "",
+            };
+            //  Build payload
             const payload = {
                 applications: [
                     {
-                        ...values,
-                        phone,
-                        countryCode,
-                        platformServices: platformServices.map((s:any) => ({
-                            platformServiceId: s.platformServiceId || s.id,
-                            platformServiceCategoryId: s.platformServiceCategoryId,
-                            platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
-                            platformServiceCategoryPackageAddonsId:
-                                s.platformServiceCategoryPackageAddonsId || s.addons || [],
-                        })),
-                        status: "Draft",         // must match your backend enum
-                        // supportingDocs: [
-                        //     {
-                        //         name: "passport.pdf",
-                        //         type: "application/pdf",
-                        //         size: 204800,
-                        //         url: "https://example.com/docs/passport.pdf",
-                        //     },
-                        // ],
+                        firstName: values.firstName,
+                        lastName: values.lastName,
+                        email: values.email,
+                        phone: values.phone,
+                        countryCode: values.countryCode || "+1",
+                        company: values.company || "",
+                        status: "Submitted",
+                        applicationSource: "Website", // Website | AgentPortal | AdminPortal
+
+                        // ✅ Use same object for both
+                        address: fullAddress,
+                        currentLegalAddress: fullAddress,
+
+                        fromCountryId: values.fromCountryId || "68d839b82ea0a4e770b07daf",
+                        toCountryId: values.toCountryId || "68d839b82ea0a4e770b07daf",
+
+                        // ✅ Platform services (clean mapping)
+                        platformServices: (platformServices || [])
+                            .filter((s: any) => s.platformServiceCategoryId || s.platformServiceId)
+                            .map((s: any) => ({
+                                platformServiceId: s.platformServiceId && s.platformServiceId.trim() !== "" ? s.platformServiceId : values.platformServiceId || "68cc5e9562e517276caa119e",
+                                platformServiceCategoryId: s.platformServiceCategoryId || "",
+                                platformServiceCategoryPackageAddonsId: s.platformServiceCategoryPackageAddonsId || s.addons || [],
+                                platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
+
+                            })),
+
+                        // ✅ Custom service fields
                         serviceFields: {
-                            someServiceSpecificField: "example value",
+                            serviceType: "CourierDelivery",
                         },
                     },
                 ],
             };
-
-            // 🔄 Save form in redux store (if editing existing app)
+            //  Save to Redux if editing existing app
             const activeId = store.getState().application.activeId;
             if (activeId) {
                 dispatch(
@@ -191,37 +195,34 @@ export default function Step1() {
                     })
                 );
             }
+            setPayload(payload)
+            const res = await verifyEmail({
+                email: values.email
+            }).unwrap();
 
-            // 🚀 Send to backend
-            // @ts-expect-error mismatch RTK
-            const response = await createApplication(payload).unwrap();
-            console.log(response, "responsess");
+            console.log(res, "res")
+            setEmailVerify(true)
 
-            if (response?.status && response.data?.redirectURL) {
-                clearPlatformServices();
-                localStorage.removeItem("applications");      
-                window.location.href = response.data.redirectURL;
-            } else {
-                toast.error("Application created but no redirect URL returned");
-            }
         } catch (error: any) {
-            console.error("Error creating application:", error);
 
-            if (error?.data?.message) {
-                toast.error(error.data.message);
-            } else {
-                toast.error("Something went wrong while creating application");
-            }
+            toast.error(error?.data?.message || "Something went wrong while creating application");
         }
     };
 
-// if(true){
+    const handleVerify = async () => {
+        const response = await createApplication(payload).unwrap();
+        if (response?.status && response.data?.redirectURL) {
+            clearPlatformServices();
+            localStorage.removeItem("applications");
+            window.location.href = response.data.redirectURL;
+        } else {
+            toast.error("Application created but no redirect URL returned");
+        }
+    };
 
-//     return  <EmailVerifyDialog/>
-// }
-
-
-
+    if (emailOtpVerify) {
+        return <EmailVerifyDialog email={payload.email ?? ""} handleSubmite={handleVerify} />
+    }
     return (
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
             {/* Header */}
@@ -235,7 +236,7 @@ export default function Step1() {
                                 // Each card has its own form.applications[0]
 
                                 const formData = app.form?.applications?.[activeIndex];
-                            console.log(formData, "formData")
+                                console.log(formData, "formData")
 
                                 if (formData) {
                                     form.reset(mapApiToForm(formData));
