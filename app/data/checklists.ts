@@ -1,5 +1,22 @@
+type ChecklistItem = {
+  id: string;
+  title: string;
+  documents: string[];
+  fees: string[];
+  faq: string[];
+};
+
+type Services = {
+  oci: ChecklistItem[];
+  passport: ChecklistItem[];
+};
+
+type Checklists = {
+  india: Services;
+};
  
-export const CHECKLISTS = {
+
+export const CHECKLISTS:Checklists = {
   india: {
     oci: [
       {

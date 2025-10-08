@@ -8,8 +8,7 @@ import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
 import { usePathname } from "next/navigation";
-import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
-
+ 
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -94,23 +93,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   //   fromCountrySlug: country?.slug || ""
   // });
 
-  const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceSubCategoriesQuery({
-    platformServiceSlug: country?.slug == "india" ? "indian-possport" : country?.slug == "united-states" ? "us-passport" : "visa",
-    toCountrySlug: country?.slug || "",
-  });
-
   const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "apostilleOptions",
     toCountrySlug: country?.slug || "",
     fromCountrySlug: country?.slug || ""
   });
 
-  const apiPassport: DropdownOption[] =
-    passportList?.data?.data?.map((item: any) => ({
-      id: item._id,
-      name: item.name,
-      slug: item.slug,
-    })) || [];
 
   const apostilleOption: DropdownOption[] =
     apostilleOptions?.data?.data?.map((item: any) => ({
@@ -130,8 +118,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const [stateSearch, setStateSearch] = useState("");
 
   const [passportType, setPassportType] = useState<DropdownOption | null>(null);
-  const [passportSearch, setPassportSearch] = useState("");
-
 
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
   const [apostilleSearch, setApostilleSearch] = useState("");
@@ -294,7 +280,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     }
   }, [currentPath, setActiveTab])
 
-  if (countryLoading || passportLoading || apostilleLoading) { // your loading condition
+  if (countryLoading  || apostilleLoading) { // your loading condition
     return (
       <div className="max-w-4xl mx-auto p-6 flex flex-row gap-4">
         {[...Array(3)].map((_, i) => (

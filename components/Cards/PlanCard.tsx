@@ -30,7 +30,7 @@ export interface VisaPlan {
   platformServiceCategoryId: string;
 }
 
-const PlanCard = ({ plan, type }: { plan: VisaPlan; type: string }) => {
+const PlanCard = ({ plan }: { plan: VisaPlan; type: string }) => {
   const router = useRouter();
   const primaryColor = "#D20F21";
   const searchParams = useSearchParams();

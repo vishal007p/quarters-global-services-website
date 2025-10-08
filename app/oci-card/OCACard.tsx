@@ -1,30 +1,15 @@
 "use client";
 import BannerLayout from "@/components/Banner/BannerLayout";
- import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
- import FAQSection from "@/components/FAQSection";
+import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
- import TestimonialSlider from "@/components/TestimonialSlider ";
+import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
-import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import { startApplication } from "@/store/slices/applicationSlice";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, } from "react";
 import { useDispatch } from "react-redux";
-
-interface services {
-  _id: string;
-  code: string;
-  name: string;
-  slug: string;
-}
-
 const OCACard = () => {
-  const searchParams = useSearchParams();
- 
-  
   const dispatch = useDispatch();
- 
-
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
   }, [dispatch]);
@@ -42,15 +27,9 @@ const OCACard = () => {
           We help U.S. citizens apply for tourist, business, student, and <br className="hidden sm:inline" />
           work visas—accurately, securely, and on time.
         </h1>
-
-
       </BannerLayout>
- 
-
       <WhyChoose />
-
       <CommitmentSection />
-
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"

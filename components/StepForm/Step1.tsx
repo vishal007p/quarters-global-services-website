@@ -200,12 +200,28 @@ export default function Step1() {
                 email: values.email
             }).unwrap();
 
-            console.log(res, "res")
-            setEmailVerify(true)
-
+            console.log(res, "resssss")
+            if (res?.message === "Email is already verified.") {
+                const response = await createApplication(payload).unwrap();
+                if (response?.status && response.data?.redirectURL) {
+                    clearPlatformServices();
+                    localStorage.removeItem("applications");
+                    window.location.href = response.data.redirectURL;
+                } else {
+                    toast.error("Application created but no redirect URL returned");
+                }
+            } else {
+                toast.error(res?.message || "Email verification failed");
+                setEmailVerify(false);
+            }
         } catch (error: any) {
 
             toast.error(error?.data?.message || "Something went wrong while creating application");
+            if ("We have sent OTP to your email. Please check your inbox." === error?.data?.message) {
+                setEmailVerify(true)
+
+            }
+
         }
     };
 
@@ -220,9 +236,7 @@ export default function Step1() {
         }
     };
 
-    if (emailOtpVerify) {
-        return <EmailVerifyDialog email={payload.email ?? ""} handleSubmite={handleVerify} />
-    }
+
     return (
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
             {/* Header */}
@@ -540,6 +554,8 @@ export default function Step1() {
                     </div>
                 </form>
             </Form>
+
+            {emailOtpVerify && <EmailVerifyDialog email={payload?.applications[0]?.email ?? ""} handleSubmite={handleVerify} />}
         </div>
     );
 }

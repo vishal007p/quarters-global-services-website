@@ -15,7 +15,6 @@ export interface PlatformService {
  */
 export const savePlatformServiceStep = (
   stepData: Partial<PlatformService>,
-  createNew: boolean = false
 ) => {
   if (typeof window === "undefined") return;
 

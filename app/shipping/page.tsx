@@ -16,8 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input"; // ✅ file input component
-import { useRouter } from "nextjs-toploader/app";
+ import { useRouter } from "nextjs-toploader/app";
 
 // ✅ Document List for Shipping (US Visa)
 const DOCUMENT_LIST = [

@@ -16,27 +16,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { CHECKLISTS } from "@/app/data/checklists";
- 
+
 const formSchema = z.object({
   documents: z.array(z.string()).nonempty("Select at least one document"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+
+
 interface ChecklistPageProps {
-  country: string;
-  service: string; // e.g. "oci" or "passport"
-  subServiceId: string; // e.g. "oci-adult" or "passport-minor"
+  country: keyof typeof CHECKLISTS;
+  service: keyof typeof CHECKLISTS["india"];
+  subServiceId: string;
 }
 
 const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) => {
   const router = useRouter();
   const serviceData = CHECKLISTS[country]?.[service]?.find(
-    (item) => item.id === subServiceId
+    (item: any) => item.id === subServiceId
   );
 
-  if (!serviceData)
-    return <p className="text-center text-gray-500">Checklist not found.</p>;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -46,7 +46,9 @@ const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) =
   });
 
   const onSubmit = () => router.push("/shipping/summary");
-
+  if (!serviceData)
+    return <p className="text-center text-gray-500">Checklist not found.</p>;
+  
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
       <h2 className="text-2xl font-bold mb-6">{serviceData.title}</h2>
@@ -59,7 +61,7 @@ const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) =
             name="documents"
             render={() => (
               <FormItem>
-                {serviceData.documents.map((doc) => (
+                {serviceData.documents.map((doc: any) => (
                   <FormField
                     key={doc}
                     control={form.control}
@@ -95,7 +97,7 @@ const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) =
       <div className="mt-6 bg-gray-100 p-4 rounded-lg">
         <h3 className="font-semibold mb-2">Fees</h3>
         <ul className="list-disc pl-6 text-gray-700">
-          {serviceData.fees.map((f, i) => (
+          {serviceData.fees.map((f: any, i: number) => (
             <li key={i}>{f}</li>
           ))}
         </ul>
@@ -105,7 +107,7 @@ const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) =
       <div className="mt-6 bg-blue-50 p-4 rounded-lg">
         <h3 className="font-semibold mb-2">FAQ / Notes</h3>
         <ul className="list-disc pl-6 text-gray-700">
-          {serviceData.faq.map((f, i) => (
+          {serviceData.faq.map((f: any, i: number) => (
             <li key={i}>{f}</li>
           ))}
         </ul>

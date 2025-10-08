@@ -7,25 +7,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useValidateOtpMutation } from "@/services/validateOtpApi";
+import { toast } from "sonner"; // or your toast lib
 
 type EmailVerifyDialogProps = {
   email: string;
   handleSubmite: () => void;
+  onResend?: () => void;
 };
 
-
-export default function EmailVerifyDialog({ email, handleSubmite }:EmailVerifyDialogProps) {
+export default function EmailVerifyDialog({
+  email,
+  handleSubmite,
+  onResend,
+}: EmailVerifyDialogProps) {
+  const [open, setOpen] = useState(true); // internal state
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [validateOtp, { data, isLoading, error }] = useValidateOtpMutation();
-
+  const [validateOtp, { isLoading }] = useValidateOtpMutation();
 
   const handleChange = (value: string, index: number) => {
-    if (value.length > 1) return; // only single digit
+    if (value.length > 1) return;
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -38,19 +42,24 @@ export default function EmailVerifyDialog({ email, handleSubmite }:EmailVerifyDi
   };
 
   const handleVerify = async () => {
-  const code = otp.join(""); // convert ["1","2","3","4","5","6"] → "123456"
+    const code = otp.join("");
+    try {
+      const res = await validateOtp({ email, otp: code }).unwrap();
 
-  const res = await validateOtp({ email: email, otp: code }).unwrap();
-  console.log("Entered OTP:", code);
-  handleSubmite();
-};
+      if (res?.status) {
+        toast.success(res?.message || "Email verified!");
+        handleSubmite();
+        setOpen(false); // ✅ close after success
+      } else {
+        toast.error(res?.message || "Invalid OTP");
+      }
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Verification failed");
+    }
+  };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Verify Email</Button>
-      </DialogTrigger>
-
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Email Verification</DialogTitle>
@@ -60,7 +69,6 @@ export default function EmailVerifyDialog({ email, handleSubmite }:EmailVerifyDi
           </DialogDescription>
         </DialogHeader>
 
-        {/* OTP Inputs */}
         <div className="flex justify-center gap-3 my-6">
           {otp.map((digit, i) => (
             <Input
@@ -77,8 +85,16 @@ export default function EmailVerifyDialog({ email, handleSubmite }:EmailVerifyDi
         </div>
 
         <div className="flex justify-end space-x-3">
-          <Button variant="outline">Resend</Button>
-          <Button onClick={handleVerify}>Verify</Button>
+          <Button
+            variant="outline"
+            onClick={onResend}
+            disabled={isLoading}
+          >
+            Resend
+          </Button>
+          <Button onClick={handleVerify} disabled={isLoading}>
+            {isLoading ? "Verifying..." : "Verify"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

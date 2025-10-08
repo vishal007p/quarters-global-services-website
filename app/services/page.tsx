@@ -8,21 +8,17 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import VisaServiceCardSkeletons from '@/components/Skeletons/VisaServiceCardSkeletons';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import WhyChoose from '@/components/WhyChoose/WhyChoose';
-import { useGetPlatformServiceByIdQuery, useGetPlatformServicesQuery } from '@/services/platformApi';
-import { useGetPlatformServiceCategoriesQuery } from '@/services/platformCategoryApi';
-import { startApplication } from '@/store/slices/applicationSlice';
+import { useGetPlatformServiceByIdQuery } from '@/services/platformApi';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 
 const Passport = () => {
     const searchParams = useSearchParams();
     const country = searchParams.get("toCountrySlug") || "";
-    const citizenship = searchParams.get("fromCountrySlug") || "";
     const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
     const { data, isLoading } = useGetPlatformServiceByIdQuery("india");
     const packages = data?.data?.data;
-    
-  
+
     return (
         <>
             <BannerLayout bg="/services/passport.png">
