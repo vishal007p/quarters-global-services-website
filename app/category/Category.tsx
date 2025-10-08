@@ -13,7 +13,7 @@ import React from "react";
 const Category = () => {
     const searchParams = useSearchParams();
     const country = searchParams.get("toCountrySlug") || "";
-    const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
+    const platformServiceCategorySlug = searchParams.get("Slug") || "";
     const { data, error, isLoading } = useGetPlatformServiceSubCategoriesQuery(
         {
             platformServiceSlug: platformServiceCategorySlug,
