@@ -46,7 +46,7 @@ const EVisaPlan = () => {
         platformServiceCategoryId: `category-${index}`,
         platformServiceCategoryPackageId: `package-${index}`,
         platformServiceCategoryPackageAddonsId: [],
-      }, true);
+      });
     });
 
   };

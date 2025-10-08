@@ -24,12 +24,11 @@ interface services {
 const SubCategory = () => {
   const searchParams = useSearchParams();
   const subCategorySlug = searchParams.get("subCategorySlug");
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" | "e-visa">(
-    "visa"
-  );
+  const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
+
   const country = searchParams.get("toCountrySlug") || "";
   const platformServiceCategorySlug = searchParams.get("platformServiceCategorySlug") || "";
-  const { data,  isLoading } = useGetPlatformServiceSubCategoriesQuery(
+  const { data, isLoading } = useGetPlatformServiceSubCategoriesQuery(
     {
       platformServiceSlug: platformServiceCategorySlug,
       toCountrySlug: country,
