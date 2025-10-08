@@ -5,6 +5,7 @@
 import BannerLayout from "@/components/Banner/BannerLayout";
 import ServiceSection from "@/components/ServiceSection";
 import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
+import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 
@@ -16,11 +17,17 @@ type Service = {
     iconUrl: string;
     slug: string;
     buttonText?: string; // optional
+    platformServiceId:string
 };
 
 const ServicesPage = () => {
-    const { data, isLoading } = useGetNavbarServicesQuery();
-    const services: any[] = data?.data?.data?.filter((item: Service) => item.slug === "other-services") || [];
+    const { data, isLoading } = useGetPlatformServiceSubCategoriesQuery(
+        {
+            platformServiceSlug: "other-services",
+            toCountrySlug: "india",
+        }
+    );
+    const services: any[] = data?.data?.data || [];
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -152,8 +159,8 @@ const ServicesPage = () => {
                                     </div>
                                 </div>
                             ))
-                        ) : services && services[0]?.subServices.length > 0 ? (
-                            services[0].subServices.map((service: Service, index: number) => (
+                        ) : services && services.length > 0 ? (
+                            services.map((service: Service, index: number) => (
                                 <div
                                     key={index}
                                     className={`transition-opacity duration-700 ${isVisible ? "opacity-100" : "opacity-0"
@@ -167,6 +174,9 @@ const ServicesPage = () => {
                                         imageSrc={service.iconUrl}
                                         imagePosition={index % 2 === 0 ? "left" : "right"}
                                         slug={service.slug}
+                                        id={service._id}
+                                        platformServiceId={service.platformServiceId}
+
                                     />
                                 </div>
                             ))

@@ -24,7 +24,7 @@ const Services = () => {
             <BannerLayout bg="/services/passport.png">
                 {/* Overlay Heading */}
                 <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center text-[clamp(1.5rem,2.5vw,2.75rem)] leading-snug">
-                    Fast, Secure Passport Services
+                    Fast, Secure  Services
                 </h4>
 
                 {/* Main Heading */}
@@ -38,8 +38,7 @@ const Services = () => {
                 </div>
             </BannerLayout>
             <div className="max-w-6xl mx-auto my-16 px-4">
-                <h2 className="text-3xl font-bold text-center mb-12">Our Passport Processing Plans</h2>
-
+                <h2 className="text-3xl font-bold text-center mb-12">Our  Processing Plans</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {isLoading ? (
                         <>
@@ -57,12 +56,7 @@ const Services = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
-                                        // link={
-                                        //     service.subCategories && service.subCategories.length > 1
-                                        //         ? `/visa/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${citizenship}&subCategorySlug=${service.slug}`
-                                        //         : `/visa/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
-                                        // }
-                                        link={`/category?toCountrySlug=${country}&Slug=${service.slug}`}
+                                        link={service.name?.toLowerCase() === "other services"?"/other-services":`/category?toCountrySlug=${country}&Slug=${service.slug}`}
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
                                             <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />

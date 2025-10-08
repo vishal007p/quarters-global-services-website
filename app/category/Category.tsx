@@ -21,8 +21,7 @@ const Category = () => {
         }
     );
     const packages = data?.data?.data;
-    console.log("packages", packages);
-    if (error) return <p>Something went wrong</p>;
+     if (error) return <p>Something went wrong</p>;
 
     return (
         <>

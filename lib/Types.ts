@@ -30,7 +30,7 @@ export type ApplicationPayload = {
       platformServiceId: string;
       platformServiceCategoryId: string;
       platformServiceCategoryPackageAddonsId: any[];
-      platformServiceCategoryPackageId: string;
+      platformServiceCategoryPackageId: string | undefined;
     }[];
     serviceFields: {
       serviceType: string;
