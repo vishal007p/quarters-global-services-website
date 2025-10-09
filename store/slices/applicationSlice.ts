@@ -53,6 +53,7 @@ const applicationSlice = createSlice({
   reducers: {
     startApplication(state, action: PayloadAction<{ type: string }>) {
       const id = uuid4();
+      console.log(action.payload.type,"app")
       const newApp: Application = {
         id,
         type: action.payload.type,
@@ -73,7 +74,7 @@ const applicationSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; name: string; platformServiceCategoryId: string }>
     ) {
-      const app = state.applications.find((a) => a.id === action.payload.id);
+      const app = state.applications.find((a) => a.id === action.payload.id); 
       if (app) {
         app.name = action.payload.name;
         app.platformServiceCategoryId = action.payload.platformServiceCategoryId;
@@ -93,6 +94,7 @@ const applicationSlice = createSlice({
       }>
     ) {
       const app = state.applications.find((a) => a.id === action.payload.id);
+      console.log(app,"app")
       if (app) {
         app.package = action.payload.package;
         app.platformServiceCategoryPackageId = action.payload.platformServiceCategoryPackageId;
@@ -112,6 +114,7 @@ const applicationSlice = createSlice({
 
     setFormData(state, action: PayloadAction<{ id: string; form: Record<string, any> }>) {
       const app = state.applications.find((a) => a.id === action.payload.id);
+    
       if (app) {
         // ✅ Deep merge safety
         app.form = {

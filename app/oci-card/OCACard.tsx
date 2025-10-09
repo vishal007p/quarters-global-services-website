@@ -5,14 +5,9 @@ import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
-import { startApplication } from "@/store/slices/applicationSlice";
-import React, { useEffect, } from "react";
-import { useDispatch } from "react-redux";
-const OCACard = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(startApplication({ type: "visa" }));
-  }, [dispatch]);
+ import React from "react";
+ const OCACard = () => {
+  
 
   return (
     <>

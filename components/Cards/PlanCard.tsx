@@ -58,6 +58,7 @@ const PlanCard = ({ plan }: { plan: VisaPlan; type: string }) => {
       platformServiceCategoryPackageId: String(plan._id),
       price: Number(plan.price),
       currency: "USD",
+      Price_name:plan.name
     });
   };
 
@@ -108,9 +109,9 @@ const PlanCard = ({ plan }: { plan: VisaPlan; type: string }) => {
         <div className="text-3xl font-bold text-[${primaryColor}]">
           ${plan.price}
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
+        {/* <p className="text-sm text-muted-foreground mt-2">
           {plan.priceDescription}
-        </p>
+        </p> */}
       </CardContent>
 
       <CardFooter className="px-4 pb-4">

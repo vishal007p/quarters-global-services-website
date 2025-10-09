@@ -6,17 +6,12 @@ import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
-import { startApplication } from "@/store/slices/applicationSlice";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
+ import React, {   useState } from "react";
+ 
 
 const Visa = () => {
   const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(startApplication({ type: "visa" }));
-  }, [dispatch]);
+ 
 
   return (
     <>

@@ -4,8 +4,7 @@
 
 import BannerLayout from "@/components/Banner/BannerLayout";
 import ServiceSection from "@/components/ServiceSection";
-import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
-import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
+ import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 

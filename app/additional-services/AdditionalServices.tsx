@@ -6,69 +6,78 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle'
 import AdditionalServiceSkeleton from '@/components/Skeletons/AdditionalServiceSkeleton'
 import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
- import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
+import { savePlatformServiceStep } from '@/lib/platformServiceStorage'
+import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 
 const AdditionalServices = () => {
 
-    const [selected, setSelected] = useState<string[]>([]);
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  const [selected, setSelected] = useState<string[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    const country = searchParams.get("toCountrySlug") || "";
-    const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
+  const country = searchParams.get("toCountrySlug") || "";
+  const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
 
-   const { data, isLoading } =
-     useGetPlatformServiceCategoryPackageAddonQuery({
-       platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
-       toCountrySlug: country, // ← must not be empty
-     });
-    const additional = data?.data?.data
+  const { data, isLoading } =
+    useGetPlatformServiceCategoryPackageAddonQuery({
+      platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
+      toCountrySlug: country, // ← must not be empty
+    });
+  const additional = data?.data?.data
 
-    const toggleSelection = (id: string) => {
-        setSelected((prev) => {
-            let updated: string[];
+  const toggleSelection = (addon: Addon) => {
+    setSelected((prev) => {
+      const id = String(addon._id);
+      let updated: string[];
 
-            if (prev.includes(id)) {
-                // Deselect
-                updated = prev.filter((item) => item !== id);
-            } else {
-                // Select
-                updated = [...prev, id];
-            }
-
-            // Save updated addons to localStorage
-            // savePlatformServiceStep({
-            //     platformServiceCategoryPackageAddonsId: updated,
-            // });
-
-            return updated;
+      if (prev.includes(id)) {
+        // 🗑️ Deselect → remove from localStorage
+        updated = prev.filter((item) => item !== id);
+        savePlatformServiceStep(
+          {
+            platformServiceCategoryPackageId: addon._id,
+            additionService_name: addon.name,
+          },
+          true // ✅ important — tells function to remove
+        );
+      } else {
+        // 💾 Select → store with full info
+        updated = [...prev, id];
+        savePlatformServiceStep({
+          platformServiceCategoryPackageId: addon._id,
+          additionService: true,
+          additionService_price: Number(addon.price),
+          additionService_name: addon.name,
+          currency: addon.currency || "USD",
         });
-    };
+      }
+
+      return updated;
+    });
+  };
+  const handleContinue = () => {
+    router.push(`/checkout`);
+  };
+  return (
+    <>
+      <BannerLayout bg='/home.png' >
+        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
+          Fast, Hassle-Free  Visa Services
+        </h4>
+        <h1 className="text-4xl font-bold mb-4">
+          We help U.S. citizens apply for tourist, business, student, and<br />
+          work visas—accurately, securely, and on time.
+        </h1>
+      </BannerLayout>
 
 
-    const handleContinue = () => {
-        router.push(`/checkout`);
-    };
-    return (
-        <>
-            <BannerLayout bg='/home.png' >
-                <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
-                    Fast, Hassle-Free  Visa Services
-                </h4>
-                <h1 className="text-4xl font-bold mb-4">
-                    We help U.S. citizens apply for tourist, business, student, and<br />
-                    work visas—accurately, securely, and on time.
-                </h1>
-            </BannerLayout>
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <h2 className="text-2xl font-bold mb-6 text-center">Select Services</h2>
 
-
-            <div className="max-w-6xl mx-auto px-4 py-10">
-                <h2 className="text-2xl font-bold mb-6 text-center">Select Services</h2>
-
-                <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
-                    {
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
+          {
             isLoading ? <>
               <AdditionalServiceSkeleton />
               <AdditionalServiceSkeleton />
@@ -87,7 +96,7 @@ const AdditionalServices = () => {
                       <div>
                         <Checkbox
                           checked={selected.includes(String(service._id))}
-                          onCheckedChange={() => toggleSelection(String(service._id))}
+                          onCheckedChange={() => toggleSelection(service)}
                           className="w-5 h-5"
                         />
                         <h3 className="font-semibold text-lg mb-1 mt-2">{service.name}</h3>
@@ -131,30 +140,30 @@ const AdditionalServices = () => {
             </>
           }
 
-                </div>
+        </div>
 
-                <div className="mt-8 text-center">
-                    <button onClick={handleContinue}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
-                        Continue
-                    </button>
-                </div>
-            </div>
+        <div className="mt-8 text-center">
+          <button onClick={handleContinue}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+            Continue
+          </button>
+        </div>
+      </div>
 
-            <CommitmentSection />
+      <CommitmentSection />
 
 
-            <div className="max-w-7xl mx-auto px-10 py-12  ">
-                <SectionTitle
-                    subtitle="Our Testimonials"
-                    title="Real Stories. Real Success."
-                    highlight="Quartus"
-                    align="center"
-                />
-                <TestimonialSlider />
-            </div>
-        </>
-    )
+      <div className="max-w-7xl mx-auto px-10 py-12  ">
+        <SectionTitle
+          subtitle="Our Testimonials"
+          title="Real Stories. Real Success."
+          highlight="Quartus"
+          align="center"
+        />
+        <TestimonialSlider />
+      </div>
+    </>
+  )
 }
 
 export default AdditionalServices

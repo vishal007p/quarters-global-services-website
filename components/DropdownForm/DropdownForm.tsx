@@ -225,7 +225,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     saveStep(step);
     if (activeTab === "Services") {
       router.push(`/services?toCountrySlug=${country?.slug}&&fromCountrySlug=${ country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
-      savePlatformServiceStep({ platformServiceId: country?.id , platformServiceCategoryId: visaService[0]._id   });
+      savePlatformServiceStep({ platformServiceId: country?.id , platformServiceCategoryId: visaService[0]?._id   });
     }   else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     } else if (activeTab === "e-visa") {

@@ -7,11 +7,9 @@ import TestimonialSlider from "@/components/TestimonialSlider ";
 import { Checkbox } from "@/components/ui/checkbox";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useGetPlatformServiceCategoryPackageAddonQuery } from "@/services/platformServiceAddonApi";
-import { addAddon } from "@/store/slices/applicationSlice";
-import { useRouter, useSearchParams } from "next/navigation";
+ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
+ 
 export interface Addon {
   _id: string;
   platformServiceCategoryPackageId: string;
@@ -36,11 +34,9 @@ const AdditionalServices = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const dispatch = useDispatch();
-  const country = searchParams.get("toCountrySlug") || "";
+   const country = searchParams.get("toCountrySlug") || "";
   const packageSlug = searchParams.get("slug") || ""; // ← this is the actual package slug
-  const { activeId } = useSelector((state: any) => state.application);
-  const { data, isLoading, error } =
+   const { data, isLoading, error } =
     useGetPlatformServiceCategoryPackageAddonQuery({
       platformServiceCategoryPackageSlug: packageSlug, // ← use slug param
       toCountrySlug: country, // ← must not be empty
@@ -48,27 +44,35 @@ const AdditionalServices = () => {
   const additional = data?.data?.data;
   if (error) return <p>Error loading data</p>;
 
-  const toggleSelection = (id: string) => {
-    dispatch(addAddon({ id: activeId, addon: id }));
+  const toggleSelection = (addon: Addon) => {
     setSelected((prev) => {
+      const id = String(addon._id);
       let updated: string[];
 
       if (prev.includes(id)) {
-        // Deselect
+        // 🗑️ Deselect → remove from localStorage
         updated = prev.filter((item) => item !== id);
+        savePlatformServiceStep(
+          {
+            platformServiceCategoryPackageId: addon._id,
+            additionService_name: addon.name,
+          } );
       } else {
-        // Select
+        // 💾 Select → store with full info
         updated = [...prev, id];
+        savePlatformServiceStep({
+          platformServiceCategoryPackageId: addon._id,
+          additionService: true,
+          additionService_price: Number(addon.price),
+          additionService_name: addon.name,
+          currency: addon.currency || "USD",
+        });
       }
-
-      // Save updated addons to localStorage
-      savePlatformServiceStep({
-        platformServiceCategoryPackageAddonsId: updated,
-      });
 
       return updated;
     });
   };
+
 
   const handleContinue = () => {
     router.push(`/checkout`);
@@ -119,7 +123,7 @@ const AdditionalServices = () => {
                       <div>
                         <Checkbox
                           checked={selected.includes(String(service._id))}
-                          onCheckedChange={() => toggleSelection(String(service._id))}
+                          onCheckedChange={() => toggleSelection(service)}
                           className="w-5 h-5"
                         />
                         <h3 className="font-semibold text-lg mb-1 mt-2">{service.name}</h3>

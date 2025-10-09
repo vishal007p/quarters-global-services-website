@@ -17,7 +17,7 @@ const PlanSelection = () => {
     searchParams.get("Slug") || "";
   const { data, error, isLoading } = useGetPlatformServiceCategoryPackagesQuery(
     {
-      platformServiceCategorySlug:platformServiceCategorySlug,
+      platformServiceCategorySlug: platformServiceCategorySlug,
       toCountrySlug: country,
     }
   );
@@ -26,7 +26,7 @@ const PlanSelection = () => {
 
   return (
     <>
-      <BannerLayout  bg="/services/visa.png">
+      <BannerLayout bg="/services/visa.png">
         {/* Overlay Heading */}
         <h4
           className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 

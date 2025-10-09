@@ -9,16 +9,15 @@ import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkel
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
-import { startApplication } from "@/store/slices/applicationSlice";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 
 interface services {
   _id: string;
   code: string;
   name: string;
   slug: string;
+  description: string
 }
 
 const SubCategory = () => {
@@ -34,14 +33,10 @@ const SubCategory = () => {
       toCountrySlug: country,
     }
   );
-  const dispatch = useDispatch();
   const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
 
   console.log(visaService, "visaServicess");
 
-  useEffect(() => {
-    dispatch(startApplication({ type: "visa" }));
-  }, [dispatch]);
 
   return (
     <>
@@ -100,7 +95,7 @@ const SubCategory = () => {
                     </svg>
                     }
                     title={service.name}
-                    description={service.name}
+                    description={service.description}
                   />
                 </div>
               ))}

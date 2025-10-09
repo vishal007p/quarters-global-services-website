@@ -9,11 +9,9 @@ import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkel
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
-import { startApplication } from "@/store/slices/applicationSlice";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
+ import { useSearchParams } from "next/navigation";
+import React, {  useState } from "react";
+ 
 interface services {
   _id: string;
   code: string;
@@ -32,12 +30,11 @@ const EVisa = () => {
     toCountrySlug: country,
     fromCountrySlug: fromCountrySlug
   });
-  const dispatch = useDispatch();
-  const visaService = data?.data?.data;
+   const visaService = data?.data?.data;
 
-  useEffect(() => {
-    dispatch(startApplication({ type: "visa" }));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(startApplication({ type: "visa" }));
+  // }, [dispatch]);
 
   return (
     <>

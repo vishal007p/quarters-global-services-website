@@ -9,11 +9,9 @@ import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkel
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
-import { startApplication } from "@/store/slices/applicationSlice";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
+ import { useSearchParams } from "next/navigation";
+import React, {  useState } from "react";
+ 
 interface services {
   _id: string;
   code: string;
@@ -34,15 +32,11 @@ const SubCategory = () => {
       toCountrySlug: country,
     }
   );
-  const dispatch = useDispatch();
-  const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
+   const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
 
   console.log(visaService, "visaServicess");
 
-  useEffect(() => {
-    dispatch(startApplication({ type: "visa" }));
-  }, [dispatch]);
-
+ 
   return (
     <>
       <BannerLayout bg="/services/visa.png">
