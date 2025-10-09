@@ -4,51 +4,107 @@ import { Form } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
- import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+ import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import FormWrapper from './FormWrapper';
+import handleAsync from '@/lib/handleAsync';
+import { saveSession } from '@/lib/session';
+
+// ---------------- Schema ----------------
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: 'Username must be at least 2 characters.',
-  }),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  remember: z.boolean().optional(),
 });
+
+// ---------------- Component ----------------
 const LoginForm = () => {
+  const route = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      email: '',
+      password: '',
+      remember: false,
     },
   });
+
+  const onSubmit = handleAsync(async (values: z.infer<typeof formSchema>) => {
+    try {
+      // 🔑 Call your backend login route
+      const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) {
+        throw new Error('Invalid credentials');
+      }
+
+      const data = await res.json();
+      const userDataId = data?.data?._id;
+      const userDataToken = data?.data?.token?.split(' ')?.[1];
+
+      if (!userDataToken || !userDataId) {
+        throw new Error('User data not found');
+      }
+      // Save user token
+      saveSession({ id: userDataId, token: userDataToken });
+      toast.success('Login successfully');
+      route.push('/dashboard');
+    } finally {
+      console.log('done');
+    }
+  });
+
   return (
     <Form {...form}>
-      <form className="flex flex-col  py-6 gap-4 mt-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col py-6 gap-4 mt-3">
+        {/* Email */}
         <FormWrapper
           control={form.control}
-          name="username"
+          name="email"
           type="text"
           placeholder="Email"
           require={true}
           cssStyles="mb-4"
         />
+
+        {/* Password */}
         <FormWrapper
           control={form.control}
-          name="username"
+          name="password"
           type="password"
           placeholder="Password"
           require={true}
           cssStyles="mb-4"
         />
+
+        {/* Remember Me */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center flex-wrap gap-3">
-            <Checkbox id="remember" />
-            <Label htmlFor="remember " className="text-primary text-xs md:text-sm">
+            <Checkbox
+              id="remember"
+              checked={form.watch('remember')}
+              onCheckedChange={(val) => form.setValue('remember', Boolean(val))}
+            />
+            <Label htmlFor="remember" className="text-primary text-xs md:text-sm">
               Remember me
             </Label>
           </div>
-          <p className="font-normal text-xs md:text-sm text-primary ">Forget Password?</p>
+          <p className="font-normal text-xs md:text-sm text-primary">Forget Password?</p>
         </div>
-        <Button type="submit" className="text-xl text-white h-16">
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          className="text-xl text-white h-16"
+          disabled={form.formState.isSubmitting}
+        >
           Login
         </Button>
       </form>

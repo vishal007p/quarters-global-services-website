@@ -1,3 +1,5 @@
+import { ZodIssue } from "zod/v3";
+
 export type ApplicationPayload = {
   applications: {
     firstName: string;
@@ -37,3 +39,17 @@ export type ApplicationPayload = {
     };
   }[];
 };
+
+
+export type UserSession = {
+  id: string;
+  token: string;
+};
+
+
+
+export type ErrorInstance = { response: { data: { message: string } } };
+export type ErrorInstance2 = {
+  data: { message: string; errors: Record<string, string> | ZodIssue[] };
+};
+export type ErrorInstanceCombine = { message?: string } & ErrorInstance2 & ErrorInstance;

@@ -1,22 +1,24 @@
-import React from 'react';
-import LoginForm from '@/components/form/LoginForm';
+import React from "react";
+import LoginForm from "@/components/form/LoginForm";
 
 const LoginPage = () => {
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side (Form Section) */}
-      <div className="xl:w-full w-full px-8 flex flex-col items-center justify-center">
-        <div className="xl:max-w-[456px] w-[94%] mx-auto text-center">
-          <h1 className="md:text-2xl mb-4 text-xl font-semibold text-text-secondary-200">
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Left Side — Form Section */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6 sm:px-10 py-10 bg-white">
+        <div className="w-full max-w-md text-left">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4">
             Welcome back to Quartus
           </h1>
-         
+          <p className="text-gray-500 mb-6 text-sm sm:text-base">
+            Please sign in to continue
+          </p>
           <LoginForm />
         </div>
       </div>
 
-      {/* Right Side (Image Section) */}
-      <div className="hidden xl:block xl:flex-1 bg-[url(/auth.png)] bg-cover bg-center" />
+      {/* Right Side — Image Section */}
+      <div className="w-full md:w-1/2 h-64 md:h-auto bg-[url('/logion.jpg')] bg-cover bg-center" />
     </div>
   );
 };

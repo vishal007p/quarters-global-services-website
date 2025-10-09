@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { MdGTranslate, MdMenu, MdClose, MdShoppingCart } from "react-icons/md";
+import {  MdMenu, MdClose, MdShoppingCart } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import GoogleTranslate from "@/components/GoogleTranslate";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
 import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
@@ -13,7 +12,6 @@ import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
 const Header = () => {
   const { data, isError, isLoading } = useGetNavbarServicesQuery();
 
-  const [showTranslate, setShowTranslate] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -93,16 +91,7 @@ const Header = () => {
                   </button>
                 ))}
 
-              {/* Add E-Visa */}
-              <button
-                onClick={() => router.push("/e-visa")}
-                className={`${currentPath === "/e-visa"
-                  ? "text-blue-600 font-semibold"
-                  : "hover:text-blue-600"
-                  } transition cursor-pointer`}
-              >
-                E-Visa
-              </button>
+           
 
               {/* Static Pages */}
               <button
