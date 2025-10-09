@@ -80,7 +80,7 @@ const Category = () => {
                                         </svg>
                                         }
                                         title={service.name}
-                                        description={service.name}
+                                        description={service.description}
                                     />
                                 </div>
                             ))}
