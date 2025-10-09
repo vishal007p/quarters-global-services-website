@@ -5,6 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { DynamicForm } from "@/components/DynamicForm/DynamicForm";
 import { serviceForms } from "@/lib/serviceForms";
 import { useCreateApplication2Mutation } from "@/services/applicationApi2";
+import { clearPlatformServices } from "@/lib/platformServiceStorage";
+import { toast } from "sonner";
+import { ApplicationPayload } from "@/lib/Types";
 
 export default function CreateApplication() {
   const params = useSearchParams();
@@ -13,7 +16,6 @@ export default function CreateApplication() {
   const [createApplication, { isLoading, isError, isSuccess, error }] =
     useCreateApplication2Mutation();
 
-  console.log(error, "error")
 
   const [showAlert, setShowAlert] = useState(false);
 
@@ -36,37 +38,75 @@ export default function CreateApplication() {
   const { schema, fields } = serviceForms[type];
 
   const handleSubmit = async (values: any) => {
-    const payload = {
+    let storedService = null;
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("selectedService");
+      if (stored) storedService = JSON.parse(stored);
+    }
+    const payload: ApplicationPayload = {
       applications: [
         {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          phone: values.phone,
+          countryCode: "+91",
+          company: values.company || "",
+          status: "Submitted",
+          applicationSource: "Website",
+          address: {
+            addressLine1: values.senderAddress || "",
+            addressLine2: "",
+            city: values.citySender || "",
+            state: values.stateSender || "",
+            zipCode: values.zipCodeSender || "",
+            country: values.countrySender || "",
+          },
+
+          currentLegalAddress: {
+            addressLine1: values.recipientAddress || "",
+            addressLine2: "",
+            city: values.cityRecipient || "",
+            state: values.stateRecipient || "",
+            zipCode: values.zipCodeRecipient || "",
+            country: values.countryRecipient || "",
+          },
+
+          fromCountryId: values.fromCountryId || "",
+          toCountryId: values.toCountryId || "",
+
           platformServices: [
             {
-              platformServiceId: "123",
-              platformServiceCategoryId: "abc",
-              platformServiceCategoryPackageId: "pkg1",
-              platformServiceCategoryPackageAddonsId: ["addon1"],
+              platformServiceId:
+                storedService?.platformServiceId || values.platformServiceId || "",
+              platformServiceCategoryId:
+                storedService?._id || values.platformServiceCategoryId || "",
+              platformServiceCategoryPackageId: undefined,
+              platformServiceCategoryPackageAddonsId:
+                values.platformServiceCategoryPackageAddonsId || [],
             },
           ],
-          firstName: "John",
-          lastName: "Doe",
-          email: "john@example.com",
-          countryCode: "+1",
-          phone: "1234567890",
-          status: "Submitted",
+
           serviceFields: {
-            ...values,
-            serviceType: type,
+            serviceType: values.serviceType || type,
           },
         },
       ],
     };
-
     try {
-      await createApplication(payload).unwrap();
+      const response = await createApplication(payload as ApplicationPayload).unwrap();
+      if (response?.status && response.data?.redirectURL) {
+        clearPlatformServices();
+        localStorage.removeItem("applications");
+        window.location.href = response.data.redirectURL;
+      } else {
+        toast.error("Application created but no redirect URL returned");
+      }
     } catch (err) {
-      console.error("Failed to create application:", err);
+      console.error("❌ Failed to create application:", err);
     }
   };
+
 
   return (
     <div className="p-6 max-w-6xl mx-auto">

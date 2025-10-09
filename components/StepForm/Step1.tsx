@@ -24,6 +24,7 @@ import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import EmailVerifyDialog from "./EmailVerifyDialog";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";
+import { ApplicationPayload } from "@/services/applicationApi2";
 
 // --- Types for API ---
 interface Address {
@@ -84,7 +85,7 @@ export default function Step1() {
     const [activeIndex, setActiveIndex] = useState(0);
     const [verifyEmail] = useVerifyEmailMutation();
     const [emailOtpVerify, setEmailVerify] = useState(false)
-    const [payload, setPayload] = useState()
+    const [payload, setPayload] = useState<ApplicationPayload>()
 
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
@@ -155,7 +156,7 @@ export default function Step1() {
                         lastName: values.lastName,
                         email: values.email,
                         phone: values.phone,
-                        countryCode: values.countryCode || "+1",
+                        countryCode: "+1",
                         company: values.company || "",
                         status: "Submitted",
                         applicationSource: "Website", // Website | AgentPortal | AdminPortal
@@ -164,21 +165,19 @@ export default function Step1() {
                         address: fullAddress,
                         currentLegalAddress: fullAddress,
 
-                        fromCountryId: values.fromCountryId || "68d839b82ea0a4e770b07daf",
-                        toCountryId: values.toCountryId || "68d839b82ea0a4e770b07daf",
+                        fromCountryId: "68d839b82ea0a4e770b07daf",
+                        toCountryId: "68d839b82ea0a4e770b07daf",
 
                         // ✅ Platform services (clean mapping)
                         platformServices: (platformServices || [])
                             .filter((s: any) => s.platformServiceCategoryId || s.platformServiceId)
                             .map((s: any) => ({
-                                platformServiceId: s.platformServiceId && s.platformServiceId.trim() !== "" ? s.platformServiceId : values.platformServiceId || "68cc5e9562e517276caa119e",
+                                platformServiceId: s.platformServiceId && s.platformServiceId.trim() !== "" ? s.platformServiceId : "68cc5e9562e517276caa119e",
                                 platformServiceCategoryId: s.platformServiceCategoryId || "",
                                 platformServiceCategoryPackageAddonsId: s.platformServiceCategoryPackageAddonsId || s.addons || [],
                                 platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
 
                             })),
-
-                        // ✅ Custom service fields
                         serviceFields: {
                             serviceType: "CourierDelivery",
                         },
@@ -226,7 +225,7 @@ export default function Step1() {
     };
 
     const handleVerify = async () => {
-        const response = await createApplication(payload).unwrap();
+        const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
             clearPlatformServices();
             localStorage.removeItem("applications");

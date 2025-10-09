@@ -110,11 +110,11 @@ export const visaFieldsWithCommon = [...commonApplicantFields, ...visaFields];
 export const apostilleSchema = z.object({
     serviceType: z.string(),
   destinationCountry: z.string(),
-  documentCount: z.number(),
+  documentCount: z.string(),
 });
 export const apostilleFields: FieldConfig[] = [
   { name: "destinationCountry", label: "Destination Country", type: "text" },
-  { name: "documentCount", label: "Document Count", type: "number" },
+  { name: "documentCount", label: "Document Count", type: "text" },
 ];
 export const apostilleSchemaWithCommon = commonApplicantSchema.merge(apostilleSchema);
 export const apostilleFieldsWithCommon = [...commonApplicantFields, ...apostilleFields];

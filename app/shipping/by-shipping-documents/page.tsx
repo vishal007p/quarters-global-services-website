@@ -23,37 +23,29 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+function ChecklistPage() {
+  const country: keyof typeof CHECKLISTS = "india";
+  const service: keyof typeof CHECKLISTS["india"] = "oci";
+  const subServiceId = "oci-adult";
 
-
-interface ChecklistPageProps {
-  country: keyof typeof CHECKLISTS;
-  service: keyof typeof CHECKLISTS["india"];
-  subServiceId: string;
-}
-
-const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) => {
   const router = useRouter();
   const serviceData = CHECKLISTS[country]?.[service]?.find(
-    (item: any) => item.id === subServiceId
+    (item) => item.id === subServiceId
   );
-
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      documents: [],
-    },
+    defaultValues: { documents: [] },
   });
 
   const onSubmit = () => router.push("/shipping/summary");
-  if (!serviceData)
-    return <p className="text-center text-gray-500">Checklist not found.</p>;
-  
+
+  if (!serviceData) return <p className="text-center text-gray-500">Checklist not found.</p>;
+
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
       <h2 className="text-2xl font-bold mb-6">{serviceData.title}</h2>
 
-      {/* Document Checklist */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
@@ -93,27 +85,25 @@ const ChecklistPage = ({ country, service, subServiceId }: ChecklistPageProps) =
         </form>
       </Form>
 
-      {/* Fees */}
       <div className="mt-6 bg-gray-100 p-4 rounded-lg">
         <h3 className="font-semibold mb-2">Fees</h3>
         <ul className="list-disc pl-6 text-gray-700">
-          {serviceData.fees.map((f: any, i: number) => (
+          {serviceData.fees.map((f, i) => (
             <li key={i}>{f}</li>
           ))}
         </ul>
       </div>
 
-      {/* FAQ */}
       <div className="mt-6 bg-blue-50 p-4 rounded-lg">
         <h3 className="font-semibold mb-2">FAQ / Notes</h3>
         <ul className="list-disc pl-6 text-gray-700">
-          {serviceData.faq.map((f: any, i: number) => (
+          {serviceData.faq.map((f, i) => (
             <li key={i}>{f}</li>
           ))}
         </ul>
       </div>
     </div>
   );
-};
+}
 
 export default ChecklistPage;

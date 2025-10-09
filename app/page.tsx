@@ -48,12 +48,12 @@ const blogPosts = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" |"e-visa">("Services");
+  const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
   return (
     <>
       <BannerLayout
         bg={
-          activeTab === "visa"
+          activeTab === "Services"
             ? "/visa.jpg"
             : activeTab === "apostille"
               ? "/services/apostille.png"
@@ -191,7 +191,7 @@ export default function Home() {
               }
               title="E-Visas"
               description="Hassle-free application or reissue process."
-               link="/e-visa"
+              link="/e-visa"
             />
 
             <div className="mt-14">
@@ -235,7 +235,7 @@ export default function Home() {
           <ButtonTwo
             iconPosition="right"
             name={"Log in to portal"}
-             icon={
+            icon={
               <svg
                 width="24"
                 height="25"
@@ -258,7 +258,7 @@ export default function Home() {
           <ButtonTwo
             iconPosition="right"
             name={"Track Application"}
-             icon={
+            icon={
               <svg
                 width="24"
                 height="25"

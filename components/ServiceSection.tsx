@@ -9,7 +9,9 @@ interface ServiceSectionProps {
   buttonText?: string;
   imageSrc: string;
   imagePosition: "left" | "right";
-  slug?: string
+  slug?: string;
+  id?:string;
+  platformServiceId?:string
 }
 
 const ServiceSection: React.FC<ServiceSectionProps> = ({
@@ -18,7 +20,9 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   buttonText,
   imagePosition,
   imageSrc,
-  slug
+  slug,
+  id,
+  platformServiceId
 }) => {
   const router = useRouter()
   return (
@@ -50,7 +54,19 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button onClick={() => router.push(`/other-services/${slug}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => {
+                  // 🧠 Save service identifiers to localStorage
+                  localStorage.setItem(
+                    "selectedService",
+                    JSON.stringify({
+                      _id: "68dea43dd59bef88e366aa25",
+                      platformServiceId: "68dea43dd59bef88e366aa23",
+                      parentCategoryId: null,
+                    })
+                  );
+
+                  router.push(`/other-services/${slug}`);
+                }} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}
@@ -65,7 +81,19 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               <h2 className="text-4xl font-bold mb-6 text-gray-800">{title}</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">{description}</p>
               {buttonText && (
-                <button onClick={() => router.push(`/other-services/${slug}`)} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
+                <button onClick={() => {
+    // 🧠 Save service identifiers to localStorage
+    localStorage.setItem(
+      "selectedService",
+      JSON.stringify({
+        _id: id,
+        platformServiceId:platformServiceId,
+        
+      })
+    );
+
+    router.push(`/other-services/${slug}`);
+  }} className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-300">
                   {buttonText}
                 </button>
               )}

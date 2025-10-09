@@ -1,23 +1,19 @@
 "use client";
 import BannerLayout from "@/components/Banner/BannerLayout";
- import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
- import TestimonialSlider from "@/components/TestimonialSlider ";
+import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
- import { startApplication } from "@/store/slices/applicationSlice";
- import React, { useEffect, useState } from "react";
+import { startApplication } from "@/store/slices/applicationSlice";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
- 
+
 
 const Visa = () => {
-     const [activeTab, setActiveTab] = useState<"visa" | "passport" | "apostille" | "e-visa">(
-    "visa"
-  );
- 
+  const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
   const dispatch = useDispatch();
- 
   useEffect(() => {
     dispatch(startApplication({ type: "visa" }));
   }, [dispatch]);
@@ -48,7 +44,7 @@ const Visa = () => {
         </div>
       </BannerLayout>
 
-      
+
       <WhyChoose />
 
       <CommitmentSection />
