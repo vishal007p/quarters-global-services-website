@@ -21,10 +21,8 @@ const Services = () => {
     const packages = data?.data?.data;
 
     const save = (id: string) => {
-   
         savePlatformServiceStep({ platformServiceId: String(id) });
-        // savePlatformServiceStep({ platformServiceCategoryId: String(id) });
-
+        // savePlatformServiceStep({ platformServiceCategoryId: String(id) })
 
     }
 

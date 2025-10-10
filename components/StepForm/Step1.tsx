@@ -141,6 +141,7 @@ export default function Step1() {
     const onSubmit = async (values: Step1Data) => {
         try {
             const platformServices = getPlatformServices() || [];
+            console.log(platformServices, "platformServices")
             //  Build one common address object from currentLegalAddress
             const fullAddress = {
                 addressLine1: values.currentLegalAddress?.addressLine1 || "",
@@ -172,14 +173,19 @@ export default function Step1() {
 
                         // ✅ Platform services (clean mapping)
                         platformServices: (platformServices || [])
-                            .filter((s: any) => s.platformServiceCategoryId || s.platformServiceId)
                             .map((s: any) => ({
-                                platformServiceId: s.platformServiceId && s.platformServiceId.trim() !== "" ? s.platformServiceId : "68cc5e9562e517276caa119e",
-                                platformServiceCategoryId: s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
-                                platformServiceCategoryPackageAddonsId: s.platformServiceCategoryPackageAddonsId || s.addons || [],
-                                platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
+                                platformServiceId:
+                                    s.platformServiceId && s.platformServiceId.trim() !== ""
+                                        ? s.platformServiceId
+                                        : "68cc5e9562e517276caa119e",
+                                platformServiceCategoryId:
+                                    s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
+                                platformServiceCategoryPackageAddonsId:
+                                    s.platformServiceCategoryPackageAddonsId || s.addons || [],
+                                platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
+                            }))
+                            .filter((item: any) => !!item.platformServiceCategoryPackageId),
 
-                            })),
                         serviceFields: {
                             serviceType: "CourierDelivery",
                         },

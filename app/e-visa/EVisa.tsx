@@ -32,10 +32,6 @@ const EVisa = () => {
   });
    const visaService = data?.data?.data;
 
-  // useEffect(() => {
-  //   dispatch(startApplication({ type: "visa" }));
-  // }, [dispatch]);
-
   return (
     <>
       <BannerLayout bg="/services/visa.png">

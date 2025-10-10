@@ -37,7 +37,7 @@ const SubCategory = () => {
   const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
 
   const save = (id: string) => {
-    savePlatformServiceStep({ platformServiceCategoryPackageId: String(id) });
+    savePlatformServiceStep({ platformServiceSubCategoryId: String(id) });
   }
 
   return (

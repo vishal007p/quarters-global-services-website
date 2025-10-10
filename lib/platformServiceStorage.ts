@@ -15,6 +15,7 @@ export interface PlatformService {
   platformServiceId: string;
   platformServiceCategoryId: string;
   platformServiceCategoryPackageId: string;
+  platformServiceSubCategoryId?: string; // ✅ add this
   platformServiceCategoryPackageAddonsId: string[];
   price?: number;
   currency?: string;
@@ -66,6 +67,7 @@ export const savePlatformServiceStep = (
       additionService: stepData.additionService ?? false,
       additionService_price: stepData.additionService_price ?? 0,
       additionService_name: stepData.additionService_name ?? "",
+      platformServiceSubCategoryId:stepData.platformServiceSubCategoryId
     };
 
     if (index !== -1) {
@@ -102,7 +104,7 @@ export const getTotalPrice = (): number => {
   return platformServices.reduce((sum, s) => sum + (s.price || 0), 0);
 };
 
- 
+
 export const isPlatformServiceSaved = (id: string): boolean => {
   if (typeof window === "undefined") return false;
   const existing = localStorage.getItem("platformServices");

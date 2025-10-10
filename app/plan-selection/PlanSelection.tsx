@@ -22,6 +22,7 @@ const PlanSelection = () => {
     }
   );
   const packages = data?.data?.data;
+  console.log(packages,"sdss")
   if (error) return <p>Something went wrong</p>;
 
   return (
