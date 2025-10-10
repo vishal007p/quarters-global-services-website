@@ -12,6 +12,7 @@ interface VisaServiceCardProps {
   description: string;
   link?: string;
   shouldStartApplication?: boolean; // ✅ renamed
+  save?: (id: string) => void
 }
 
 const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
@@ -20,7 +21,8 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   description,
   link,
   id,
-  shouldStartApplication
+  shouldStartApplication,
+  save
 
 }) => {
   const router = useRouter();
@@ -74,7 +76,8 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
             if (shouldStartApplication) {
               dispatch(startApplication({ type: title ?? "" }));
             }
-            savePlatformServiceStep({ platformServiceCategoryId: String(id) });
+
+            if (save) { save(id) }
             // Then navigate
             handleApplyNow();
           }}

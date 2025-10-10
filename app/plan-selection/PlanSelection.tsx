@@ -31,15 +31,15 @@ const PlanSelection = () => {
         <h4
           className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
                m-auto rounded-lg font-bold mb-4 text-center text-white 
-               text-[clamp(1rem,1.8vw,2rem)]"
+               text-[clamp(1rem,1.8vw,2rem)] capitalize"
         >
-          Fast, Hassle-Free Visa Services
+          Fast, Hassle-Free {platformServiceCategorySlug} Services
         </h4>
 
         {/* Main Heading */}
         <h1
           className="font-bold mb-6 text-center text-white 
-               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug"
+               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug capitalize"
         >
           We help U.S. citizens apply for tourist, business, student, and
           <br className="hidden sm:inline" />

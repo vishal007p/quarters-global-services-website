@@ -26,7 +26,7 @@ const Visa = () => {
         <h1 className="font-bold mb-6 text-center 
                  text-[clamp(1.5rem,2.5vw,2.75rem)] 
                  sm:text-[clamp(1.75rem,2.5vw,3rem)] 
-                 md:text-[clamp(2rem,2.2vw,3.25rem)] 
+                 md:text-[clamp(2rem,2.2vw,3rem)] 
                  leading-snug">
           We help U.S. citizens apply for tourist, business, student, and
           <br className="hidden sm:inline" />

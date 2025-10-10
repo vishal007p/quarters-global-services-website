@@ -8,7 +8,8 @@ import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
 import { usePathname } from "next/navigation";
- 
+import Button from "../Buttons/Button";
+
 
 // --- Type Definitions ---
 type DropdownOption = {
@@ -29,7 +30,7 @@ export type PlatformServiceStep = {
 };
 
 
-type TabType =  "Services" | "apostille" | "e-visa";
+type TabType = "Services" | "apostille" | "e-visa";
 
 interface DropdownFormProps {
   activeTab: TabType;
@@ -38,7 +39,7 @@ interface DropdownFormProps {
 
 
 // --- Tabs ---
-const tabs: TabType[] = ["Services",  "apostille", "e-visa"];
+const tabs: TabType[] = ["Services", "apostille", "e-visa"];
 
 const STORAGE_KEY = "platformServiceStep";
 
@@ -187,8 +188,8 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         apostille: "",
       };
     }
-    
-    
+
+
     else if (activeTab === "apostille") {
       newErrors = {
         citizenship: "",
@@ -217,16 +218,15 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       citizenship: citizenship?.slug,
       citizenship_code: citizenship?.code,
       country: country?.slug,
-      countryCode: (country as any)?.code, 
+      countryCode: (country as any)?.code,
       state: stateOrCountry?.slug,
       passportType: passportType?.slug,
       apostilleType: apostilleType?.slug,
     };
     saveStep(step);
     if (activeTab === "Services") {
-      router.push(`/services?toCountrySlug=${country?.slug}&&fromCountrySlug=${ country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
-      savePlatformServiceStep({ platformServiceId: country?.id , platformServiceCategoryId: visaService[0]?._id   });
-    }   else if (activeTab === "apostille") {
+      router.push(`/services?toCountrySlug=${country?.slug}&&fromCountrySlug=${country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
+     } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     } else if (activeTab === "e-visa") {
       router.push(`/e-visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
@@ -275,10 +275,10 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         });
     }
 
-   
+
   }, [currentPath, setActiveTab])
 
-  if (countryLoading  || apostilleLoading) { // your loading condition
+  if (countryLoading || apostilleLoading) { // your loading condition
     return (
       <div className="max-w-4xl mx-auto p-6 flex flex-row gap-4">
         {[...Array(3)].map((_, i) => (
@@ -312,12 +312,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             >
               {tab === "Services"
                 ? "Services"
-                : 
-                  tab === "apostille"
-                    ? "Apostille & Legalization"
-                    : tab === "e-visa"
-                      ? "E-Visa"
-                      : ""}
+                :
+                tab === "apostille"
+                  ? "Apostille & Legalization"
+                  : tab === "e-visa"
+                    ? "E-Visa"
+                    : ""}
 
             </button>
           ))}
@@ -361,30 +361,33 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           <GoButton handleGo={handleGo} />
         </div>
       )}
- 
+
       {/* Apostille Form */}
       {activeTab === "apostille" && (
         <div className="p-6 rounded-md max-w-4xl mx-auto w-full flex flex-col md:flex-row md:items-start gap-4 justify-center">
-          <DropdownWrapper
-            value={country}
-            setValue={setCountry}
-            search={countrySearch}
-            setSearch={setCountrySearch}
-            filteredOptions={filteredCountries}
-            errors={errors.country}
-            placeholder="Select Country"
-            type="flag"
+          <Button
+            link="/apostille-and-legalization"
+            iconPosition="right"
+            name={"Start Legalization Process"}
+            icon={
+              <svg
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12.5" r="12" fill="#D31021" />
+                <path
+                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            }
           />
-          <DropdownWrapper
-            value={apostilleType}
-            setValue={setApostilleType}
-            search={apostilleSearch}
-            setSearch={setApostilleSearch}
-            filteredOptions={filteredApostille}
-            errors={errors.apostille}
-            placeholder="Select Apostille Type"
-          />
-          <GoButton handleGo={handleGo} />
         </div>
       )}
 

@@ -8,6 +8,7 @@ import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
+import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -35,16 +36,17 @@ const SubCategory = () => {
   );
   const visaService = data?.data?.data.filter((service: services) => service.slug === subCategorySlug);
 
-  console.log(visaService, "visaServicess");
-
+  const save = (id: string) => {
+    savePlatformServiceStep({ platformServiceCategoryPackageId: String(id) });
+  }
 
   return (
     <>
       <BannerLayout bg="/services/visa.png">
         {/* Overlay Heading */}
         <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center 
-                 text-[clamp(1rem,1.8vw,2rem)]">
-          Fast, Hassle-Free {country} Visa Services
+                 text-[clamp(1rem,1.8vw,2rem)] capitalize">
+          Fast, Hassle-Free {platformServiceCategorySlug} Services
         </h4>
 
         {/* Main Heading */}
@@ -52,7 +54,7 @@ const SubCategory = () => {
                  text-[clamp(1.5rem,2.5vw,2.75rem)] 
                  sm:text-[clamp(1.75rem,2.5vw,3rem)] 
                  md:text-[clamp(2rem,2.2vw,3.25rem)] 
-                 leading-snug">
+                 leading-snug capitalize">
           We help U.S. citizens apply for tourist, business, student, and
           <br className="hidden sm:inline" />
           work visas—accurately, securely, and on time.
@@ -84,6 +86,7 @@ const SubCategory = () => {
                 >
                   <VisaServiceCard
                     id={service._id}
+                    save={save}
                     link={`/plan-selection?toCountrySlug=${country}&&platformService&Category&Slug=${service.slug}`}
                     icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="74" height="74" rx="16" fill="#96C6FF" />

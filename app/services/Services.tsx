@@ -8,6 +8,7 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import VisaServiceCardSkeletons from '@/components/Skeletons/VisaServiceCardSkeletons';
 import TestimonialSlider from '@/components/TestimonialSlider ';
 import WhyChoose from '@/components/WhyChoose/WhyChoose';
+import { savePlatformServiceStep } from '@/lib/platformServiceStorage';
 import { useGetPlatformServiceByIdQuery } from '@/services/platformApi';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
@@ -18,6 +19,14 @@ const Services = () => {
     const [activeTab, setActiveTab] = useState<"Services" | "apostille" | "e-visa">("Services");
     const { data, isLoading } = useGetPlatformServiceByIdQuery(country);
     const packages = data?.data?.data;
+
+    const save = (id: string) => {
+   
+        savePlatformServiceStep({ platformServiceId: String(id) });
+        // savePlatformServiceStep({ platformServiceCategoryId: String(id) });
+
+
+    }
 
     return (
         <>
@@ -56,6 +65,7 @@ const Services = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
+                                        save={save}
                                         link={service.name?.toLowerCase() === "other services" ? "/other-services" : `/category?toCountrySlug=${country}&Slug=${service.slug}`}
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />

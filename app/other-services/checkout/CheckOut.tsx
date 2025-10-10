@@ -77,13 +77,10 @@ export default function CreateApplication() {
 
           platformServices: [
             {
-              platformServiceId:
-                storedService?.platformServiceId || values.platformServiceId || "",
-              platformServiceCategoryId:
-                storedService?._id || values.platformServiceCategoryId || "",
-              platformServiceCategoryPackageId: undefined,
-              platformServiceCategoryPackageAddonsId:
-                values.platformServiceCategoryPackageAddonsId || [],
+              platformServiceId: "68cc5e9562e517276caa119e",
+              platformServiceCategoryId: "68cc5e9562e517276caa119e",
+              platformServiceCategoryPackageAddonsId: [],
+              platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
             },
           ],
 

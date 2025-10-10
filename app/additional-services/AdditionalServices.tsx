@@ -62,11 +62,11 @@ const AdditionalServices = () => {
   };
   return (
     <>
-      <BannerLayout bg='/home.png' >
-        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4">
-          Fast, Hassle-Free  Visa Services
-        </h4>
-        <h1 className="text-4xl font-bold mb-4">
+      <BannerLayout bg='/e-visa.jpg' >
+        <h4 className="bg-black/40 py-3 pb-5 px-4 w-[50%] m-auto rounded-lg text-4xl font-bold mb-4 capitalize">
+          Fast, Hassle-Free {packageSlug} Services
+        </h4> 
+        <h1 className="text-4xl font-bold mb-4 capitalize">
           We help U.S. citizens apply for tourist, business, student, and<br />
           work visas—accurately, securely, and on time.
         </h1>

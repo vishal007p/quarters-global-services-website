@@ -23,6 +23,8 @@ export interface PlatformService {
   additionService_price?: number;
   additionService_name?: string;
 }
+
+
 export const savePlatformServiceStep = (
   stepData: Partial<PlatformService>,
   remove = false
@@ -32,42 +34,45 @@ export const savePlatformServiceStep = (
   const existing = localStorage.getItem("platformServices");
   const platformServices: PlatformService[] = existing ? JSON.parse(existing) : [];
 
-  // ✅ Identify existing record
-  const index = platformServices.findIndex(
-    (s) =>
-      s.platformServiceCategoryPackageId ===
-        stepData.platformServiceCategoryPackageId &&
-      s.additionService_name === stepData.additionService_name
-  );
+  // ✅ Find the first non-empty identifier from stepData
+  const currentId =
+    stepData.platformServiceCategoryPackageId ||
+    stepData.platformServiceCategoryId ||
+    stepData.platformServiceId ||
+    "";
+
+  // ✅ Find the first non-empty identifier in each stored item
+  const index = platformServices.findIndex((s) => {
+    const storedId =
+      s.platformServiceCategoryPackageId ||
+      s.platformServiceCategoryId ||
+      s.platformServiceId ||
+      "";
+    return storedId === currentId;
+  });
 
   if (remove) {
     if (index !== -1) platformServices.splice(index, 1);
   } else {
-    // ✅ Prepare full record
     const record: PlatformService = {
       platformServiceId: stepData.platformServiceId || "",
       platformServiceCategoryId: stepData.platformServiceCategoryId || "",
-      platformServiceCategoryPackageId:
-        stepData.platformServiceCategoryPackageId || "",
+      platformServiceCategoryPackageId: stepData.platformServiceCategoryPackageId || "",
       platformServiceCategoryPackageAddonsId:
         stepData.platformServiceCategoryPackageAddonsId || [],
-      price:
-        stepData.price ??
-        stepData.additionService_price ??
-        0, // fallback support
+      price: stepData.price ?? stepData.additionService_price ?? 0,
       currency: stepData.currency || "USD",
-      Price_name:
-        stepData.Price_name ??
-        stepData.additionService_name ??
-        "", // store readable name too
+      Price_name: stepData.Price_name ?? stepData.additionService_name ?? "",
       additionService: stepData.additionService ?? false,
       additionService_price: stepData.additionService_price ?? 0,
       additionService_name: stepData.additionService_name ?? "",
     };
 
     if (index !== -1) {
+      // ✅ Update existing
       platformServices[index] = { ...platformServices[index], ...record };
     } else {
+      // ✅ Add new only if not found
       platformServices.push(record);
     }
   }
@@ -95,4 +100,52 @@ export const getTotalPrice = (): number => {
   if (!existing) return 0;
   const platformServices: PlatformService[] = JSON.parse(existing);
   return platformServices.reduce((sum, s) => sum + (s.price || 0), 0);
+};
+
+ 
+export const isPlatformServiceSaved = (id: string): boolean => {
+  if (typeof window === "undefined") return false;
+  const existing = localStorage.getItem("platformServices");
+  if (!existing) return false;
+
+  const platformServices: PlatformService[] = JSON.parse(existing);
+  return platformServices.some(
+    (s) =>
+      s.platformServiceId === id ||
+      s.platformServiceCategoryId === id ||
+      s.platformServiceCategoryPackageId === id
+  );
+};
+
+export const removeFromPlatformServices = (id: string) => {
+  if (typeof window === "undefined") return;
+
+  const existing = localStorage.getItem("applications");
+  if (!existing) return;
+
+  const data = JSON.parse(existing);
+
+  // ✅ Ensure structure integrity
+  if (!Array.isArray(data.applications)) {
+    console.warn("Invalid structure: expected applications array");
+    return;
+  }
+
+  // ✅ Filter out the record that matches the ID or its service keys
+  const filteredApps = data.applications.filter(
+    (s: any) =>
+      s.id !== id &&
+      s.platformServiceId !== id &&
+      s.platformServiceCategoryId !== id &&
+      s.platformServiceCategoryPackageId !== id
+  );
+
+  // ✅ Save back the cleaned structure (keeping activeId intact)
+  const updated = {
+    ...data,
+    applications: filteredApps,
+  };
+
+  localStorage.setItem("applications", JSON.stringify(updated));
+  console.log("✅ Removed from localStorage:", id);
 };

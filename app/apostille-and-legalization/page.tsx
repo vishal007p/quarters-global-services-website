@@ -58,6 +58,7 @@ const page = () => {
           <Button
             iconPosition="right"
             name={"Start Legalization Process"}
+            link='/apostille-and-legalization/checkout'
             icon={
               <svg
                 width="24"

@@ -96,7 +96,7 @@ export default function Home() {
 
           <Button
             iconPosition="right"
-            name={"Book a consultation"}
+            name={"Start Application"}
             icon={
               <svg
                 width="24"
@@ -162,7 +162,6 @@ export default function Home() {
             />
             <div className="mt-14">
               <VisaServiceCard
-
                 id="1"
                 icon={<svg width="74" height="75" viewBox="0 0 74 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect y="0.5" width="74" height="74" rx="16" fill="#FFA6AE" />

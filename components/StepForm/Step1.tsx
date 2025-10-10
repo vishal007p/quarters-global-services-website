@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { FileEdit } from "lucide-react";
 import { step1Schema, Step1Data } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
-import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+import { clearPlatformServices, getPlatformServices, removeFromPlatformServices, savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useDispatch } from "react-redux";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { store } from "@/store/store";
@@ -24,6 +24,8 @@ import { useRouter } from "nextjs-toploader/app";
 import { toast } from "sonner";
 import EmailVerifyDialog from "./EmailVerifyDialog";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";
+import { Trash } from "lucide-react";
+
 import { ApplicationPayload } from "@/services/applicationApi2";
 
 // --- Types for API ---
@@ -173,7 +175,7 @@ export default function Step1() {
                             .filter((s: any) => s.platformServiceCategoryId || s.platformServiceId)
                             .map((s: any) => ({
                                 platformServiceId: s.platformServiceId && s.platformServiceId.trim() !== "" ? s.platformServiceId : "68cc5e9562e517276caa119e",
-                                platformServiceCategoryId: s.platformServiceCategoryId || "",
+                                platformServiceCategoryId: s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
                                 platformServiceCategoryPackageAddonsId: s.platformServiceCategoryPackageAddonsId || s.addons || [],
                                 platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
 
@@ -235,6 +237,10 @@ export default function Step1() {
         }
     };
 
+    const handleDelete = (id: string) => {
+        removeFromPlatformServices(id);
+        window.location.reload()
+    };
 
     return (
         <div className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
@@ -268,13 +274,27 @@ export default function Step1() {
                                         {app.type || "No "}
                                     </span>
                                 </h2>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="flex items-center gap-1 sm:gap-2 text-black border-black hover:bg-white hover:text-[#00408D] transition"
-                                >
-                                    <FileEdit className="w-4 h-4" /> Edit
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="flex items-center gap-1 sm:gap-2 text-black border-black hover:bg-white hover:text-[#00408D] transition"
+                                    >
+                                        <FileEdit className="w-4 h-4" />
+                                    </Button>
+
+
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => handleDelete(app.id)}
+                                        size="sm"
+                                        className="flex items-center gap-1 sm:gap-2 text-black border-black hover:bg-white hover:text-[#00408D] transition"
+                                    >
+                                        <Trash className="w-4 h-4" />
+                                    </Button>
+                                </div>
+
+
                             </div>
                         </div>
                     ))}

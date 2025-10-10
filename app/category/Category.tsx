@@ -1,11 +1,12 @@
 "use client";
 import BannerLayout from "@/components/Banner/BannerLayout";
- import VisaServiceCard from "@/components/Cards/VisaServiceCard";
+import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
- import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
+import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
+import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useSearchParams } from "next/navigation";
 import React from "react";
@@ -20,8 +21,11 @@ const Category = () => {
             toCountrySlug: country,
         }
     );
+    const save = (id: string) => {
+        savePlatformServiceStep({ platformServiceCategoryId: String(id) });
+    }
     const packages = data?.data?.data;
-     if (error) return <p>Something went wrong</p>;
+    if (error) return <p>Something went wrong</p>;
 
     return (
         <>
@@ -30,15 +34,15 @@ const Category = () => {
                 <h4
                     className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
                m-auto rounded-lg font-bold mb-4 text-center text-white 
-               text-[clamp(1rem,1.8vw,2rem)]"
+               text-[clamp(1rem,1.8vw,2rem)] capitalize"
                 >
-                    Fast, Hassle-Free Visa Services
+                    Fast, Hassle-Free {platformServiceCategorySlug} Services
                 </h4>
 
                 {/* Main Heading */}
                 <h1
                     className="font-bold mb-6 text-center text-white 
-               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug"
+               text-[clamp(1.5rem,2.5vw,3rem)] leading-snug capitalize"
                 >
                     We help U.S. citizens apply for tourist, business, student, and
                     <br className="hidden sm:inline" />
@@ -64,6 +68,7 @@ const Category = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
+                                        save={save}
                                         link={
                                             service.subCategories && service.subCategories.length > 1
                                                 ? `/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
