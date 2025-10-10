@@ -8,13 +8,8 @@ import TestimonialSlider from '@/components/TestimonialSlider ';
 import WhyChoose from '@/components/WhyChoose/WhyChoose';
 import React, { useState } from 'react'
 
- 
-
 const Passport = () => {
-  
-
   const [activeTab, setActiveTab] = useState<"Services" | "apostille" |  "e-visa">("Services");
- 
   return (
     <>
       <BannerLayout bg="/services/passport.png">
