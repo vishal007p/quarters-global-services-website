@@ -56,7 +56,7 @@ const Services = () => {
                                 >
                                     <VisaServiceCard
                                         id={service._id}
-                                        link={service.name?.toLowerCase() === "other services"?"/other-services":`/category?toCountrySlug=${country}&Slug=${service.slug}`}
+                                        link={service.name?.toLowerCase() === "other services" ? "/other-services" : `/category?toCountrySlug=${country}&Slug=${service.slug}`}
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
                                             <rect x="23" y="20" width="28" height="34" rx="4" fill="white" />

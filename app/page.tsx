@@ -235,6 +235,7 @@ export default function Home() {
           <ButtonTwo
             iconPosition="right"
             name={"Log in to portal"}
+            link="/login"
             icon={
               <svg
                 width="24"

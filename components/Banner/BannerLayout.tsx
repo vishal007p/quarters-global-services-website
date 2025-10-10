@@ -13,7 +13,7 @@ const BannerLayout: React.FC<BannerLayoutProps> = ({ bg, videoSrc, children }) =
   const isTailwindClass = bg && !isImage;
 
   return (
-    <section className="relative w-full h-[800px]  px-4 flex items-center justify-center text-white overflow-hidden">
+    <section className="relative w-full h-[580px]  px-4 flex items-center justify-center text-white overflow-hidden">
       {/* Background Image */}
       {isImage && (
         <div
