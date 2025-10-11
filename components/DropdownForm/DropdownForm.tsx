@@ -87,13 +87,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [country, setCountry] = useState<DropdownOption | null>(null);
 
-  // --- Fetch Passport & Apostille Options ---
-  // const { data: passportList, isLoading: passportLoading } = useGetPlatformServiceCategoriesQuery({
-  //   platformServiceSlug: "us-passport", // change will in feature
-  //   toCountrySlug: country?.slug || "",
-  //   fromCountrySlug: country?.slug || ""
-  // });
-
   const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({
     platformServiceSlug: "apostilleOptions",
     toCountrySlug: country?.slug || "",
@@ -140,8 +133,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     fromCountrySlug: citizenship?.slug || "united-states"
   });
 
-  const visaService = visamain?.data?.data;
-
+ 
   // --- Filter Options ---
   const filteredCountries = apiCountries.filter((option) =>
     option.name.toLowerCase().includes(countrySearch.toLowerCase())
@@ -198,15 +190,17 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
         passport: "",
         apostille: apostilleType ? "" : "Please select apostille type",
       };
-    } else if (activeTab === "e-visa") {
-      newErrors = {
-        citizenship: citizenship ? "" : "Please select citizenship",
-        country: country ? "" : "Please select travel country",
-        state: "",
-        passport: "",
-        apostille: "",
-      };
-    }
+    } 
+    
+    // else if (activeTab === "e-visa") {
+    //   newErrors = {
+    //     citizenship: citizenship ? "" : "Please select citizenship",
+    //     country: country ? "" : "Please select travel country",
+    //     state: "",
+    //     passport: "",
+    //     apostille: "",
+    //   };
+    // }
     setErrors(newErrors);
     return Object.values(newErrors).every((err) => err === "");
   };
@@ -229,7 +223,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
      } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     } else if (activeTab === "e-visa") {
-      router.push(`/e-visa?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}`);
+      router.push(`/category?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}&Slug=e-visa`);
       savePlatformServiceStep({ platformServiceId: country?.id });
     }
   };
@@ -349,7 +343,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             placeholder="Select Country"
             type="flag"
           />
-          <DropdownWrapper
+          {/* <DropdownWrapper
             value={stateOrCountry}
             setValue={setStateOrCountry}
             search={stateSearch}
@@ -357,7 +351,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             filteredOptions={filteredStates}
             errors={errors.state}
             placeholder="Select State"
-          />
+          /> */}
           <GoButton handleGo={handleGo} />
         </div>
       )}

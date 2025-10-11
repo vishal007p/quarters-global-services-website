@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Step1Data2, step1Schema, step1Schema2, Step2Data } from "@/lib/validationSchemas";
+import { Step1Data2,  step1Schema2, Step2Data } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
 import { useDispatch } from "react-redux";
-import { useRouter } from "nextjs-toploader/app";
-import { useState } from "react";
+ import { useState } from "react";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";
 import { ApplicationPayload } from "@/lib/Types";
@@ -114,11 +113,10 @@ type Props = {
 };
 
 export default function Step1({ onNext }: Props) {
-  const [createApplication, { data, isLoading }] =
+  const [createApplication] =
     useCreateApplicationMutation();
   const dispatch = useDispatch();
-  const router = useRouter()
-  const [verifyEmail] = useVerifyEmailMutation();
+   const [verifyEmail] = useVerifyEmailMutation();
   const [emailOtpVerify, setEmailVerify] = useState(false)
   const [payload, setPayload] = useState<ApplicationPayload>()
 

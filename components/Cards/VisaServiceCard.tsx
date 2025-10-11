@@ -77,7 +77,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
             }
 
             if (title === "OCI Card") {
-              localStorage.setItem("formType", "OCI")
+              sessionStorage.setItem("formType", "OCI")
             }
 
             if (save) { save(id) }

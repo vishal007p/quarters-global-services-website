@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { FileEdit } from "lucide-react";
 import { step1Schema, Step1Data } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
-import { clearPlatformServices, getPlatformServices, removeFromPlatformServices, savePlatformServiceStep } from "@/lib/platformServiceStorage";
+import { clearPlatformServices, getPlatformServices, removeFromPlatformServices } from "@/lib/platformServiceStorage";
 import { useDispatch } from "react-redux";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { store } from "@/store/store";
