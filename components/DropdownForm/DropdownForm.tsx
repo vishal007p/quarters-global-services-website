@@ -192,15 +192,15 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       };
     } 
     
-    // else if (activeTab === "e-visa") {
-    //   newErrors = {
-    //     citizenship: citizenship ? "" : "Please select citizenship",
-    //     country: country ? "" : "Please select travel country",
-    //     state: "",
-    //     passport: "",
-    //     apostille: "",
-    //   };
-    // }
+    else if (activeTab === "e-visa") {
+      newErrors = {
+        citizenship: citizenship ? "" : "Please select citizenship",
+        country: country ? "" : "Please select travel country",
+        state: "",
+        passport: "",
+        apostille: "",
+      };
+    }
     setErrors(newErrors);
     return Object.values(newErrors).every((err) => err === "");
   };
@@ -343,7 +343,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             placeholder="Select Country"
             type="flag"
           />
-          {/* <DropdownWrapper
+          <DropdownWrapper
             value={stateOrCountry}
             setValue={setStateOrCountry}
             search={stateSearch}
@@ -351,7 +351,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             filteredOptions={filteredStates}
             errors={errors.state}
             placeholder="Select State"
-          /> */}
+          />
           <GoButton handleGo={handleGo} />
         </div>
       )}

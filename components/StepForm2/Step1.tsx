@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Step1Data2,  step1Schema2, Step2Data } from "@/lib/validationSchemas";
+import { Step1Data2, step1Schema2, Step2Data } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
 import { useDispatch } from "react-redux";
- import { useState } from "react";
+import { useState } from "react";
 import { setFormData } from "@/store/slices/applicationSlice";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";
 import { ApplicationPayload } from "@/lib/Types";
@@ -116,7 +116,7 @@ export default function Step1({ onNext }: Props) {
   const [createApplication] =
     useCreateApplicationMutation();
   const dispatch = useDispatch();
-   const [verifyEmail] = useVerifyEmailMutation();
+  const [verifyEmail] = useVerifyEmailMutation();
   const [emailOtpVerify, setEmailVerify] = useState(false)
   const [payload, setPayload] = useState<ApplicationPayload>()
 
@@ -217,19 +217,48 @@ export default function Step1({ onNext }: Props) {
 
       console.log(res, "resssss");
 
-      if (res?.message === "Email is already verified.") {
-        const response = await createApplication(payload).unwrap();
-        if (response?.status && response.data?.redirectURL) {
-          clearPlatformServices();
-          localStorage.removeItem("applications");
-          window.location.href = response.data.redirectURL;
+      try {
+        const res = await verifyEmail({
+          email: values.email
+        }).unwrap();
+
+        if (res?.message === "Email is already verified.") {
+          const response = await createApplication(payload).unwrap();
+          if (response?.status && response.data?.redirectURL) {
+            clearPlatformServices();
+            localStorage.removeItem("applications");
+            window.location.href = response.data.redirectURL;
+          } else {
+            toast.error("Application created but no redirect URL returned");
+          }
         } else {
-          toast.error("Application created but no redirect URL returned");
+          console.error(res?.message || "Email verification failed");
+          if (res?.message === "We have sent OTP to your email. Please check your inbox."
+          ) {
+            setEmailVerify(true);
+          }
+          setEmailVerify(false);
         }
-      } else {
-        toast.error(res?.message || "Email verification failed");
-        setEmailVerify(false);
+      } catch (err: any) {
+        const message =
+          err?.message ||
+          err?.data?.message ||
+          "Something went wrong while verifying email.";
+
+        // Show toast message
+        toast.error(message);
+
+        // ✅ If backend indicates OTP sent, open verification dialog
+        if (
+          message === "We have sent OTP to your email. Please check your inbox." ||
+          message.toLowerCase().includes("otp")
+        ) {
+          setEmailVerify(true);
+        } else {
+          setEmailVerify(false);
+        }
       }
+
     } catch (error: any) {
       toast.error(error?.data?.message || "Something went wrong while creating application");
       if ("We have sent OTP to your email. Please check your inbox." === error?.data?.message) {
@@ -237,7 +266,7 @@ export default function Step1({ onNext }: Props) {
       }
     }
   };
- 
+
 
   const handleVerify = async () => {
     const response = await createApplication(payload as ApplicationPayload).unwrap();

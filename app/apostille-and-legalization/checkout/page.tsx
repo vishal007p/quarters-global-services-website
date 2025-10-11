@@ -1,15 +1,157 @@
 "use client";
+import EmailVerifyDialog from "@/components/StepForm/EmailVerifyDialog";
+import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+import { useCreateApplicationMutation } from "@/services/applicationApi";
+import { useVerifyEmailMutation } from "@/services/verifyEmail";
+import { setFormData } from "@/store/slices/applicationSlice";
+import { store } from "@/store/store";
 import { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 export default function GetStartedSection() {
   const [country, setCountry] = useState("");
   const [scannedCopy, setScannedCopy] = useState("Yes");
   const [translation, setTranslation] = useState("Yes");
+  const [verifyEmail] = useVerifyEmailMutation();
+  const [createApplication, { isLoading }] = useCreateApplicationMutation();
+  const dispatch = useDispatch();
+  const [emailOtpVerify, setEmailVerify] = useState(false);
+  const [payload, setPayload] = useState<any>(null);
+
+  // basic form state
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+  });
 
   const countries = ["USA", "Canada", "UK", "Australia", "India"];
   const languages = ["Spanish", "French", "German", "Hindi", "Arabic"];
   const pageTypes = ["1-5 pages", "6-10 pages", "11-20 pages"];
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    if (!form.firstName || !form.lastName || !form.email || !form.phone) {
+      toast.error("Please fill all required fields");
+      return;
+    }
+
+    try {
+
+      const payload = {
+        applications: [
+          {
+            firstName: form.firstName,
+            lastName: form.lastName,
+            email: form.email,
+            phone: form.phone,
+            countryCode: "+1",
+            company: form.company || "",
+            status: "Submitted",
+            applicationSource: "Website",
+            fromCountryId: "68d839b82ea0a4e770b07daf",
+            toCountryId: "68d839b82ea0a4e770b07daf",
+            platformServices: [{
+              platformServiceId: "68e968e1e7bd0d029655fa49",
+              platformServiceCategoryId: "68e968e2e7bd0d029655fa4c",
+              platformServiceCategoryPackageAddonsId: [],
+              platformServiceCategoryPackageId: "68e968e2e7bd0d029655fa4f"
+            }],
+            serviceFields: {
+              serviceType: "CourierDelivery",
+              country,
+              scannedCopy,
+              translation,
+            },
+          },
+        ],
+      };
+
+      const activeId = store.getState().application.activeId;
+      if (activeId) {
+        dispatch(setFormData({ id: activeId, form: payload }));
+      }
+
+      setPayload(payload);
+
+
+ 
+      try {
+        const res = await verifyEmail({
+          email: form.email
+        }).unwrap();
+
+        if (res?.message === "Email is already verified.") {
+          const response = await createApplication(payload as any).unwrap();
+          if (response?.status && response.data?.redirectURL) {
+            clearPlatformServices();
+            localStorage.removeItem("applications");
+            window.location.href = response.data.redirectURL;
+          } else {
+            toast.error("Application created but no redirect URL returned");
+          }
+        } else {
+          console.error(res?.message || "Email verification failed");
+          if (res?.message === "We have sent OTP to your email. Please check your inbox."
+          ) {
+            setEmailVerify(true);
+          }
+          setEmailVerify(false);
+        }
+      } catch (err: any) {
+        const message =
+          err?.message ||
+          err?.data?.message ||
+          "Something went wrong while verifying email.";
+
+        // Show toast message
+        toast.error(message);
+
+        // ✅ If backend indicates OTP sent, open verification dialog
+        if (
+          message === "We have sent OTP to your email. Please check your inbox." ||
+          message.toLowerCase().includes("otp")
+        ) {
+          setEmailVerify(true);
+        } else {
+          setEmailVerify(false);
+        }
+      }
+
+
+
+    } catch (error: any) {
+      const msg = error?.data?.message || "Something went wrong while creating application";
+      toast.error(msg);
+      if (msg === "We have sent OTP to your email. Please check your inbox.") {
+        setEmailVerify(true);
+      }
+    }
+
+
+  };
+
+  const handleVerify = async () => {
+    try {
+      const response = await createApplication(payload as any).unwrap();
+      if (response?.status && response.data?.redirectURL) {
+        clearPlatformServices();
+        localStorage.removeItem("applications");
+        window.location.href = response.data.redirectURL;
+      } else {
+        toast.error("Application created but no redirect URL returned");
+      }
+    } catch (error) {
+      toast.error("Failed to create application after verification");
+    }
+  };
 
   return (
     <section className="bg-white py-16 px-6 sm:px-10 lg:px-20">
@@ -18,15 +160,66 @@ export default function GetStartedSection() {
         <div>
           <h2 className="text-blue-700 font-semibold mb-4">Get Started</h2>
 
-          {/* Question 1 */}
+          {/* BASIC INFO */}
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name *"
+              value={form.firstName}
+              onChange={onChange}
+              className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name *"
+              value={form.lastName}
+              onChange={onChange}
+              className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email *"
+              value={form.email}
+              onChange={onChange}
+              className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone *"
+              value={form.phone}
+              onChange={onChange}
+              className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="mb-6">
+            <input
+              type="text"
+              name="company"
+              placeholder="Company (optional)"
+              value={form.company}
+              onChange={onChange}
+              className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Country */}
           <div className="mb-6">
             <label className="block text-gray-800 font-medium mb-2">
               1. Which country are the documents intended for?
             </label>
             <select
+              title="sass"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Country</option>
               {countries.map((c) => (
@@ -37,12 +230,10 @@ export default function GetStartedSection() {
             </select>
           </div>
 
-          {/* Question 2 */}
+          {/* Scanned Copy */}
           <div className="mb-6">
             <p className="text-gray-800 font-medium mb-2">
-              2. Are you interested in obtaining a scanned copy of your
-              authenticated documents before we return them to you? The cost for
-              this service is <span className="font-semibold">$20</span>.
+              2. Do you want a scanned copy of your authenticated documents?
             </p>
             <div className="flex gap-6 mt-2">
               {["Yes", "No"].map((val) => (
@@ -60,7 +251,7 @@ export default function GetStartedSection() {
             </div>
           </div>
 
-          {/* Question 3 */}
+          {/* Translation */}
           <div className="mb-6">
             <p className="text-gray-800 font-medium mb-2">
               3. Do you need your documents translated?
@@ -81,14 +272,14 @@ export default function GetStartedSection() {
             </div>
           </div>
 
-          {/* Conditional Translation Fields */}
+          {/* Translation fields */}
           {translation === "Yes" && (
             <div className="grid sm:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-gray-800 mb-2 text-sm">
                   What Language?
                 </label>
-                <select className="w-full border rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500">
+                <select title="sss" className="w-full border rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500">
                   <option value="">Select</option>
                   {languages.map((lang) => (
                     <option key={lang} value={lang}>
@@ -101,7 +292,7 @@ export default function GetStartedSection() {
                 <label className="block text-gray-800 mb-2 text-sm">
                   How many Pages
                 </label>
-                <select className="w-full border rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500">
+                <select title="sss" className="w-full border rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500">
                   <option value="">Type</option>
                   {pageTypes.map((type) => (
                     <option key={type} value={type}>
@@ -113,13 +304,16 @@ export default function GetStartedSection() {
             </div>
           )}
 
-          {/* Continue Button */}
-          <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition-all font-medium">
-            Continue <FaArrowRight className="text-sm" />
+          <button
+            onClick={onSubmit}
+            disabled={isLoading}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition-all font-medium"
+          >
+            {isLoading ? "Please wait..." : "Continue"} <FaArrowRight className="text-sm" />
           </button>
         </div>
 
-        {/* RIGHT SIDE INFO CARD */}
+        {/* RIGHT INFO CARD */}
         <div className="bg-white border rounded-2xl shadow-md p-8">
           <div className="w-16 h-16 mx-auto lg:mx-0 mb-6 bg-blue-100 rounded-full flex items-center justify-center">
             <svg
@@ -143,18 +337,20 @@ export default function GetStartedSection() {
           </h3>
 
           <p className="text-gray-600 leading-relaxed mb-3">
-            Document authentication is a crucial process ensuring the validity and
-            acceptance of your legal documents in foreign countries.
+            Document authentication ensures the validity and acceptance of your legal documents abroad.
           </p>
-
           <p className="text-gray-600 leading-relaxed">
-            This process involves obtaining an{" "}
-            <span className="font-semibold">apostille</span> or certification,
-            often referred to as legalization, from the appropriate government
-            authority.
+            It involves obtaining an <span className="font-semibold">apostille</span> or certification from the appropriate authority.
           </p>
         </div>
       </div>
+
+      {emailOtpVerify && (
+        <EmailVerifyDialog
+          email={payload?.applications[0]?.email ?? ""}
+          handleSubmite={handleVerify}
+        />
+      )}
     </section>
   );
 }

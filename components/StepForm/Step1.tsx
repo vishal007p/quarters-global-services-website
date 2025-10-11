@@ -203,24 +203,51 @@ export default function Step1() {
                 );
             }
             setPayload(payload)
-            const res = await verifyEmail({
-                email: values.email
-            }).unwrap();
 
-            console.log(res, "resssss")
-            if (res?.message === "Email is already verified.") {
-                const response = await createApplication(payload).unwrap();
-                if (response?.status && response.data?.redirectURL) {
-                    clearPlatformServices();
-                    localStorage.removeItem("applications");
-                    window.location.href = response.data.redirectURL;
+
+            try {
+                const res = await verifyEmail({
+                    email: values.email
+                }).unwrap();
+
+                if (res?.message === "Email is already verified.") {
+                    const response = await createApplication(payload).unwrap();
+                    if (response?.status && response.data?.redirectURL) {
+                        clearPlatformServices();
+                        localStorage.removeItem("applications");
+                        window.location.href = response.data.redirectURL;
+                    } else {
+                        toast.error("Application created but no redirect URL returned");
+                    }
                 } else {
-                    toast.error("Application created but no redirect URL returned");
+                    console.error(res?.message || "Email verification failed");
+                    if (res?.message === "We have sent OTP to your email. Please check your inbox."
+                    ) {
+                        setEmailVerify(true);
+                    }
+                    setEmailVerify(false);
                 }
-            } else {
-                toast.error(res?.message || "Email verification failed");
-                setEmailVerify(false);
+            } catch (err: any) {
+                const message =
+                    err?.message ||
+                    err?.data?.message ||
+                    "Something went wrong while verifying email.";
+
+                // Show toast message
+                toast.error(message);
+
+                // ✅ If backend indicates OTP sent, open verification dialog
+                if (
+                    message === "We have sent OTP to your email. Please check your inbox." ||
+                    message.toLowerCase().includes("otp")
+                ) {
+                    setEmailVerify(true);
+                } else {
+                    setEmailVerify(false);
+                }
             }
+
+
         } catch (error: any) {
 
             toast.error(error?.data?.message || "Something went wrong while creating application");

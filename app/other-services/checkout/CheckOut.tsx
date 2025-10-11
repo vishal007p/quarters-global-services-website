@@ -5,9 +5,11 @@ import { useSearchParams } from "next/navigation";
 import { DynamicForm } from "@/components/DynamicForm/DynamicForm";
 import { serviceForms } from "@/lib/serviceForms";
 import { useCreateApplication2Mutation } from "@/services/applicationApi2";
-import { clearPlatformServices } from "@/lib/platformServiceStorage";
+import { clearPlatformServices, removeFromPlatformServices } from "@/lib/platformServiceStorage";
 import { toast } from "sonner";
 import { ApplicationPayload } from "@/lib/Types";
+import { useVerifyEmailMutation } from "@/services/verifyEmail";
+import EmailVerifyDialog from "@/components/StepForm/EmailVerifyDialog";
 
 export default function CreateApplication() {
   const params = useSearchParams();
@@ -15,6 +17,9 @@ export default function CreateApplication() {
 
   const [createApplication, { isLoading, isError, isSuccess, error }] =
     useCreateApplication2Mutation();
+  const [verifyEmail] = useVerifyEmailMutation();
+  const [emailOtpVerify, setEmailVerify] = useState(false)
+  const [payload, setPayload] = useState<any>()
 
 
   const [showAlert, setShowAlert] = useState(false);
@@ -38,12 +43,8 @@ export default function CreateApplication() {
   const { schema, fields } = serviceForms[type];
 
   const handleSubmit = async (values: any) => {
-    let storedService = null;
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("selectedService");
-      if (stored) storedService = JSON.parse(stored);
-    }
-    const payload: ApplicationPayload = {
+
+    const payload: any = {
       applications: [
         {
           firstName: values.firstName,
@@ -72,17 +73,15 @@ export default function CreateApplication() {
             country: values.countryRecipient || "",
           },
 
-          fromCountryId: values.fromCountryId || "",
-          toCountryId: values.toCountryId || "",
+          fromCountryId: values.fromCountryId || "68d839b82ea0a4e770b07daf",
+          toCountryId: values.toCountryId || "68d839b82ea0a4e770b07daf",
 
-          platformServices: [
-            {
-              platformServiceId: "68cc5e9562e517276caa119e",
-              platformServiceCategoryId: "68cc5e9562e517276caa119e",
-              platformServiceCategoryPackageAddonsId: [],
-              platformServiceCategoryPackageId: "650e7f1234567890abcdef03",
-            },
-          ],
+          platformServices: [{
+            platformServiceId: "68e968e1e7bd0d029655fa49",
+            platformServiceCategoryId: "68e968e2e7bd0d029655fa4c",
+            platformServiceCategoryPackageAddonsId: [],
+            platformServiceCategoryPackageId: "68e968e2e7bd0d029655fa4f"
+          }],
 
           serviceFields: {
             serviceType: values.serviceType || type,
@@ -90,20 +89,63 @@ export default function CreateApplication() {
         },
       ],
     };
+    setPayload(payload)
     try {
-      const response = await createApplication(payload as ApplicationPayload).unwrap();
-      if (response?.status && response.data?.redirectURL) {
-        clearPlatformServices();
-        localStorage.removeItem("applications");
-        window.location.href = response.data.redirectURL;
+      const res = await verifyEmail({
+        email: values.email
+      }).unwrap();
+
+      if (res?.message === "Email is already verified.") {
+        const response = await createApplication(payload).unwrap();
+        if (response?.status && response.data?.redirectURL) {
+          clearPlatformServices();
+          localStorage.removeItem("applications");
+          window.location.href = response.data.redirectURL;
+        } else {
+          toast.error("Application created but no redirect URL returned");
+        }
       } else {
-        toast.error("Application created but no redirect URL returned");
+        console.error(res?.message || "Email verification failed");
+        if (res?.message === "We have sent OTP to your email. Please check your inbox."
+        ) {
+          setEmailVerify(true);
+        }
+        setEmailVerify(false);
       }
-    } catch (err) {
-      console.error("❌ Failed to create application:", err);
+    } catch (err: any) {
+      const message =
+        err?.message ||
+        err?.data?.message ||
+        "Something went wrong while verifying email.";
+
+      // Show toast message
+      toast.error(message);
+
+      // ✅ If backend indicates OTP sent, open verification dialog
+      if (
+        message === "We have sent OTP to your email. Please check your inbox." ||
+        message.toLowerCase().includes("otp")
+      ) {
+        setEmailVerify(true);
+      } else {
+        setEmailVerify(false);
+      }
     }
+
+
   };
 
+
+  const handleVerify = async () => {
+    const response = await createApplication(payload as ApplicationPayload).unwrap();
+    if (response?.status && response.data?.redirectURL) {
+      clearPlatformServices();
+      localStorage.removeItem("applications");
+      window.location.href = response.data.redirectURL;
+    } else {
+      toast.error("Application created but no redirect URL returned");
+    }
+  };
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -143,6 +185,7 @@ export default function CreateApplication() {
 
         return <p className="text-red-600 mt-2">❌ Unknown error</p>;
       })()}
+      {emailOtpVerify && <EmailVerifyDialog email={payload?.applications[0]?.email ?? ""} handleSubmite={handleVerify} />}
 
     </div>
   );
