@@ -5,11 +5,11 @@ import MultiStepForm2 from "@/components/StepForm2/MultiStepForm2";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = localStorage.getItem("formType");
 
   return (
     <main className="min-h-screen bg-gray-50 py-10">
-      {type === "oci-card" ? <MultiStepForm2 /> : <MultiStepForm />}
+      {type === "OCI" ? <MultiStepForm2 /> : <MultiStepForm />}
     </main>
   );
 }

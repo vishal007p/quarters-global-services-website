@@ -29,7 +29,6 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   const dispatch = useDispatch();
   const { activeId } = useSelector((state: any) => state.application);
   const handleApplyNow = () => {
-
     dispatch(
       setCategory({ id: activeId, name: title, platformServiceCategoryId: id })
     );
@@ -75,6 +74,10 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
             // Save the step in localStorage first
             if (shouldStartApplication) {
               dispatch(startApplication({ type: title ?? "" }));
+            }
+
+            if (title === "OCI Card") {
+              localStorage.setItem("formType", "OCI")
             }
 
             if (save) { save(id) }

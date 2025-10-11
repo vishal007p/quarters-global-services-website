@@ -80,7 +80,43 @@ export const stepOtherDetailsSchema = z.object({
   placeOfIssue: z.string().optional(),
 });
 
+ 
 
+export const step1Schema2 = z.object({
+  applicationType: z.string().optional(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  dateOfBirth: z.string().optional(),
+  gender: z.string().optional(),
+  maritalStatus: z.string().optional(),
+  nationality: z.string().optional(),
+  phone: z.string().min(5, "Phone number is required"),
+  email: z.string().email("Invalid email address"),
+  company: z.string().optional(),
+  usPassportNumber: z.string().optional(),
+  placeOfIssue: z.string().optional(),
+  dateOfIssue: z.string().optional(),
+  dateOfExpiry: z.string().optional(),
+  departureDate: z.string().optional(),
+  physicalAddress: z.object({
+    addressLine1: z.string().optional(),
+    addressLine2: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zipCode: z.string().optional(),
+    country: z.string().optional(),
+  }),
+  currentLegalAddress: z.object({
+    addressLine1: z.string().optional(),
+    addressLine2: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zipCode: z.string().optional(),
+    country: z.string().optional(),
+  }),
+});
+
+export type Step1Data2 = z.infer<typeof step1Schema2>;
 export type Step1Data = z.infer<typeof step1Schema>;
 export type Step2Data = z.infer<typeof step2Schema>;
 export type StepOtherDetailsData = z.infer<typeof stepOtherDetailsSchema>;

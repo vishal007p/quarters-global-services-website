@@ -1,6 +1,6 @@
 "use client";
 
- import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -12,35 +12,244 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {   Step2Data, step2Schema } from "@/lib/validationSchemas";
+import { Step1Data2, step1Schema, step1Schema2, Step2Data } from "@/lib/validationSchemas";
+import { useCreateApplicationMutation } from "@/services/applicationApi";
+import { useDispatch } from "react-redux";
+import { useRouter } from "nextjs-toploader/app";
+import { useState } from "react";
+import { setFormData } from "@/store/slices/applicationSlice";
+import { useVerifyEmailMutation } from "@/services/verifyEmail";
+import { ApplicationPayload } from "@/lib/Types";
+import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+import { toast } from "sonner";
+import { store } from "@/store/store";
+import EmailVerifyDialog from "../StepForm/EmailVerifyDialog";
+
+
+// --- Types for API ---
+interface Address {
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+}
+
+interface Application {
+  // Basic Details
+  applicationType?: string;
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  maritalStatus?: string;
+  nationality?: string;
+
+  // Contact & Company Info
+  email?: string;
+  phone?: string;
+  company?: string;
+
+  // Passport Details
+  usPassportNumber?: string;
+  placeOfIssue?: string;
+  dateOfIssue?: string;
+  dateOfExpiry?: string;
+
+  // Travel Details
+  departureDate?: string;
+
+  // Address Details
+  physicalAddress?: Address;
+  currentLegalAddress?: Address;
+
+  // Platform Services (from local storage)
+  platformServices?: any[];
+
+  // Optional metadata for backend
+  status?: string;
+  applicationSource?: string;
+  fromCountryId?: string;
+  toCountryId?: string;
+}
+
+
+const mapApiToForm = (app: Application): Step1Data2 => ({
+  applicationType: app?.applicationType || "",
+  firstName: app.firstName || "",
+  lastName: app.lastName || "",
+  dateOfBirth: app.dateOfBirth || "",
+  gender: app.gender || "",
+  maritalStatus: app.maritalStatus || "",
+  nationality: app.nationality || "",
+  phone: app.phone || "",
+  email: app.email || "",
+  company: app.company || "",
+  usPassportNumber: app.usPassportNumber || "",
+  placeOfIssue: app.placeOfIssue || "",
+  dateOfIssue: app.dateOfIssue || "",
+  dateOfExpiry: app.dateOfExpiry || "",
+  departureDate: app.departureDate?.split("T")[0] || "",
+  physicalAddress: {
+    addressLine1: app.physicalAddress?.addressLine1 || "",
+    addressLine2: app.physicalAddress?.addressLine2 || "",
+    city: app.physicalAddress?.city || "",
+    state: app.physicalAddress?.state || "",
+    zipCode: app.physicalAddress?.zipCode || "",
+    country: app.physicalAddress?.country || "",
+  },
+  currentLegalAddress: {
+    addressLine1: app.currentLegalAddress?.addressLine1 || "",
+    addressLine2: app.currentLegalAddress?.addressLine2 || "",
+    city: app.currentLegalAddress?.city || "",
+    state: app.currentLegalAddress?.state || "",
+    zipCode: app.currentLegalAddress?.zipCode || "",
+    country: app.currentLegalAddress?.country || "",
+  },
+});
 
 type Props = {
   onNext: (data: Step2Data) => void;
 };
 
 export default function Step1({ onNext }: Props) {
-  const form = useForm<Step2Data>({
-    resolver: zodResolver(step2Schema),
-    defaultValues: {
-      applicationType: "OCI Minor Application",
-      firstName: "",
-      lastName: "",
-      dateOfBirth: "",
-      gender: "",
-      maritalStatus: "",
-      nationality: "",
-      phone: "",
-      email: "",
-      usPassportNumber: "",
-      placeOfIssue: "",
-      dateOfIssue: "",
-      dateOfExpiry: "",
-    },
+  const [createApplication, { data, isLoading }] =
+    useCreateApplicationMutation();
+  const dispatch = useDispatch();
+  const router = useRouter()
+  const [verifyEmail] = useVerifyEmailMutation();
+  const [emailOtpVerify, setEmailVerify] = useState(false)
+  const [payload, setPayload] = useState<ApplicationPayload>()
+
+  const form = useForm<any>({
+    resolver: zodResolver(step1Schema2),
+    defaultValues: mapApiToForm({}),
   });
 
-  const onSubmit = (values: Step2Data) => {
-    console.log("Form submitted:", values);
-    onNext(values);
+
+  const onSubmit = async (values: Step1Data2) => {
+    try {
+      const platformServices = getPlatformServices() || [];
+      console.log(platformServices, "platformServices");
+
+      // 🏠 Build common address object
+      const fullAddress = {
+        addressLine1: values.currentLegalAddress?.addressLine1 || "",
+        addressLine2: values.currentLegalAddress?.addressLine2 || "",
+        city: values.currentLegalAddress?.city || "",
+        state: values.currentLegalAddress?.state || "",
+        zipCode: values.currentLegalAddress?.zipCode || "",
+        country: values.currentLegalAddress?.country || "",
+      };
+
+      // 🧩 Build payload
+      const payload = {
+        applications: [
+          {
+            // 🔹 Basic Details
+            applicationType: values.applicationType || "",
+            firstName: values.firstName,
+            lastName: values.lastName,
+            dateOfBirth: values.dateOfBirth || "",
+            gender: values.gender || "",
+            maritalStatus: values.maritalStatus || "",
+            nationality: values.nationality || "",
+
+            // 🔹 Contact & Company Info
+            email: values.email,
+            phone: values.phone,
+            countryCode: "+1",
+            company: values.company || "",
+
+            // 🔹 Passport Details
+            usPassportNumber: values.usPassportNumber || "",
+            placeOfIssue: values.placeOfIssue || "",
+            dateOfIssue: values.dateOfIssue || "",
+            dateOfExpiry: values.dateOfExpiry || "",
+
+            // 🔹 Travel & Address Info
+            departureDate: values.departureDate || "",
+            address: fullAddress,
+            currentLegalAddress: fullAddress,
+
+            // 🔹 Static Metadata
+            status: "Submitted",
+            applicationSource: "Website",
+            fromCountryId: "68d839b82ea0a4e770b07daf",
+            toCountryId: "68d839b82ea0a4e770b07daf",
+
+            // 🔹 Platform Services
+            platformServices: (platformServices || [])
+              .map((s: any) => ({
+                platformServiceId:
+                  s.platformServiceId && s.platformServiceId.trim() !== ""
+                    ? s.platformServiceId
+                    : "68cc5e9562e517276caa119e",
+                platformServiceCategoryId:
+                  s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
+                platformServiceCategoryPackageAddonsId:
+                  s.platformServiceCategoryPackageAddonsId || s.addons || [],
+                platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
+              }))
+              .filter((item: any) => !!item.platformServiceCategoryPackageId),
+
+            // 🔹 Service Fields
+            serviceFields: {
+              serviceType: "CourierDelivery",
+            },
+          },
+        ],
+      };
+
+      // 🧠 Save to Redux if editing existing app
+      const activeId = store.getState().application.activeId;
+      if (activeId) {
+        dispatch(
+          setFormData({
+            id: activeId,
+            form: payload,
+          })
+        );
+      }
+
+      // 📨 Proceed with email verification
+      setPayload(payload);
+      const res = await verifyEmail({ email: values.email }).unwrap();
+
+      console.log(res, "resssss");
+
+      if (res?.message === "Email is already verified.") {
+        const response = await createApplication(payload).unwrap();
+        if (response?.status && response.data?.redirectURL) {
+          clearPlatformServices();
+          localStorage.removeItem("applications");
+          window.location.href = response.data.redirectURL;
+        } else {
+          toast.error("Application created but no redirect URL returned");
+        }
+      } else {
+        toast.error(res?.message || "Email verification failed");
+        setEmailVerify(false);
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Something went wrong while creating application");
+      if ("We have sent OTP to your email. Please check your inbox." === error?.data?.message) {
+        setEmailVerify(true);
+      }
+    }
+  };
+ 
+
+  const handleVerify = async () => {
+    const response = await createApplication(payload as ApplicationPayload).unwrap();
+    if (response?.status && response.data?.redirectURL) {
+      clearPlatformServices();
+      localStorage.removeItem("applications");
+      window.location.href = response.data.redirectURL;
+    } else {
+      toast.error("Application created but no redirect URL returned");
+    }
   };
 
   return (
@@ -252,6 +461,9 @@ export default function Step1({ onNext }: Props) {
           </div>
         </form>
       </Form>
+
+      {emailOtpVerify && <EmailVerifyDialog email={payload?.applications[0]?.email ?? ""} handleSubmite={handleVerify} />}
+
     </div>
   );
 }
