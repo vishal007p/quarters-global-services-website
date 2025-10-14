@@ -213,8 +213,8 @@ export default function Step1() {
                 if (res?.message === "Email is already verified.") {
                     const response = await createApplication(payload).unwrap();
                     if (response?.status && response.data?.redirectURL) {
-                        clearPlatformServices();
-                        localStorage.removeItem("applications");
+                        // clearPlatformServices();
+                        // localStorage.removeItem("applications");
                         window.location.href = response.data.redirectURL;
                     } else {
                         toast.error("Application created but no redirect URL returned");

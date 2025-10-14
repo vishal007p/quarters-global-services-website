@@ -31,10 +31,7 @@ const Category = () => {
         <>
             <BannerLayout bg="/services/visa.png">
                 {/* Overlay Heading */}
-                <h4
-                    className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] 
-               m-auto rounded-lg font-bold mb-4 text-center text-white 
-               text-[clamp(1rem,1.8vw,2rem)] capitalize"
+                <h4 className="bg-black/40 py-2 px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%]  m-auto rounded-lg font-bold mb-4 text-center text-white text-[clamp(1rem,1.8vw,2rem)] capitalize"
                 >
                     Fast, Hassle-Free {platformServiceCategorySlug} Services
                 </h4>
@@ -63,14 +60,12 @@ const Category = () => {
                             {packages.map((service: any, index: number) => (
                                 <div
                                     key={index}
-                                    className={`transform transition-transform duration-500 ${index % 2 === 0 ? "translate-y-0" : "translate-y-8"
-                                        }`}
+                                    className={`transform transition-transform duration-500 ${index % 2 === 0 ? "translate-y-0" : "translate-y-8"}`}
                                 >
                                     <VisaServiceCard
                                         id={service._id}
                                         save={save}
-                                        link={
-                                            service.subCategories && service.subCategories.length > 1
+                                         link={service.subCategories && service.subCategories.length > 1
                                                 ? `/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
                                                 : `/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
                                         }

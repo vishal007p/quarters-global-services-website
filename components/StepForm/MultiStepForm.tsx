@@ -17,7 +17,7 @@ const steps = [
 const MultiStepForm = () => {
   const [step] = useState(1);
 
-  // ✅ Dynamic values
+  //  Dynamic values
   const [, setPrices] = useState<number[]>([]);
   const [currency, setCurrency] = useState<string>("USD");
   const [total, setTotal] = useState<number>(0);
@@ -25,7 +25,7 @@ const MultiStepForm = () => {
   const [, setNames] = useState<string[]>([]);
 
 
-  // ✅ Static fixed fees
+  //  Static fixed fees
   const CONSULAR_FEE = 798.42;
   const MONEY_ORDER_FEE = 5.0;
   const SERVICE_FEE = 10.0;
@@ -36,7 +36,7 @@ const MultiStepForm = () => {
     const stored = getPlatformServices();
 
     if (stored && stored.length > 0) {
-      // 🧾 Separate by type
+      //  Separate by type
       const mainServices = stored.filter(
         (s) => !s.additionService && Number(s.price) > 0
       );
@@ -44,7 +44,7 @@ const MultiStepForm = () => {
         (s) => s.additionService && Number(s.additionService_price) > 0
       );
 
-      // 🧾 Extract name + price arrays
+      //  Extract name + price arrays
       const mainNames = mainServices.map((s) => s.Price_name || "Unnamed Service");
       const mainPrices = mainServices.map((s) => Number(s.price));
 
@@ -60,12 +60,12 @@ const MultiStepForm = () => {
         addOnServices[0]?.currency ||
         "USD";
 
-      // ✅ Save states
+      //  Save states
       setCurrency(curr);
       setPrices([...mainPrices, ...addOnPrices]);
       setNames([...mainNames, ...addOnNames]);
 
-      // ✅ Totals
+      //  Totals
       const totalDynamic =
         mainPrices.reduce((a, b) => a + b, 0) +
         addOnPrices.reduce((a, b) => a + b, 0);
