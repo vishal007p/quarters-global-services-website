@@ -9,14 +9,16 @@ type ChecklistItem = {
 type Services = {
   oci: ChecklistItem[];
   passport: ChecklistItem[];
+  visa: ChecklistItem[]
+  evisa: ChecklistItem[]
 };
 
 type Checklists = {
   india: Services;
 };
- 
 
-export const CHECKLISTS:Checklists = {
+
+export const CHECKLISTS: Checklists = {
   india: {
     oci: [
       {
@@ -251,5 +253,258 @@ export const CHECKLISTS:Checklists = {
         faq: ["Processing: 1–2 weeks (Fast-track)"],
       },
     ],
+    visa: [
+      {
+        id: "b1b2-visitor",
+        title: "B1/B2 Visitor Visa Checklist",
+        documents: [
+          "Valid Passport (minimum 6 months validity)",
+          "DS-160 Confirmation Page",
+          "Visa Appointment Confirmation",
+          "2 Recent Passport Photos (2x2 inches, white background)",
+          "Proof of Financial Capability (Bank Statement, ITR, Salary Slips)",
+          "Proof of Employment or Business Ownership",
+          "Travel Itinerary / Invitation Letter (if visiting family or business)",
+          "Proof of Residence in Home Country (Property or Rent Agreement)",
+        ],
+        fees: [
+          "US Consular Visa Fee: $185",
+          "Service Fee: $50 (Form & Document Review)",
+        ],
+        faq: [
+          "Processing time: 7–10 business days (after interview).",
+          "Applicants may be asked for additional documents during interview.",
+        ],
+      },
+      {
+        id: "f1-student",
+        title: "F1 Student Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "I-20 Form from SEVP-certified institution",
+          "SEVIS Fee Receipt (I-901)",
+          "DS-160 Confirmation Page",
+          "Visa Appointment Confirmation",
+          "Bank Statements (last 6 months) showing ability to fund education",
+          "Affidavit of Support (Form I-134 if applicable)",
+          "Academic Transcripts and Test Scores (GRE, TOEFL, IELTS)",
+          "Admission Letter and Proof of Enrollment",
+        ],
+        fees: [
+          "Visa Application Fee: $185",
+          "SEVIS Fee: $350",
+        ],
+        faq: [
+          "You can apply up to 365 days before program start date.",
+          "Entry to the U.S. allowed 30 days prior to course start.",
+        ],
+      },
+      {
+        id: "h1b-work",
+        title: "H1B Work Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "I-797 Approval Notice (Original & Copy)",
+          "H1B Petition Copy (LCA, Offer Letter, Job Description)",
+          "Educational Qualification Proof (Degree Certificates)",
+          "Resume / CV",
+          "Latest Pay Slips (if already employed in U.S.)",
+          "Employer Support Letter",
+        ],
+        fees: [
+          "Filing Fee: $460",
+          "ACWIA Fee: $750 / $1500 (based on employer size)",
+          "Anti-Fraud Fee: $500",
+        ],
+        faq: [
+          "Processing: 2–6 months (Premium Processing available).",
+          "Visa validity: Up to 3 years (renewable to 6 years).",
+        ],
+      },
+      {
+        id: "l1-transfer",
+        title: "L1 Intra-Company Transfer Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "I-129S Form (L1 Petition)",
+          "Employment Verification Letter",
+          "Salary Proof / Pay Slips",
+          "Company Organizational Chart",
+          "Educational Certificates",
+        ],
+        fees: [
+          "Visa Fee: $500",
+          "Fraud Prevention Fee: $500",
+          "Premium Processing (Optional): $2500",
+        ],
+        faq: [
+          "Used for transfer within the same company to U.S. branch.",
+          "Validity: 1–3 years initially, extendable up to 7 years.",
+        ],
+      },
+      {
+        id: "j1-exchange",
+        title: "J1 Exchange Visa Checklist",
+        documents: [
+          "DS-2019 Form issued by sponsor organization",
+          "SEVIS Fee Receipt",
+          "DS-160 Confirmation",
+          "Valid Passport",
+          "Sponsor Letter or Training Plan",
+          "Financial Proof (Bank Statements, Sponsor Letter)",
+        ],
+        fees: [
+          "Visa Fee: $185",
+          "SEVIS Fee: $220",
+        ],
+        faq: [
+          "Applies to exchange visitors, trainees, and interns.",
+          "Some categories may have 2-year home residency rule.",
+        ],
+      },
+      {
+        id: "k1-fiance",
+        title: "K1 Fiancé(e) Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "Form I-129F (Petition for Alien Fiancé)",
+          "Proof of Relationship (Photos, Chats, etc.)",
+          "Affidavit of Support (Form I-134)",
+          "Medical Examination Report",
+          "Police Clearance Certificate",
+          "2 Photos (2x2 inch white background)",
+        ],
+        fees: [
+          "Filing Fee: $535 (I-129F)",
+          "Visa Fee: $265",
+        ],
+        faq: [
+          "Used for fiancés of U.S. citizens entering to marry within 90 days.",
+        ],
+      },
+      {
+        id: "o1-extraordinary",
+        title: "O1 Extraordinary Ability Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "Form I-797 Approval Notice",
+          "Detailed Resume",
+          "Letters of Recommendation (at least 3)",
+          "Evidence of Awards, Media Coverage, Memberships",
+          "Employment Contract or Offer Letter",
+        ],
+        fees: [
+          "Visa Fee: $460",
+          "Premium Processing (optional): $2500",
+        ],
+        faq: [
+          "For individuals with extraordinary ability in arts, science, or business.",
+        ],
+      },
+      {
+        id: "tn-nafta",
+        title: "TN/TD NAFTA Visa Checklist",
+        documents: [
+          "Valid Passport",
+          "Employment Letter from U.S. Company",
+          "Proof of Canadian/Mexican Citizenship",
+          "Educational Credentials Evaluation (if required)",
+          "Resume / CV",
+        ],
+        fees: [
+          "Visa Fee: $50 (land) or $56 (air)",
+        ],
+        faq: [
+          "Available to Canadian and Mexican citizens under NAFTA/USMCA.",
+        ],
+      }],
+    evisa: [
+      {
+        id: "tourist-evisa",
+        title: "Tourist E-Visa Checklist",
+        documents: [
+          "Valid Passport with at least 6 months validity from date of arrival",
+          "Recent Passport-size Photograph (2x2 inch, white background)",
+          "Scanned Bio Page of Passport (PDF under 300 KB)",
+          "Confirmed Return Ticket",
+          "Proof of Sufficient Funds (Bank Statement or Employment Proof)",
+          "Hotel Booking or Accommodation Proof",
+          "Travel Itinerary (optional but recommended)",
+        ],
+        fees: [
+          "Visa Fee (varies by nationality, typically $25–$80)",
+          "Service Fee $20 (Document verification & upload assistance)",
+        ],
+        faq: [
+          "Processing Time: 3–5 business days after submission.",
+          "Validity: 30 days from date of arrival (Double Entry allowed).",
+          "Can be applied up to 120 days before intended travel date.",
+        ],
+      },
+      {
+        id: "business-evisa",
+        title: "Business E-Visa Checklist",
+        documents: [
+          "Valid Passport (6+ months validity)",
+          "Scanned Bio Page of Passport",
+          "Recent Photo (2x2 inch white background)",
+          "Business Card or Company Letterhead",
+          "Invitation Letter from Indian Company",
+          "Proof of Funds and Return Ticket",
+        ],
+        fees: [
+          "Visa Fee (varies by country, approx. $80–$100)",
+          "Service Fee $25 (Application support and file preparation)",
+        ],
+        faq: [
+          "Processing Time: 3–5 business days.",
+          "Validity: Up to 1 year, multiple entries allowed.",
+          "Used for attending business meetings, trade fairs, or establishing contacts.",
+        ],
+      },
+      {
+        id: "medical-evisa",
+        title: "Medical E-Visa Checklist",
+        documents: [
+          "Valid Passport (minimum 6 months validity)",
+          "Recent Passport Photo (2x2 inch white background)",
+          "Letter from Recognized Medical Institution in India",
+          "Scanned Bio Page of Passport",
+          "Proof of Funds (Bank Statement)",
+          "Return Air Ticket Booking",
+        ],
+        fees: [
+          "Visa Fee: $80 (average, varies by country)",
+          "Service Fee: $25 (Verification & upload support)",
+        ],
+        faq: [
+          "Processing: 3–4 working days after submission.",
+          "Validity: 60 days from date of arrival (Triple Entry allowed).",
+          "Can bring up to 2 medical attendants under Medical Attendant E-Visa.",
+        ],
+      },
+      {
+        id: "crew-evisa",
+        title: "Crew E-Visa Checklist",
+        documents: [
+          "Valid Passport (6+ months validity)",
+          "Employment Proof from Airline / Shipping Company",
+          "Letter of Assignment or Duty Letter",
+          "Scanned Bio Page of Passport",
+          "Recent Passport Photo (2x2 inch white background)",
+          "Return or Onward Ticket",
+        ],
+        fees: [
+          "Visa Fee: $80 (average, depends on nationality)",
+          "Service Fee: $25 (Support for digital upload)",
+        ],
+        faq: [
+          "Processing Time: 3–5 working days.",
+          "Validity: 30 days from entry (Single Entry).",
+          "Applicable for crew members of airlines, ships, or charters.",
+        ],
+      },
+    ],
+
   },
 };
