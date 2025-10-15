@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Step1Data2, step1Schema2, Step2Data } from "@/lib/validationSchemas";
+import { Step1Data2, step1Schema2 } from "@/lib/validationSchemas";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -108,11 +108,9 @@ const mapApiToForm = (app: Application): Step1Data2 => ({
   },
 });
 
-type Props = {
-  onNext: (data: Step2Data) => void;
-};
+ 
 
-export default function Step1({ onNext }: Props) {
+export default function Step1( ) {
   const [createApplication] =
     useCreateApplicationMutation();
   const dispatch = useDispatch();

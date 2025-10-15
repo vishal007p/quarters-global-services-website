@@ -4,7 +4,6 @@ import Services from "./Services";
 
 export default function Page() {
     return (
-        <Suspense fallback={<FullScreenLoader />}>      <Services />
-        </Suspense>
+        <Suspense fallback={<FullScreenLoader />}><Services /></Suspense>
     );
 }

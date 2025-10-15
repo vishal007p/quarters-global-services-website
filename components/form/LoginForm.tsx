@@ -7,11 +7,12 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
- import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import FormWrapper from './FormWrapper';
 import handleAsync from '@/lib/handleAsync';
 import { saveSession } from '@/lib/session';
+import { UserTypeENUM } from '@/lib/Types';
 
 // ---------------- Schema ----------------
 const formSchema = z.object({
@@ -35,7 +36,7 @@ const LoginForm = () => {
   const onSubmit = handleAsync(async (values: z.infer<typeof formSchema>) => {
     try {
       // 🔑 Call your backend login route
-      const res = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/sign-in', {
+      const res = await fetch(process.env.NEXT_PUBLIC_QUARTUS_API_URL + '/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
@@ -53,8 +54,10 @@ const LoginForm = () => {
         throw new Error('User data not found');
       }
       // Save user token
-      saveSession({ id: userDataId, token: userDataToken });
-      toast.success('Login successfully');
+      await saveSession(
+        { id: userDataId, token: userDataToken },
+        UserTypeENUM.ADMIN // or .USER or whatever role applies
+      ); toast.success('Login successfully');
       route.push('/dashboard');
     } finally {
       console.log('done');

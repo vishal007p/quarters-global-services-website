@@ -1,8 +1,9 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { Menu, Home, FileText, Folder, LifeBuoy, Settings, X } from "lucide-react";
+import { Menu, Home, FileText,   X } from "lucide-react";
 import clsx from "clsx";
+import { usePathname, useRouter } from "next/navigation";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -10,13 +11,11 @@ type DashboardLayoutProps = {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
-
+  const pathname = usePathname();
+  const router = useRouter();
   const navItems = [
-    { name: "My Profile", icon: Home },
-    { name: "Orders", icon: FileText },
-    { name: "Uploaded Docs", icon: Folder },
-    { name: "Support", icon: LifeBuoy },
-    { name: "Settings", icon: Settings },
+    { name: "My Profile", icon: Home, path: "/dashboard" },
+    { name: "Applications", icon: FileText, path: "/dashboard/applications" },
   ];
 
   return (
@@ -40,24 +39,38 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </button>
         </div>
 
-        {/* Sidebar Menu */}
-        <nav className="flex-1 mt-2 overflow-y-auto">
-          {navItems.map((item) => (
-            <button
-              key={item.name}
-              className="flex items-center w-full px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 transition"
-            >
-              <item.icon className="h-5 w-5" />
-              <span className="ml-3">{item.name}</span>
-            </button>
-          ))}
+         {/* Sidebar Menu */}
+        <nav className="flex-1 mt-2 overflow-y-auto px-4">
+          {navItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <button
+                key={item.name}
+                onClick={() => {
+                  router.push(item.path);
+                  setOpen(false);
+                }}
+                className={clsx(
+                  "flex items-center w-full px-4 py-2 text-left transition rounded-sm",
+                  isActive
+                    ? "bg-red-100 text-red-600 font-normal"
+                    : "text-gray-600 hover:bg-red-50 hover:text-red-600"
+                )}
+              >
+                <item.icon
+                  className={clsx("h-5 w-5", isActive ? "text-red-600" : "")}
+                />
+                <span className="ml-3">{item.name}</span>
+              </button>
+            );
+          })}
         </nav>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Navbar */}
-        <header className="flex items-center justify-between px-6 h-16 bg-white border-b shadow-sm">
+        <header className="flex items-center justify-between px-6 h-14 bg-white border-b shadow-sm">
           {/* Toggle button (mobile only) */}
           <button
             className="lg:hidden p-2 text-gray-600"
@@ -81,7 +94,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 bg-white">{children}</main>
       </div>
     </div>
   );

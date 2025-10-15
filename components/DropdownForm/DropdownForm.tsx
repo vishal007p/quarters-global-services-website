@@ -3,7 +3,6 @@
 import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 import { useGetCountriesQuery } from "@/services/countryApi";
-import { useGetPlatformServiceCategoriesQuery } from "@/services/platformCategoryApi";
 import DropdownWrapper from "./DropdownWrapper";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import Skeleton from "react-loading-skeleton";
@@ -22,7 +21,6 @@ type DropdownOption = {
 export type PlatformServiceStep = {
   citizenship?: string;
   country?: string;
-  state?: string;
   passportType?: string;
   apostilleType?: string;
   countryCode: string,
@@ -37,26 +35,10 @@ interface DropdownFormProps {
   setActiveTab: React.Dispatch<React.SetStateAction<TabType>>;
 }
 
-
 // --- Tabs ---
 const tabs: TabType[] = ["Services", "apostille", "e-visa"];
 
 const STORAGE_KEY = "platformServiceStep";
-
-
-// --- Sample States ---
-const states: DropdownOption[] = [
-  { id: "1", name: "Alabama", slug: "alabama" },
-  { id: "2", name: "Alaska", slug: "alaska" },
-  { id: "3", name: "Arizona", slug: "arizona" },
-  { id: "4", name: "Arkansas", slug: "arkansas" },
-  { id: "5", name: "California", slug: "california" },
-  { id: "6", name: "Colorado", slug: "colorado" },
-  { id: "7", name: "Connecticut", slug: "connecticut" },
-  { id: "8", name: "Delaware", slug: "delaware" },
-  { id: "9", name: "Florida", slug: "florida" },
-  { id: "10", name: "Georgia", slug: "georgia" },
-];
 
 // --- Go Button ---
 const GoButton = ({ handleGo }: { handleGo: () => void }) => (
@@ -87,34 +69,12 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [country, setCountry] = useState<DropdownOption | null>(null);
 
-  const { data: apostilleOptions, isLoading: apostilleLoading } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: "apostilleOptions",
-    toCountrySlug: country?.slug || "",
-    fromCountrySlug: country?.slug || ""
-  });
-
-
-  const apostilleOption: DropdownOption[] =
-    apostilleOptions?.data?.data?.map((item: any) => ({
-      id: item._id,
-      name: item.name,
-      slug: item.slug,
-    })) || [];
-
   // --- State ---
   const [citizenship, setCitizenship] = useState<DropdownOption | null>(null);
   const [citizenshipSearch, setCitizenshipSearch] = useState("");
-
-
   const [countrySearch, setCountrySearch] = useState("");
-
-  const [stateOrCountry, setStateOrCountry] = useState<DropdownOption | null>(null);
-  const [stateSearch, setStateSearch] = useState("");
-
   const [passportType, setPassportType] = useState<DropdownOption | null>(null);
-
   const [apostilleType, setApostilleType] = useState<DropdownOption | null>(null);
-  const [apostilleSearch, setApostilleSearch] = useState("");
   const pathname = usePathname();
   const currentPath = pathname === "/" ? "" : pathname.replace("/", "");
   const visibleTabs = currentPath === "" ? tabs : tabs.filter((tab) => tab === currentPath);
@@ -122,18 +82,11 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   const [errors, setErrors] = useState({
     citizenship: "",
     country: "",
-    state: "",
     passport: "",
     apostille: "",
   });
 
-  const { data: visamain } = useGetPlatformServiceCategoriesQuery({
-    platformServiceSlug: country?.slug == "india" ? "visa" : country?.slug == "united-states" ? "us-visa" : "visa",
-    toCountrySlug: country?.slug || "united-states",
-    fromCountrySlug: citizenship?.slug || "united-states"
-  });
 
- 
   // --- Filter Options ---
   const filteredCountries = apiCountries.filter((option) =>
     option.name.toLowerCase().includes(countrySearch.toLowerCase())
@@ -141,14 +94,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const filteredCitizenships = apiCountries.filter((option) =>
     option.name.toLowerCase().includes(citizenshipSearch.toLowerCase())
-  );
-
-  const filteredStates = states.filter((option) =>
-    option.name.toLowerCase().includes(stateSearch.toLowerCase())
-  );
-
-  const filteredApostille = apostilleOption.filter((option) =>
-    option.name.toLowerCase().includes(apostilleSearch.toLowerCase())
   );
 
   // --- Save to sessionStorage ---
@@ -167,7 +112,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     return null;
   };
 
-
   // --- Validation ---
   const validate = () => {
     let newErrors = { ...errors };
@@ -175,28 +119,24 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       newErrors = {
         citizenship: citizenship ? "" : "Please select citizenship",
         country: country ? "" : "Please select country",
-        state: stateOrCountry ? "" : "Please select state",
         passport: "",
         apostille: "",
       };
     }
 
-
     else if (activeTab === "apostille") {
       newErrors = {
         citizenship: "",
         country: country ? "" : "Please select country",
-        state: "",
         passport: "",
         apostille: apostilleType ? "" : "Please select apostille type",
       };
-    } 
-    
+    }
+
     else if (activeTab === "e-visa") {
       newErrors = {
         citizenship: citizenship ? "" : "Please select citizenship",
         country: country ? "" : "Please select travel country",
-        state: "",
         passport: "",
         apostille: "",
       };
@@ -213,14 +153,13 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       citizenship_code: citizenship?.code,
       country: country?.slug,
       countryCode: (country as any)?.code,
-      state: stateOrCountry?.slug,
       passportType: passportType?.slug,
       apostilleType: apostilleType?.slug,
     };
     saveStep(step);
     if (activeTab === "Services") {
       router.push(`/services?toCountrySlug=${country?.slug}&&fromCountrySlug=${country?.slug == "india" ? "indian-visa" : country?.slug == "united-states" ? "us-visa" : "visa"}`);
-     } else if (activeTab === "apostille") {
+    } else if (activeTab === "apostille") {
       router.push(`/apostille?type=${apostilleType?.slug}&&fromCountrySlug=${citizenship?.slug}`);
     } else if (activeTab === "e-visa") {
       router.push(`/category?toCountrySlug=${country?.slug}&fromCountrySlug=${citizenship?.slug}&Slug=e-visa`);
@@ -247,13 +186,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           slug: saved.country,
         });
 
-      if (saved.state)
-        setStateOrCountry({
-          id: saved.state,
-          name: saved.state,
-          slug: saved.state,
-        });
-
       if (saved.passportType)
         setPassportType({
           id: saved.passportType,
@@ -272,7 +204,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   }, [currentPath, setActiveTab])
 
-  if (countryLoading || apostilleLoading) { // your loading condition
+  if (countryLoading) { // your loading condition
     return (
       <div className="max-w-4xl mx-auto p-6 flex flex-row gap-4">
         {[...Array(3)].map((_, i) => (
@@ -343,15 +275,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
             placeholder="Select Country"
             type="flag"
           />
-          <DropdownWrapper
-            value={stateOrCountry}
-            setValue={setStateOrCountry}
-            search={stateSearch}
-            setSearch={setStateSearch}
-            filteredOptions={filteredStates}
-            errors={errors.state}
-            placeholder="Select State"
-          />
+
           <GoButton handleGo={handleGo} />
         </div>
       )}

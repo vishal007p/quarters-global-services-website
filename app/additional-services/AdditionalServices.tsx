@@ -1,6 +1,5 @@
 "use client"
-import { Addon } from '@/app/visa/additional-services/AdditionalServices'
-import BannerLayout from '@/components/Banner/BannerLayout'
+ import BannerLayout from '@/components/Banner/BannerLayout'
 import CommitmentSection from '@/components/CommitmentSection/CommitmentSection'
 import SectionTitle from '@/components/SectionTitle/SectionTitle'
 import AdditionalServiceSkeleton from '@/components/Skeletons/AdditionalServiceSkeleton'
@@ -27,7 +26,7 @@ const AdditionalServices = () => {
     });
   const additional = data?.data?.data
 
-  const toggleSelection = (addon: Addon) => {
+  const toggleSelection = (addon: any) => {
     setSelected((prev) => {
       const id = String(addon._id);
       let updated: string[];
@@ -84,7 +83,7 @@ const AdditionalServices = () => {
               <AdditionalServiceSkeleton />
             </> : <>
               {additional && additional.length > 0 ? (
-                additional.map((service: Addon) => (
+                additional.map((service: any) => (
                   <div
                     key={service._id}
                     className={`border p-5 rounded-lg shadow-sm transition-all duration-300 ${selected.includes(String(service._id))

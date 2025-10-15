@@ -1,6 +1,5 @@
 import React from "react";
 import ServiceButton from "../Buttons/ServiceButton";
-import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { setCategory, startApplication } from "@/store/slices/applicationSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "nextjs-toploader/app";

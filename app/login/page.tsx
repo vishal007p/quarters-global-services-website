@@ -16,7 +16,6 @@ const LoginPage = () => {
           <LoginForm />
         </div>
       </div>
-
       {/* Right Side — Image Section */}
       <div className="w-full md:w-1/2 h-64 md:h-auto bg-[url('/logion.jpg')] bg-cover bg-center" />
     </div>

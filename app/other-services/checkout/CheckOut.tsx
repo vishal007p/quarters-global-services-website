@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { DynamicForm } from "@/components/DynamicForm/DynamicForm";
 import { serviceForms } from "@/lib/serviceForms";
 import { useCreateApplication2Mutation } from "@/services/applicationApi2";
-import { clearPlatformServices, removeFromPlatformServices } from "@/lib/platformServiceStorage";
+import { clearPlatformServices } from "@/lib/platformServiceStorage";
 import { toast } from "sonner";
 import { ApplicationPayload } from "@/lib/Types";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";

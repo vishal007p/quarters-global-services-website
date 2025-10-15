@@ -18,7 +18,7 @@ export default function OrderSummaryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // User input for address
-  const [sender, setSender] = useState({
+  const [sender, ] = useState({
     name: "John Doe",
     company: "JD Services",
     address1: "2427 FM 1092 RD",
@@ -31,7 +31,7 @@ export default function OrderSummaryPage() {
     email: "john.doe@example.com",
   });
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const API_BASE = process.env.NEXT_PUBLIC_QUARTUS_API_URL;
 
   // ✅ Fetch shipping services
   useEffect(() => {

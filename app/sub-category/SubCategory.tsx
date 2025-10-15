@@ -44,7 +44,7 @@ const SubCategory = () => {
 
   return (
     <>
-      <BannerLayout bg="/services/visa.png">
+      <BannerLayout  >
         {/* Overlay Heading */}
         <h4 className="bg-black/40 py-2 px-3 sm:py-3 sm:px-4 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] m-auto rounded-lg text-white font-bold mb-4 text-center 
                  text-[clamp(1rem,1.8vw,2rem)] capitalize">

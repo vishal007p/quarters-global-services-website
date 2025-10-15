@@ -1,6 +1,6 @@
 "use client";
 import EmailVerifyDialog from "@/components/StepForm/EmailVerifyDialog";
-import { clearPlatformServices, getPlatformServices } from "@/lib/platformServiceStorage";
+import { clearPlatformServices } from "@/lib/platformServiceStorage";
 import { useCreateApplicationMutation } from "@/services/applicationApi";
 import { useVerifyEmailMutation } from "@/services/verifyEmail";
 import { setFormData } from "@/store/slices/applicationSlice";
@@ -149,6 +149,7 @@ export default function GetStartedSection() {
         toast.error("Application created but no redirect URL returned");
       }
     } catch (error) {
+      console.log(error)
       toast.error("Failed to create application after verification");
     }
   };

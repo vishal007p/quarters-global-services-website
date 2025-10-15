@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { FaArrowLeft, FaArrowRight, FaQuoteLeft } from "react-icons/fa";
 
 interface Testimonial {
   name: string;
@@ -33,10 +34,10 @@ const defaultTestimonials = [
     image: "https://randomuser.me/api/portraits/women/3.jpg",
     text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
   },
-   {
-    name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
-    text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
+  {
+    name: "Guy Hawkins",
+    image: "https://randomuser.me/api/portraits/men/4.jpg",
+    text: "A seamless experience from start to finish. Clear communication and fast turnaround times.",
   },
 ];
 
@@ -46,53 +47,94 @@ const TestimonialSlider: React.FC<TestimonialSliderProps> = ({
   const [currentSlide, setCurrentSlide] = useState(1);
 
   return (
-    <div className="max-w-7xl mx-auto px-10 py-12 h-[400px] relative">
+    <div className="relative max-w-8xl mx-auto p-12">
       <Swiper
-        modules={[Navigation, Pagination]}  
+        modules={[Navigation]}
         spaceBetween={30}
         slidesPerView={1}
         breakpoints={{
           768: { slidesPerView: 2 },
           1024: { slidesPerView: 3 },
         }}
-        pagination={{ clickable: true }}
         navigation={{
           nextEl: ".swiper-button-next-custom",
           prevEl: ".swiper-button-prev-custom",
         }}
+        pagination={false}
         onSlideChange={(swiper) => setCurrentSlide(swiper.realIndex + 1)}
-
-
+        className="pb-12 h-[350px] "
       >
         {testimonials.map((item, index) => (
           <SwiperSlide key={index}>
-            <div className="bg-white shadow-md rounded-xl p-6 h-full flex flex-col justify-between text-center">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="relative bg-gradient-to-b h-[300px] from-yellow-50 to-white shadow-xl rounded-2xl p-8   flex flex-col justify-between text-center hover:shadow-2xl border border-yellow-100"
+            >
+              <FaQuoteLeft className="absolute top-5 left-5 text-[#E7000B] text-2xl opacity-50" />
               <div className="flex justify-center mb-4">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 rounded-full border-4 border-yellow-300"
-                  width={150}
-                  height={150}
-                />
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="rounded-full border-4 text-[#E7000B]  object-cover shadow-md"
+                  />
+                </div>
               </div>
-              <h4 className="font-semibold text-lg">{item.name}</h4>
-              <p className="text-sm text-gray-600 mt-2">{item.text}</p>
-            </div>
+              <h4 className="font-semibold text-lg text-gray-800 mt-2">
+                {item.name}
+              </h4>
+              <p className="text-gray-600 text-sm mt-3 leading-relaxed">
+                {item.text}
+              </p>
+              <div className="mt-4 flex justify-center">
+                <span className="inline-block w-10 h-1 rounded-full text-[#E7000B] "></span>
+              </div>
+            </motion.div>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* Bottom navigation + slide number */}
-      <div className="flex justify-center items-center mt-6 space-x-4">
-        <button className="swiper-button-prev-custom bg-gray-200 p-2 rounded-full hover:bg-gray-300">
-          &#8592;
+      {/* --- Custom Navigation & Circular Indicator --- */}
+      <div className="flex justify-center items-center gap-6 mt-4">
+        <button  title="ss" className="swiper-button-prev-custom bg-[#E7000B] text-white p-3 rounded-full hover:bg-red-500 shadow-md transition">
+          <FaArrowLeft className="w-5 h-5" />
         </button>
-        <span className="font-semibold">
-          {currentSlide}/{testimonials.length}
-        </span>
-        <button className="swiper-button-next-custom bg-gray-200 p-2 rounded-full hover:bg-gray-300">
-          &#8594;
+
+        {/* Circular Slide Indicator */}
+        <div className="relative w-10 h-10 flex items-center justify-center">
+          <svg className="absolute inset-0 w-full h-full transform -rotate-90">
+            <circle
+              cx="20"
+              cy="20"
+              r="18"
+              stroke="#E7000B"
+              strokeWidth="4"
+              fill="none"
+              opacity="0.3"
+            />
+            <motion.circle
+              cx="20"
+              cy="20"
+              r="18"
+              stroke="#E7000B"
+              strokeWidth="4"
+              fill="none"
+              strokeDasharray="113"
+              strokeDashoffset={
+                113 - (113 / testimonials.length) * currentSlide
+              }
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            />
+          </svg>
+          <span className="text-sm font-semibold text-gray-700">
+            {currentSlide}/{testimonials.length}
+          </span>
+        </div>
+
+        <button title="ss" className="swiper-button-next-custom bg-[#E7000B] text-white p-3 rounded-full hover:bg-red-500 shadow-md transition">
+          <FaArrowRight className="w-5 h-5" />
         </button>
       </div>
     </div>

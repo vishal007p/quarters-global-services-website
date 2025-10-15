@@ -1,10 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 
@@ -23,9 +29,10 @@ export default function CurrencyAndTime() {
   const [converted, setConverted] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base = process.env.NEXT_PUBLIC_QUARTUS_API_URL;
 
-  const handleConvert = async () => {
+  // ✅ FIX: wrap in useCallback so it doesn’t change on every render
+  const handleConvert = useCallback(async () => {
     if (!amount || isNaN(Number(amount))) return;
     setLoading(true);
     try {
@@ -41,11 +48,12 @@ export default function CurrencyAndTime() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [amount, fromCountry, toCountry, base]); // ✅ proper deps
 
+  // ✅ Effect will only re-run when amount/from/to actually change
   useEffect(() => {
     if (amount) handleConvert();
-  }, [amount, fromCountry, toCountry]);
+  }, [amount, fromCountry, toCountry, handleConvert]);
 
   // Time logic
   const [time, setTime] = useState(new Date());
@@ -55,12 +63,21 @@ export default function CurrencyAndTime() {
   }, []);
 
   const chinaTime = new Date(time.toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
-  const chinaHours = chinaTime.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  const chinaDate = chinaTime.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  const chinaHours = chinaTime.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const chinaDate = chinaTime.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   const week = `Week ${Math.ceil(chinaTime.getDate() / 7) + chinaTime.getMonth() * 4}`;
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 max-w-5xl m-auto mt-10">  
+    <div className="grid md:grid-cols-2 gap-6 max-w-5xl m-auto mt-10">
       {/* Currency Exchange Card */}
       <Card className="shadow-md border border-blue-100">
         <CardHeader className="bg-blue-900 text-white rounded-t-lg py-2">
@@ -118,7 +135,9 @@ export default function CurrencyAndTime() {
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 text-center bg-blue-50 text-blue-800 rounded-lg p-3 font-medium shadow-sm"
             >
-              {loading ? "Converting..." : `${amount} ${fromCountry} = ${converted} ${toCountry}`}
+              {loading
+                ? "Converting..."
+                : `${amount} ${fromCountry} = ${converted} ${toCountry}`}
             </motion.div>
           )}
         </CardContent>
@@ -141,7 +160,9 @@ export default function CurrencyAndTime() {
             {chinaHours} <span className="text-sm text-gray-600 align-middle">GMT+8</span>
           </motion.div>
 
-          <p className="mt-3 text-gray-700">{chinaDate}, {week}</p>
+          <p className="mt-3 text-gray-700">
+            {chinaDate}, {week}
+          </p>
           <p className="text-sm text-gray-500 mt-1">Chinese Standard Time (CST)</p>
         </CardContent>
       </Card>

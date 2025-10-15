@@ -101,7 +101,7 @@ export default function WeatherStripAxiosDirect({
   const [loading, setLoading] = useState(!dummy);
   const [err, setErr] = useState<string | null>(null);
 
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const base = process.env.NEXT_PUBLIC_QUARTUS_API_URL;
   const url = useMemo(() => `${base?.replace(/\/$/, "")}/common/get-wather-forecast`, [base]);
 
   useEffect(() => {

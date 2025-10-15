@@ -14,13 +14,9 @@ const steps = [
 
 const MultiStepForm2 = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<any>({});
-  console.log(formData, "formData")
-
-  const next = (data: any) => {
-    setFormData((prev: any) => ({ ...prev, ...data }));
-    setStep((s) => s + 1);
-  };
+  const [formData, ] = useState<any>({});
+ 
+   
 
   const handleStep2Submit = async () => {
     try {
@@ -117,7 +113,7 @@ const MultiStepForm2 = () => {
 
           {/* Form Steps */}
           <div className={`${step === 3 ? "w-full" : "w-full"}`}>
-            {step === 1 && <Step1 onNext={next} />}
+            {step === 1 && <Step1 />}
             {step === 2 && <Step2 onNext={handleStep2Submit} onBack={back} />}
             {step === 3 && <Step3 />}
           </div>
