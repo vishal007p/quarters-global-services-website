@@ -6,6 +6,7 @@ import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
+import WeatherStrip from "@/components/WeatherStrip";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
 import { useSearchParams } from "next/navigation";
@@ -65,9 +66,9 @@ const Category = () => {
                                     <VisaServiceCard
                                         id={service._id}
                                         save={save}
-                                         link={service.subCategories && service.subCategories.length > 1
-                                                ? `/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
-                                                : `/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
+                                        link={service.subCategories && service.subCategories.length > 1
+                                            ? `/sub-category?toCountrySlug=${country}&platformServiceCategorySlug=${platformServiceCategorySlug}&subCategorySlug=${service.slug}`
+                                            : `/plan-selection?toCountrySlug=${country}&Slug=${service.slug}`  // Updated line
                                         }
                                         icon={<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="74" height="74" rx="16" fill="#96C6FF" />
@@ -92,6 +93,7 @@ const Category = () => {
                 </div>
             </div>
             <CommitmentSection />
+            <WeatherStrip countryCode="IN" className="max-w-6xl mx-auto"  />
             <div className="max-w-7xl mx-auto px-10 py-12  ">
                 <SectionTitle
                     subtitle="Our Testimonials"

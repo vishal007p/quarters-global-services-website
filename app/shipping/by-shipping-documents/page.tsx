@@ -315,11 +315,11 @@ export default function OrderSummaryPage() {
               <>
                 <li className="flex justify-between text-blue-800">
                   <span>Base Shipping Cost</span>
-                  <span>${Number(quote.baseShippingCost || 0).toFixed(2)}</span>
+                  <span>${Number(quote?.baseShippingCost || 0).toFixed(2)}</span>
                 </li>
                 <li className="flex justify-between text-blue-800">
                   <span>Application Charge</span>
-                  <span>${Number(quote.applicationCharge || 0).toFixed(2)}</span>
+                  <span>${Number(quote?.applicationCharge || 0).toFixed(2)}</span>
                 </li>
               </>
             )}
@@ -331,7 +331,7 @@ export default function OrderSummaryPage() {
             <span>Total</span>
             <span>
               $
-              { quote.totalAmount}
+              { quote?.totalAmount}
             </span>
           </div>
         </div>
