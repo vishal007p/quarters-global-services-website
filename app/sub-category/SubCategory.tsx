@@ -2,11 +2,13 @@
 import BannerLayout from "@/components/Banner/BannerLayout";
 import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import CurrencyAndTime from "@/components/CurrencyAndTime";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
 import TestimonialSlider from "@/components/TestimonialSlider ";
+import WeatherStripAxiosDirect from "@/components/WeatherStrip";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import { savePlatformServiceStep } from "@/lib/platformServiceStorage";
 import { useGetPlatformServiceSubCategoriesQuery } from "@/services/platformSubCategorysApi";
@@ -115,7 +117,8 @@ const SubCategory = () => {
       <WhyChoose />
 
       <CommitmentSection />
-
+      <WeatherStripAxiosDirect dummy={true} className="max-w-5xl mx-auto mt-10" />
+      <CurrencyAndTime />
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"

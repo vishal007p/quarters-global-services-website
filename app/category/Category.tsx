@@ -2,6 +2,7 @@
 import BannerLayout from "@/components/Banner/BannerLayout";
 import VisaServiceCard from "@/components/Cards/VisaServiceCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import CurrencyAndTime from "@/components/CurrencyAndTime";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import VisaServiceCardSkeletons from "@/components/Skeletons/VisaServiceCardSkeletons";
@@ -93,7 +94,9 @@ const Category = () => {
                 </div>
             </div>
             <CommitmentSection />
-            <WeatherStrip countryCode="IN" className="max-w-6xl mx-auto"  />
+            <WeatherStrip dummy={true} className="max-w-5xl mx-auto mt-10" />
+            <CurrencyAndTime />
+
             <div className="max-w-7xl mx-auto px-10 py-12  ">
                 <SectionTitle
                     subtitle="Our Testimonials"
