@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { Menu, FileText, X, LogOut } from "lucide-react";
+import { Menu, FileText, X, LogOut, Users } from "lucide-react";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie"; // ✅ add this
@@ -16,7 +16,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
 
   const topNavItems = [
-    { name: "Applications", icon: FileText, path: "/dashboard/applications" },
+    { name: "Applications", icon: Users, path: "/dashboard/applications" },
+    { name: "Customers", icon: FileText, path: "/dashboard/customers" },
   ];
 
   const sessionCookieName =
