@@ -16,7 +16,8 @@ type Service = {
     iconUrl: string;
     slug: string;
     buttonText?: string; // optional
-    platformServiceId:string
+    platformServiceId:string;
+    description:string;
 };
 
 const OtherService = () => {
