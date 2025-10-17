@@ -9,7 +9,7 @@ const page = async ({
 }: {
   searchParams: Promise<{ page?: string; applicationSources?: ApplicationSource }>;
 }) => {
-  const page = (await searchParams).page || '1';
+  const page = (await searchParams).page || '3';
   const applicationSources = (await searchParams).applicationSources || 'AdminPortal';
 
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { Menu, Home, FileText,   X } from "lucide-react";
+import { Menu, FileText, X, LogOut } from "lucide-react";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -13,8 +13,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const navItems = [
-    { name: "My Profile", icon: Home, path: "/dashboard" },
+
+  const topNavItems = [
     { name: "Applications", icon: FileText, path: "/dashboard/applications" },
   ];
 
@@ -23,14 +23,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Sidebar */}
       <div
         className={clsx(
-          "flex flex-col bg-white border-r transition-all duration-300 ease-in-out",
-          // default full width on desktop, toggle on mobile
+          "flex flex-col bg-white border-r transition-all duration-300 ease-in-out shadow-md",
           open ? "w-64" : "w-0 lg:w-64"
         )}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h1 className="font-bold text-red-600">Dashboard</h1>
+          <h1 className="font-bold text-red-600 text-lg">Dashboard</h1>
           <button
             className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded"
             onClick={() => setOpen(false)}
@@ -39,39 +38,55 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </button>
         </div>
 
-         {/* Sidebar Menu */}
-        <nav className="flex-1 mt-2 overflow-y-auto px-4">
-          {navItems.map((item) => {
-            const isActive = pathname === item.path;
-            return (
-              <button
-                key={item.name}
-                onClick={() => {
-                  router.push(item.path);
-                  setOpen(false);
-                }}
-                className={clsx(
-                  "flex items-center w-full px-4 py-2 text-left transition rounded-sm",
-                  isActive
-                    ? "bg-red-100 text-red-600 font-normal"
-                    : "text-gray-600 hover:bg-red-50 hover:text-red-600"
-                )}
-              >
-                <item.icon
-                  className={clsx("h-5 w-5", isActive ? "text-red-600" : "")}
-                />
-                <span className="ml-3">{item.name}</span>
-              </button>
-            );
-          })}
-        </nav>
+        {/* Sidebar Menu */}
+        <div className="flex flex-col justify-between flex-1 overflow-y-auto">
+          {/* Top Nav Items */}
+          <nav className="mt-2 px-4">
+            {topNavItems.map((item) => {
+              const isActive = pathname === item.path;
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    router.push(item.path);
+                    setOpen(false);
+                  }}
+                  className={clsx(
+                    "flex items-center w-full px-4 py-2 text-left transition rounded-md",
+                    isActive
+                      ? "bg-red-100 text-red-600 font-medium"
+                      : "text-gray-600 hover:bg-red-50 hover:text-red-600"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="ml-3">{item.name}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Bottom Logout Button */}
+          <div className="mt-auto mb-4 px-4 border-t pt-4">
+            <button
+              onClick={() => {
+                // 🔹 You can clear tokens or session data here
+                console.log("Logging out...");
+                router.push("/login"); // redirect to login page
+                setOpen(false);
+              }}
+              className="flex items-center justify-center w-full px-4 py-2 bg-red-600 text-white font-medium rounded-md shadow-sm hover:bg-red-700 transition-all duration-200"
+            >
+              <LogOut className="h-5 w-5 mr-2" />
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Navbar */}
         <header className="flex items-center justify-between px-6 h-14 bg-white border-b shadow-sm">
-          {/* Toggle button (mobile only) */}
           <button
             className="lg:hidden p-2 text-gray-600"
             onClick={() => setOpen(!open)}
@@ -84,7 +99,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </h2>
 
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">John Doe</span>
+            <span className="text-sm text-gray-700 font-medium">John Doe</span>
             <img
               src="https://i.pravatar.cc/40"
               alt="user avatar"
@@ -94,7 +109,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 bg-white">{children}</main>
+        <main className="flex-1 p-6 bg-white overflow-y-auto">
+  <div className="w-full h-full overflow-x-auto overflow-y-hidden scrollbar-hide">
+    {children}
+  </div>
+</main>
+
       </div>
     </div>
   );

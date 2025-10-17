@@ -106,7 +106,7 @@ export default function WeatherStripAxiosDirect({
 
   useEffect(() => {
     if (dummy) return; // use dummy data directly
-    const ctrl = new AbortController();
+     const ctrl = new AbortController();
     (async () => {
       try {
         setLoading(true);

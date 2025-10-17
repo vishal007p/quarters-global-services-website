@@ -168,7 +168,7 @@ const OtherService = () => {
                                 >
                                     <ServiceSection
                                         title={service.name}
-                                        description={service.displayName}
+                                        description={service.description}
                                         buttonText="Learn More"
                                         imageSrc={service.iconUrl}
                                         imagePosition={index % 2 === 0 ? "left" : "right"}

@@ -6,8 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { ExternalLink, Plus } from 'lucide-react';
 import Link from 'next/link';
-import DeleteConfirm from '@/components/common/DeleteConfirm';
-import { toast } from 'sonner';
+ import { toast } from 'sonner';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CommonTable from '@/components/common/CommonTable';
@@ -87,22 +86,13 @@ const ApplicationsPage = ({
             className: 'text-center',
             render: (row: any) => (
                 <div className="flex items-center justify-center gap-2">
-                    <Link href={`/admin/applications/edit?application=${row.id}`}>
+                    <Link href={`/dashboard/applications/edit?application=${row.id}`}>
                         <Icon name="edit" />
                     </Link>
-                    <Link href={`/admin/applications/edit?application=${row.id}&isView=1`}>
+                    <Link href={`/dashboard/applications/edit?application=${row.id}&isView=1`}>
                         <Icon name="view" />
                     </Link>
-                    <DeleteConfirm
-                        title="Delete Application"
-                        description="Are you sure you want to delete this application? This action cannot be undone."
-                        confirmLabel="Delete"
-                        onConfirm={() => handleDeleteApplication(row.id)}
-                    >
-                        <button title='ss' type="button" className="cursor-pointer hover:opacity-70 transition-opacity">
-                            <Icon name="delete" />
-                        </button>
-                    </DeleteConfirm>
+                    
                 </div>
             ),
         },
@@ -128,25 +118,9 @@ const ApplicationsPage = ({
                 {/* Tabs */}
                 <Tabs defaultValue={selectedApplicationSources || applicationSources[0]}>
                     <TabsList className="bg-primary-300 text-black-100 p-0">
+                    
                         <TabsTrigger
-                            asChild
-                            value={applicationSources[0]}
-                            className="data-[state=active]:bg-black data-[state=active]:text-white"
-                        >
-                            <Link href={`/dashboard/applications?applicationSources=${applicationSources[0]}`}>
-                                Walk-in
-                            </Link>
-                        </TabsTrigger>
-                        <TabsTrigger
-                            asChild
-                            value={applicationSources[1]}
-                            className="data-[state=active]:bg-black data-[state=active]:text-white"
-                        >
-                            <Link href={`/dashboard/applications?applicationSources=${applicationSources[1]}`}>
-                                Agency
-                            </Link>
-                        </TabsTrigger>
-                        <TabsTrigger
+                        
                             asChild
                             value={applicationSources[2]}
                             className="data-[state=active]:bg-black data-[state=active]:text-white"
@@ -172,12 +146,7 @@ const ApplicationsPage = ({
                         <PopoverContent className="max-w-sm">Filter options here</PopoverContent>
                     </Popover>
 
-                    <Button asChild>
-                        <Link href="/admin/applications/create">
-                            <Plus className="mr-2 h-4 w-4" />
-                            New Walking Application
-                        </Link>
-                    </Button>
+                   
                 </div>
             </div>
 
