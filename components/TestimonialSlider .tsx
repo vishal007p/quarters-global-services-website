@@ -21,22 +21,22 @@ interface TestimonialSliderProps {
 const defaultTestimonials = [
   {
     name: "Devon Lane",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
+    image: "/p1.jpg",
     text: "Excellent service for OCI application. Their team is responsive, and the portal makes everything easy and secure.",
   },
   {
     name: "Kathryn Murphy",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
+    image: "/p2.jpg",
     text: "The process was super smooth and fast. I applied for my US tourist visa, uploaded my documents, and tracked everything online. Highly recommend Quartus!",
   },
   {
     name: "Annette Black",
-    image: "https://randomuser.me/api/portraits/women/3.jpg",
+    image: "/p3.jpg",
     text: "Needed my documents apostilled quickly—Quartus handled it end-to-end with real-time updates. Very reliable.",
   },
   {
     name: "Guy Hawkins",
-    image: "https://randomuser.me/api/portraits/men/4.jpg",
+    image: "/p4.jpg",
     text: "A seamless experience from start to finish. Clear communication and fast turnaround times.",
   },
 ];

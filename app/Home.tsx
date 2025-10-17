@@ -338,7 +338,7 @@ export default function Home() {
                   <Image
                     width={32}
                     height={32}
-                    src={post.authorImage}
+                    src={"/p4.jpg"}
                     alt={post.author}
                     className="w-8 h-8 rounded-full"
                   />
