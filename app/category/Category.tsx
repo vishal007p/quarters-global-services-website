@@ -43,9 +43,9 @@ const Category = () => {
                     className="font-bold mb-6 text-center text-white 
                text-[clamp(1.5rem,2.5vw,3rem)] leading-snug capitalize"
                 >
-                    We help U.S. citizens apply for tourist, business, student, and
+                   ` We help {country} citizens apply for tourist, business, student, and
                     <br className="hidden sm:inline" />
-                    work visas—accurately, securely, and on time.
+                    work visas—accurately, securely, and on time.``
                 </h1>
             </BannerLayout>
 

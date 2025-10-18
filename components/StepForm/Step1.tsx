@@ -88,7 +88,7 @@ export default function Step1() {
     const [verifyEmail] = useVerifyEmailMutation();
     const [emailOtpVerify, setEmailVerify] = useState(false)
     const [payload, setPayload] = useState<ApplicationPayload>()
-console.log(payload,"payload")
+    console.log(payload, "payload")
     const platformServices = getPlatformServices() || [];
 
 
@@ -226,22 +226,35 @@ console.log(payload,"payload")
                     email: values.email
                 }).unwrap();
 
-                if (res?.message === "Email is already verified.") {
-                    const response = await createApplication(payload).unwrap();
-                    if (response?.status && response.data?.redirectURL) {
-                        // clearPlatformServices();
-                        // localStorage.removeItem("applications");
-                        window.location.href = response.data.redirectURL;
-                    } else {
-                        toast.error("Application created but no redirect URL returned");
+                // if (res?.message === "Email is already verified.") {
+                //     const response = await createApplication(payload).unwrap();
+                //     if (response?.status && response.data?.redirectURL) {
+                //         // clearPlatformServices();
+                //         // localStorage.removeItem("applications");
+                //         window.location.href = response.data.redirectURL;
+                //     } else {
+                //         toast.error("Application created but no redirect URL returned");
+                //     }
+                // } else {
+                //     if (res?.message === "We have sent OTP to your email. Please check your inbox."
+                //     ) {
+                //         setEmailVerify(true);
+                //     }
+                //     setEmailVerify(false);
+                // }
+
+                if (res.status) {
+                    if (res?.message === "Email is already verified.") {
+                        const response = await createApplication(payload).unwrap();
+                        if (response?.status && response.data?.redirectURL) {
+                            // clearPlatformServices();
+                            // localStorage.removeItem("applications");
+                            window.location.href = response.data.redirectURL;
+                        } else {
+                            setEmailVerify(true);
+                        }
+
                     }
-                } else {
-                    console.error(res?.message || "Email verification failed");
-                    if (res?.message === "We have sent OTP to your email. Please check your inbox."
-                    ) {
-                        setEmailVerify(true);
-                    }
-                    setEmailVerify(false);
                 }
             } catch (err: any) {
                 const message =
@@ -250,28 +263,12 @@ console.log(payload,"payload")
                     "Something went wrong while verifying email.";
 
                 // Show toast message
-                toast.error(message);
-
-                // ✅ If backend indicates OTP sent, open verification dialog
-                if (
-                    message === "We have sent OTP to your email. Please check your inbox." ||
-                    message.toLowerCase().includes("otp")
-                ) {
-                    setEmailVerify(true);
-                } else {
-                    setEmailVerify(false);
-                }
+               toast.error(message);               
             }
-
 
         } catch (error: any) {
-
             toast.error(error?.data?.message || "Something went wrong while creating application");
-            if ("We have sent OTP to your email. Please check your inbox." === error?.data?.message) {
-                setEmailVerify(true)
-
-            }
-
+        
         }
     };
 

@@ -6,6 +6,7 @@ import { Footer } from "@/layout/Footer";
 import NextTopLoader from 'nextjs-toploader';
 import ReduxProvider from "@/providers/ReduxProvider";
 import { Toaster } from "@/components/ui/sonner";
+import BasicLayout from "@/layout/BasicLaypout";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -29,15 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-         <head>
+      <head>
         <link rel="icon" href="/Fevicon.svg" type="image/svg+xml" />
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <ReduxProvider>
-            <Header />
-          {children}
-              <Footer />
-            <Toaster />
+          <BasicLayout>
+            {children}
+          </BasicLayout>
+
+          <Toaster />
         </ReduxProvider>
         <NextTopLoader />
       </body>
