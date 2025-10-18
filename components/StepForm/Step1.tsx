@@ -179,7 +179,7 @@ export default function Step1() {
                             const merged = (platformServices || []).reduce((acc: any, s: any) => {
                                 // merge all non-empty values
                                 for (const [key, value] of Object.entries(s)) {
-                                    if (Array.isArray(value) && value.length > 0) {
+                                    if (Array.isArray(value) && value.length > 0) {fasdZX
                                         // merge arrays safely
                                         acc[key] = [...(acc[key] || []), ...value];
                                     } else if (value !== "" && value !== null && value !== undefined) {
