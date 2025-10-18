@@ -88,9 +88,9 @@ export default function Step1() {
     const [verifyEmail] = useVerifyEmailMutation();
     const [emailOtpVerify, setEmailVerify] = useState(false)
     const [payload, setPayload] = useState<ApplicationPayload>()
-    console.log(payload, "payload")
-
+console.log(payload,"payload")
     const platformServices = getPlatformServices() || [];
+
 
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
@@ -173,14 +173,11 @@ export default function Step1() {
 
                         fromCountryId: "68d839b82ea0a4e770b07daf",
                         toCountryId: "68d839b82ea0a4e770b07daf",
-
-                        // ✅ Platform services (clean mapping)
                         platformServices: (() => {
                             const merged = (platformServices || []).reduce((acc: any, s: any) => {
-                                // merge all non-empty values
                                 for (const [key, value] of Object.entries(s)) {
-                                    if (Array.isArray(value) && value.length > 0) {
-                                        // merge arrays safely
+                                    if (Array.isArray(value)) {
+                                        // merge arrays safely, even if empty
                                         acc[key] = [...(acc[key] || []), ...value];
                                     } else if (value !== "" && value !== null && value !== undefined) {
                                         // keep last non-empty string/number/boolean
@@ -204,7 +201,6 @@ export default function Step1() {
                             // return as array (to keep the same structure)
                             return [merged];
                         })(),
-
 
                         serviceFields: {
                             serviceType: "CourierDelivery",
@@ -280,7 +276,7 @@ export default function Step1() {
     };
 
     const handleVerify = async () => {
-         
+
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
 

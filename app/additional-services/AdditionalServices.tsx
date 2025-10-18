@@ -7,8 +7,10 @@ import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
 import { savePlatformServiceStep } from '@/lib/platformServiceStorage'
 import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
-import { useRouter, useSearchParams } from 'next/navigation'
+import {   useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
+import { useRouter } from "nextjs-toploader/app";
+
 
 const AdditionalServices = () => {
 
@@ -44,7 +46,7 @@ const AdditionalServices = () => {
         // 💾 Select → store with full info
         updated = [...prev, id];
         savePlatformServiceStep({
-        additionService: true,
+           additionService: true,
           additionService_price: Number(addon.price),
           additionService_name: addon.name,
           currency: addon.currency || "USD",
@@ -57,6 +59,7 @@ const AdditionalServices = () => {
   const handleContinue = () => {
       savePlatformServiceStep({
           platformServiceCategoryPackageAddonsId: selected||[],
+     
         });
     router.push(`/checkout`);
   };

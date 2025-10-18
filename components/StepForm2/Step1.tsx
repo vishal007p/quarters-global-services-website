@@ -108,9 +108,9 @@ const mapApiToForm = (app: Application): Step1Data2 => ({
   },
 });
 
- 
 
-export default function Step1( ) {
+
+export default function Step1() {
   const [createApplication] =
     useCreateApplicationMutation();
   const dispatch = useDispatch();
@@ -176,19 +176,34 @@ export default function Step1( ) {
             toCountryId: "68d839b82ea0a4e770b07daf",
 
             // 🔹 Platform Services
-            platformServices: (platformServices || [])
-              .map((s: any) => ({
-                platformServiceId:
-                  s.platformServiceId && s.platformServiceId.trim() !== ""
-                    ? s.platformServiceId
-                    : "68cc5e9562e517276caa119e",
-                platformServiceCategoryId:
-                  s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
-                platformServiceCategoryPackageAddonsId:
-                  s.platformServiceCategoryPackageAddonsId || s.addons || [],
-                platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
-              }))
-              .filter((item: any) => !!item.platformServiceCategoryPackageId),
+            platformServices: (() => {
+              const merged = (platformServices || []).reduce((acc: any, s: any) => {
+                for (const [key, value] of Object.entries(s)) {
+                  if (Array.isArray(value)) {
+                    // merge arrays safely, even if empty
+                    acc[key] = [...(acc[key] || []), ...value];
+                  } else if (value !== "" && value !== null && value !== undefined) {
+                    // keep last non-empty string/number/boolean
+                    acc[key] = value;
+                  }
+                }
+                return acc;
+              }, {
+                platformServiceId: "",
+                platformServiceCategoryId: "",
+                platformServiceCategoryPackageId: "",
+                platformServiceCategoryPackageAddonsId: [],
+                price: 0,
+                currency: "USD",
+                Price_name: "",
+                additionService: false,
+                additionService_price: 0,
+                additionService_name: ""
+              });
+
+              // return as array (to keep the same structure)
+              return [merged];
+            })(),
 
             // 🔹 Service Fields
             serviceFields: {
