@@ -1,9 +1,10 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { Menu, FileText, X, LogOut } from "lucide-react";
+import { Menu, FileText, X, LogOut, Users } from "lucide-react";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie"; // ✅ add this
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -15,8 +16,31 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
 
   const topNavItems = [
-    { name: "Applications", icon: FileText, path: "/dashboard/applications" },
+    { name: "Applications", icon: Users, path: "/dashboard/applications" },
+    { name: "Customers", icon: FileText, path: "/dashboard/customers" },
   ];
+
+  const sessionCookieName =
+    process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME || "QUATRUS_ADMIN_PANEL_SESSION";
+
+  const handleLogout = () => {
+    alert("ss")
+    try {
+      Cookies.remove(sessionCookieName);
+
+      // Optionally clear localStorage/sessionStorage
+      localStorage.clear();
+      sessionStorage.clear();
+
+      console.log("Logged out, cookie removed:", sessionCookieName);
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setOpen(false);
+    }
+  };
 
   return (
     <div className="flex h-screen w-full bg-gray-100">
@@ -31,6 +55,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex items-center justify-between p-4 border-b">
           <h1 className="font-bold text-red-600 text-lg">Dashboard</h1>
           <button
+            title="ss"
             className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded"
             onClick={() => setOpen(false)}
           >
@@ -40,7 +65,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Sidebar Menu */}
         <div className="flex flex-col justify-between flex-1 overflow-y-auto">
-          {/* Top Nav Items */}
           <nav className="mt-2 px-4">
             {topNavItems.map((item) => {
               const isActive = pathname === item.path;
@@ -68,12 +92,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Bottom Logout Button */}
           <div className="mt-auto mb-4 px-4 border-t pt-4">
             <button
-              onClick={() => {
-                // 🔹 You can clear tokens or session data here
-                console.log("Logging out...");
-                router.push("/login"); // redirect to login page
-                setOpen(false);
-              }}
+              onClick={handleLogout}
               className="flex items-center justify-center w-full px-4 py-2 bg-red-600 text-white font-medium rounded-md shadow-sm hover:bg-red-700 transition-all duration-200"
             >
               <LogOut className="h-5 w-5 mr-2" />
@@ -83,11 +102,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navbar */}
         <header className="flex items-center justify-between px-6 h-14 bg-white border-b shadow-sm">
           <button
+            title="aa"
             className="lg:hidden p-2 text-gray-600"
             onClick={() => setOpen(!open)}
           >
@@ -108,13 +127,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 p-6 bg-white overflow-y-auto">
-  <div className="w-full h-full overflow-x-auto overflow-y-hidden scrollbar-hide">
-    {children}
-  </div>
-</main>
-
+          <div className="w-full h-full overflow-x-auto overflow-y-hidden ">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );
