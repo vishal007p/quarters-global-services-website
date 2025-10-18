@@ -177,33 +177,33 @@ export default function Step1() {
 
             // 🔹 Platform Services
             platformServices: (() => {
-              const merged = (platformServices || []).reduce((acc: any, s: any) => {
-                for (const [key, value] of Object.entries(s)) {
-                  if (Array.isArray(value)) {
-                    // merge arrays safely, even if empty
-                    acc[key] = [...(acc[key] || []), ...value];
-                  } else if (value !== "" && value !== null && value !== undefined) {
-                    // keep last non-empty string/number/boolean
-                    acc[key] = value;
-                  }
-                }
-                return acc;
-              }, {
-                platformServiceId: "",
-                platformServiceCategoryId: "",
-                platformServiceCategoryPackageId: "",
-                platformServiceCategoryPackageAddonsId: [],
-                price: 0,
-                currency: "USD",
-                Price_name: "",
-                additionService: false,
-                additionService_price: 0,
-                additionService_name: ""
-              });
+                            const merged = (platformServices || []).reduce((acc: any, s: any) => {
+                                for (const [key, value] of Object.entries(s)) {
+                                    if (Array.isArray(value)) {
+                                        // merge arrays safely, even if empty
+                                        acc[key] = [...(acc[key] || []), ...value];
+                                    } else if (value !== "" && value !== null && value !== undefined) {
+                                        // keep last non-empty string/number/boolean
+                                        acc[key] = value;
+                                    }
+                                }
+                                return acc;
+                            }, {
+                                platformServiceId: "",
+                                platformServiceCategoryId: "",
+                                platformServiceCategoryPackageId: "",
+                                platformServiceCategoryPackageAddonsId: [],
+                                price: 0,
+                                currency: "USD",
+                                Price_name: "",
+                                additionService: false,
+                                additionService_price: 0,
+                                additionService_name: ""
+                            });
 
-              // return as array (to keep the same structure)
-              return [merged];
-            })(),
+                            // return as array (to keep the same structure)
+                            return [merged];
+                        })(),
 
             // 🔹 Service Fields
             serviceFields: {

@@ -7,10 +7,8 @@ import TestimonialSlider from '@/components/TestimonialSlider '
 import { Checkbox } from '@/components/ui/checkbox'
 import { savePlatformServiceStep } from '@/lib/platformServiceStorage'
 import { useGetPlatformServiceCategoryPackageAddonQuery } from '@/services/platformServiceAddonApi'
-import {   useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
-import { useRouter } from "nextjs-toploader/app";
-
 
 const AdditionalServices = () => {
 
@@ -38,7 +36,8 @@ const AdditionalServices = () => {
         updated = prev.filter((item) => item !== id);
         savePlatformServiceStep(
           {
-             additionService_name: addon.name,
+            platformServiceCategoryPackageAddonsId:[ addon._id],
+            additionService_name: addon.name,
           },
           true // ✅ important — tells function to remove
         );
@@ -46,7 +45,8 @@ const AdditionalServices = () => {
         // 💾 Select → store with full info
         updated = [...prev, id];
         savePlatformServiceStep({
-           additionService: true,
+          platformServiceCategoryPackageAddonsId: [addon._id],
+          additionService: true,
           additionService_price: Number(addon.price),
           additionService_name: addon.name,
           currency: addon.currency || "USD",
@@ -57,10 +57,7 @@ const AdditionalServices = () => {
     });
   };
   const handleContinue = () => {
-      savePlatformServiceStep({
-          platformServiceCategoryPackageAddonsId: selected||[],
-     
-        });
+ 
     router.push(`/checkout`);
   };
   return (

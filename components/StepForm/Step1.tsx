@@ -226,35 +226,20 @@ export default function Step1() {
                     email: values.email
                 }).unwrap();
 
-                // if (res?.message === "Email is already verified.") {
-                //     const response = await createApplication(payload).unwrap();
-                //     if (response?.status && response.data?.redirectURL) {
-                //         // clearPlatformServices();
-                //         // localStorage.removeItem("applications");
-                //         window.location.href = response.data.redirectURL;
-                //     } else {
-                //         toast.error("Application created but no redirect URL returned");
-                //     }
-                // } else {
-                //     if (res?.message === "We have sent OTP to your email. Please check your inbox."
-                //     ) {
-                //         setEmailVerify(true);
-                //     }
-                //     setEmailVerify(false);
-                // }
+                console.log(res,"ressss")
 
                 if (res.status) {
-                    if (res?.message === "Email is already verified.") {
+                     if (res?.message === "Email is already verified.") {
                         const response = await createApplication(payload).unwrap();
                         if (response?.status && response.data?.redirectURL) {
                             // clearPlatformServices();
                             // localStorage.removeItem("applications");
                             window.location.href = response.data.redirectURL;
-                        } else {
+                        } 
+
+                    }else {
                             setEmailVerify(true);
                         }
-
-                    }
                 }
             } catch (err: any) {
                 const message =
@@ -273,7 +258,6 @@ export default function Step1() {
     };
 
     const handleVerify = async () => {
-
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
 

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { clearPlatformServices } from "@/lib/platformServiceStorage";
 
 export default function OrderSummaryPage() {
   const [useDifferentAddress, setUseDifferentAddress] = useState(false);
@@ -18,7 +19,7 @@ export default function OrderSummaryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // User input for address
-  const [sender, ] = useState({
+  const [sender,] = useState({
     name: "John Doe",
     company: "JD Services",
     address1: "2427 FM 1092 RD",
@@ -78,7 +79,7 @@ export default function OrderSummaryPage() {
         carrierCode: selectedCarrier,
         serviceCode: selectedService.serviceCode,
         packageTypeCode: selectedPackage,
-        sender: { country: "US", zip: "77002"  },
+        sender: { country: "US", zip: "77002" },
       };
 
       const res = await axios.post(
@@ -112,7 +113,7 @@ export default function OrderSummaryPage() {
         applicationIds: ["68e834654610ca2ccaea567a"], // TODO: Replace dynamically
         carrierCode: selectedCarrier,
         packageTypeCode: selectedPackage,
-        totalAmount:Number(quote.totalAmount || 0),
+        totalAmount: Number(quote.totalAmount || 0),
         sender,
       };
 
@@ -131,6 +132,10 @@ export default function OrderSummaryPage() {
         res.data?.data?.checkoutSession?.session?.url;
 
       if (redirectURL) {
+        clearPlatformServices();
+        localStorage.removeItem("applications");
+        localStorage.removeItem("platformServices");
+
         window.location.href = redirectURL; // 🔁 Redirect to Stripe Checkout
       } else {
         alert("✅ Shipping created, but no redirect URL found.");
@@ -204,7 +209,7 @@ export default function OrderSummaryPage() {
             </Button>
           )}
 
-       
+
 
           <div>
             <h3 className="text-lg font-semibold mb-3 text-gray-800">
@@ -309,7 +314,7 @@ export default function OrderSummaryPage() {
           </h3>
 
           <ul className="text-sm text-gray-700 space-y-2">
-           
+
 
             {quote && (
               <>
@@ -331,7 +336,7 @@ export default function OrderSummaryPage() {
             <span>Total</span>
             <span>
               $
-              { quote?.totalAmount}
+              {quote?.totalAmount}
             </span>
           </div>
         </div>

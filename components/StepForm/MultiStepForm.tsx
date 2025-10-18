@@ -191,7 +191,7 @@ const MultiStepForm = () => {
                     {getPlatformServices()
                       .filter((s) => s.additionService && Number(s.additionService_price) > 0)
                       .map((s, idx) => (
-                        <div
+                        <div 
                           key={idx}
                           className="flex justify-between items-center py-2 border-b last:border-none"
                         >
