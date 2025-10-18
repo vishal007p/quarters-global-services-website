@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         <main className="flex-1 p-6 bg-white overflow-y-auto">
-          <div className="w-full h-full overflow-x-auto overflow-y-hidden ">
+          <div className="w-full h-full overflow-x-auto  ">
             {children}
           </div>
         </main>
