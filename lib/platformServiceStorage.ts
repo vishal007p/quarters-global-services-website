@@ -25,7 +25,6 @@ export interface PlatformService {
   additionService_name?: string;
 }
 
-
 export const savePlatformServiceStep = (
   stepData: Partial<PlatformService>,
   remove = false
@@ -35,26 +34,26 @@ export const savePlatformServiceStep = (
   const existing = localStorage.getItem("platformServices");
   const platformServices: PlatformService[] = existing ? JSON.parse(existing) : [];
 
-  // ✅ Find the first non-empty identifier from stepData
+  // ✅ Identify unique key — if addon, use addon ID as fallback
   const currentId =
     stepData.platformServiceCategoryPackageId ||
     stepData.platformServiceCategoryId ||
     stepData.platformServiceId ||
-    "";
+    (stepData.platformServiceCategoryPackageAddonsId?.[0] ?? ""); // addon fallback
 
-  // ✅ Find the first non-empty identifier in each stored item
   const index = platformServices.findIndex((s) => {
     const storedId =
       s.platformServiceCategoryPackageId ||
       s.platformServiceCategoryId ||
       s.platformServiceId ||
-      "";
+      (s.platformServiceCategoryPackageAddonsId?.[0] ?? "");
     return storedId === currentId;
   });
 
   if (remove) {
     if (index !== -1) platformServices.splice(index, 1);
   } else {
+    // 🏗️ Prepare record safely
     const record: PlatformService = {
       platformServiceId: stepData.platformServiceId || "",
       platformServiceCategoryId: stepData.platformServiceCategoryId || "",
@@ -67,20 +66,36 @@ export const savePlatformServiceStep = (
       additionService: stepData.additionService ?? false,
       additionService_price: stepData.additionService_price ?? 0,
       additionService_name: stepData.additionService_name ?? "",
-      platformServiceSubCategoryId:stepData.platformServiceSubCategoryId
+      platformServiceSubCategoryId: stepData.platformServiceSubCategoryId,
     };
 
+    // 🚫 Addon updates shouldn't clear parent subcategory
+    if (record.additionService) {
+      delete record.platformServiceSubCategoryId;
+    }
+
     if (index !== -1) {
-      // ✅ Update existing
-      platformServices[index] = { ...platformServices[index], ...record };
+      const existingRecord = platformServices[index];
+
+      // ✅ Merge only non-empty values
+      const mergedRecord = Object.fromEntries(
+        Object.entries(record).filter(([_, value]) => {
+          if (typeof value === "number") return true; // keep 0
+          if (Array.isArray(value)) return value.length > 0;
+          return value !== "" && value !== undefined && value !== null;
+        })
+      );
+
+      platformServices[index] = { ...existingRecord, ...mergedRecord };
     } else {
-      // ✅ Add new only if not found
+      // ➕ Add new record
       platformServices.push(record);
     }
   }
 
   localStorage.setItem("platformServices", JSON.stringify(platformServices));
 };
+
 
 
 export const getPlatformServices = (): PlatformService[] => {

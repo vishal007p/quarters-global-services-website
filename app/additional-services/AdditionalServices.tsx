@@ -50,12 +50,15 @@ const AdditionalServices = () => {
           additionService_price: Number(addon.price),
           additionService_name: addon.name,
           currency: addon.currency || "USD",
+          platformServiceSubCategoryId:"",
+
         });
       }
 
       return updated;
     });
   };
+  
   const handleContinue = () => {
  
     router.push(`/checkout`);
