@@ -78,7 +78,7 @@ export default function OrderSummaryPage() {
         carrierCode: selectedCarrier,
         serviceCode: selectedService.serviceCode,
         packageTypeCode: selectedPackage,
-        sender: { country: "US", zip: "77002" },
+        sender: { country: "US", zip: "77002"  },
       };
 
       const res = await axios.post(

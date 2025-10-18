@@ -88,9 +88,9 @@ export default function Step1() {
     const [verifyEmail] = useVerifyEmailMutation();
     const [emailOtpVerify, setEmailVerify] = useState(false)
     const [payload, setPayload] = useState<ApplicationPayload>()
+    console.log(payload, "payload")
 
-      const platformServices = getPlatformServices() || [];
-      console.log(platformServices,"platformServices")
+    const platformServices = getPlatformServices() || [];
 
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
@@ -143,7 +143,7 @@ export default function Step1() {
 
     const onSubmit = async (values: Step1Data) => {
         try {
-          
+
             console.log(platformServices, "platformServices")
             //  Build one common address object from currentLegalAddress
             const fullAddress = {
@@ -175,19 +175,36 @@ export default function Step1() {
                         toCountryId: "68d839b82ea0a4e770b07daf",
 
                         // ✅ Platform services (clean mapping)
-                        platformServices: (platformServices || [])
-                            .map((s: any) => ({
-                                platformServiceId:
-                                    s.platformServiceId && s.platformServiceId.trim() !== ""
-                                        ? s.platformServiceId
-                                        : "68cc5e9562e517276caa119e",
-                                platformServiceCategoryId:
-                                    s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
-                                platformServiceCategoryPackageAddonsId:
-                                    s.platformServiceCategoryPackageAddonsId || s.addons || [],
-                                platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
-                            }))
-                            .filter((item: any) => !!item.platformServiceCategoryPackageId),
+                        platformServices: (() => {
+                            const merged = (platformServices || []).reduce((acc: any, s: any) => {
+                                // merge all non-empty values
+                                for (const [key, value] of Object.entries(s)) {
+                                    if (Array.isArray(value) && value.length > 0) {
+                                        // merge arrays safely
+                                        acc[key] = [...(acc[key] || []), ...value];
+                                    } else if (value !== "" && value !== null && value !== undefined) {
+                                        // keep last non-empty string/number/boolean
+                                        acc[key] = value;
+                                    }
+                                }
+                                return acc;
+                            }, {
+                                platformServiceId: "",
+                                platformServiceCategoryId: "",
+                                platformServiceCategoryPackageId: "",
+                                platformServiceCategoryPackageAddonsId: [],
+                                price: 0,
+                                currency: "USD",
+                                Price_name: "",
+                                additionService: false,
+                                additionService_price: 0,
+                                additionService_name: ""
+                            });
+
+                            // return as array (to keep the same structure)
+                            return [merged];
+                        })(),
+
 
                         serviceFields: {
                             serviceType: "CourierDelivery",
@@ -265,8 +282,7 @@ export default function Step1() {
     const handleVerify = async () => {
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
-            clearPlatformServices();
-            localStorage.removeItem("applications");
+
             window.location.href = response.data.redirectURL;
         } else {
             toast.error("Application created but no redirect URL returned");
