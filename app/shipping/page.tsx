@@ -46,37 +46,40 @@ const Page = () => {
   const router = useRouter();
 
   // ✅ Load active application and match by name
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = localStorage.getItem("applications");
-    if (!stored) return;
+ useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const parsed = JSON.parse(stored);
-    const activeAppId = parsed.activeId;
-    const activeApp = parsed.applications.find(
-      (a: any) => a.id === activeAppId
-    );
+  const stored = localStorage.getItem("applications");
+  if (!stored) return;
 
-    if (activeApp?.name) {
-      const country: keyof typeof CHECKLISTS = "india";
-      let matchedDocs: string[] = [];
+  const parsed = JSON.parse(stored);
+  const country: keyof typeof CHECKLISTS = "india";
+  let matchedDocs: string[] = [];
+  let matchedAppName = "";
 
-      // Search across all service categories (oci, passport, etc.)
-      Object.values(CHECKLISTS[country]).forEach((serviceArray) => {
-        serviceArray.forEach((item) => {
-          if (
-            item.title.toLowerCase().trim() ===
-            activeApp.name.toLowerCase().trim()
-          ) {
-            matchedDocs = item.documents;
-          }
-        });
+  // 🔍 Loop through all applications in localStorage
+  parsed.applications?.forEach((app: any) => {
+    // Search across all service categories (oci, visa, passport, etc.)
+    Object.values(CHECKLISTS[country]).forEach((serviceArray) => {
+      serviceArray.forEach((item) => {
+        // 🧠 Direct name match (case-insensitive)
+        if (
+          item.title.trim().toLowerCase() ===
+          app.name.trim().toLowerCase()
+        ) {
+          matchedDocs = item.documents;
+          matchedAppName = app.name;
+        }
       });
+    });
+  });
 
-      setDocumentList(matchedDocs);
-      setActiveAppName(activeApp.name);
-    }
-  }, []);
+  if (matchedDocs.length > 0) {
+    setDocumentList(matchedDocs);
+    setActiveAppName(matchedAppName);
+  }
+}, []);
+
 
   const onSubmit = (values: FormValues) => {
     if (values.documentMethod === "shipping") {
