@@ -89,6 +89,9 @@ export default function Step1() {
     const [emailOtpVerify, setEmailVerify] = useState(false)
     const [payload, setPayload] = useState<ApplicationPayload>()
 
+      const platformServices = getPlatformServices() || [];
+      console.log(platformServices,"platformServices")
+
     const form = useForm<Step1Data>({
         resolver: zodResolver(step1Schema),
         defaultValues: mapApiToForm({}),
@@ -140,7 +143,7 @@ export default function Step1() {
 
     const onSubmit = async (values: Step1Data) => {
         try {
-            const platformServices = getPlatformServices() || [];
+          
             console.log(platformServices, "platformServices")
             //  Build one common address object from currentLegalAddress
             const fullAddress = {
@@ -175,9 +178,11 @@ export default function Step1() {
                         platformServices: (platformServices || [])
                             .map((s: any) => ({
                                 platformServiceId:
-                                    s.platformServiceId,
+                                    s.platformServiceId && s.platformServiceId.trim() !== ""
+                                        ? s.platformServiceId
+                                        : "68cc5e9562e517276caa119e",
                                 platformServiceCategoryId:
-                                    s.platformServiceCategoryId ,
+                                    s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
                                 platformServiceCategoryPackageAddonsId:
                                     s.platformServiceCategoryPackageAddonsId || s.addons || [],
                                 platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
@@ -260,7 +265,8 @@ export default function Step1() {
     const handleVerify = async () => {
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
-          
+            clearPlatformServices();
+            localStorage.removeItem("applications");
             window.location.href = response.data.redirectURL;
         } else {
             toast.error("Application created but no redirect URL returned");

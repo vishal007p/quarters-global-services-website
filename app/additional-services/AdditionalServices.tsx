@@ -34,30 +34,23 @@ const AdditionalServices = () => {
       if (prev.includes(id)) {
         // 🗑️ Deselect → remove from localStorage
         updated = prev.filter((item) => item !== id);
-        savePlatformServiceStep(
-          {
-            platformServiceCategoryPackageId: addon._id,
-            additionService_name: addon.name,
-          },
-          true // ✅ important — tells function to remove
-        );
+         
       } else {
         // 💾 Select → store with full info
         updated = [...prev, id];
-        savePlatformServiceStep({
-          platformServiceCategoryPackageId: addon._id,
-          additionService: true,
-          additionService_price: Number(addon.price),
-          additionService_name: addon.name,
-          currency: addon.currency || "USD",
-        });
+     
       }
 
       return updated;
     });
   };
   const handleContinue = () => {
+       savePlatformServiceStep({
+          platformServiceCategoryPackageAddonsId: selected||[],
+     
+        });
     router.push(`/checkout`);
+    
   };
   return (
     <>
