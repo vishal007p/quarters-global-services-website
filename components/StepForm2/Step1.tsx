@@ -172,8 +172,9 @@ export default function Step1() {
             // 🔹 Static Metadata
             status: "Submitted",
             applicationSource: "Website",
-            fromCountryId: "68d839b82ea0a4e770b07daf",
-            toCountryId: "68d839b82ea0a4e770b07daf",
+          
+                        fromCountryId: localStorage.getItem("fromCountryId"),
+                        toCountryId:localStorage.getItem("toCountryId"),
 
             // 🔹 Platform Services
             platformServices: (() => {

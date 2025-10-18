@@ -27,8 +27,8 @@ export type ApplicationPayload = {
       zipCode: string;
       country: string;
     };
-    fromCountryId: string;
-    toCountryId: string;
+    fromCountryId: string | null;
+    toCountryId: string | null;
     platformServices: {
       platformServiceId: string;
       platformServiceCategoryId: string;
@@ -97,7 +97,7 @@ export const applicationStatuses = [
 export type ApplicationStatus = (typeof applicationStatuses)[number];
 
 
- export type UserDataType = {
+export type UserDataType = {
   _id: string;
   role: UserTypeENUM;
   email: string;

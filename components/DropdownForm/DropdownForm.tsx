@@ -69,6 +69,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
 
   const [country, setCountry] = useState<DropdownOption | null>(null);
 
+
   // --- State ---
   const [citizenship, setCitizenship] = useState<DropdownOption | null>(null);
   const [citizenshipSearch, setCitizenshipSearch] = useState("");
@@ -148,6 +149,10 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
   // --- Handle Go ---
   const handleGo = () => {
     if (!validate()) return;
+    localStorage.setItem("fromCountryId", citizenship?.id ?? "")
+    localStorage.setItem("toCountryId", country?.id ?? "")
+
+    console.log(country, citizenship, "country")
     const step: PlatformServiceStep = {
       citizenship: citizenship?.slug,
       citizenship_code: citizenship?.code,
@@ -155,6 +160,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
       countryCode: (country as any)?.code,
       passportType: passportType?.slug,
       apostilleType: apostilleType?.slug,
+
     };
     saveStep(step);
     if (activeTab === "Services") {
@@ -249,8 +255,6 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
           ))}
         </div>
       </div>
-
-
 
       {/* Visa Form */}
       {activeTab === "Services" && (

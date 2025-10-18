@@ -171,8 +171,8 @@ export default function Step1() {
                         address: fullAddress,
                         currentLegalAddress: fullAddress,
 
-                        fromCountryId: "68d839b82ea0a4e770b07daf",
-                        toCountryId: "68d839b82ea0a4e770b07daf",
+                        fromCountryId: localStorage.getItem("fromCountryId"),
+                        toCountryId:localStorage.getItem("toCountryId"),
                         platformServices: (() => {
                             const merged = (platformServices || []).reduce((acc: any, s: any) => {
                                 for (const [key, value] of Object.entries(s)) {
