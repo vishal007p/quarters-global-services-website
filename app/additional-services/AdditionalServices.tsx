@@ -36,8 +36,7 @@ const AdditionalServices = () => {
         updated = prev.filter((item) => item !== id);
         savePlatformServiceStep(
           {
-            platformServiceCategoryPackageId: addon._id,
-            additionService_name: addon.name,
+             additionService_name: addon.name,
           },
           true // ✅ important — tells function to remove
         );
@@ -45,8 +44,7 @@ const AdditionalServices = () => {
         // 💾 Select → store with full info
         updated = [...prev, id];
         savePlatformServiceStep({
-          platformServiceCategoryPackageId: addon._id,
-          additionService: true,
+        additionService: true,
           additionService_price: Number(addon.price),
           additionService_name: addon.name,
           currency: addon.currency || "USD",
@@ -59,7 +57,6 @@ const AdditionalServices = () => {
   const handleContinue = () => {
       savePlatformServiceStep({
           platformServiceCategoryPackageAddonsId: selected||[],
-     
         });
     router.push(`/checkout`);
   };
