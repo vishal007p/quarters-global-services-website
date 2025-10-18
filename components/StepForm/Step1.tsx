@@ -175,11 +175,9 @@ export default function Step1() {
                         platformServices: (platformServices || [])
                             .map((s: any) => ({
                                 platformServiceId:
-                                    s.platformServiceId && s.platformServiceId.trim() !== ""
-                                        ? s.platformServiceId
-                                        : "68cc5e9562e517276caa119e",
+                                    s.platformServiceId,
                                 platformServiceCategoryId:
-                                    s.platformServiceCategoryId || "68cc5e9562e517276caa119e",
+                                    s.platformServiceCategoryId ,
                                 platformServiceCategoryPackageAddonsId:
                                     s.platformServiceCategoryPackageAddonsId || s.addons || [],
                                 platformServiceCategoryPackageId: s.platformServiceCategoryPackageId,
@@ -262,8 +260,7 @@ export default function Step1() {
     const handleVerify = async () => {
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
-            clearPlatformServices();
-            localStorage.removeItem("applications");
+          
             window.location.href = response.data.redirectURL;
         } else {
             toast.error("Application created but no redirect URL returned");
