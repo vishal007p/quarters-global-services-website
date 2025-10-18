@@ -280,7 +280,7 @@ export default function Step1() {
     };
 
     const handleVerify = async () => {
-        console.log
+         
         const response = await createApplication(payload as ApplicationPayload).unwrap();
         if (response?.status && response.data?.redirectURL) {
 

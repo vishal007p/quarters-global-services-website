@@ -24,11 +24,7 @@ const MultiStepForm = () => {
   const { activeId } = useSelector((state: any) => state.application);
   const [, setNames] = useState<string[]>([]);
 
-
-  //  Static fixed fees
-  const CONSULAR_FEE = 798.42;
  
-
 
   useEffect(() => {
     const stored = getPlatformServices();
@@ -69,7 +65,7 @@ const MultiStepForm = () => {
         addOnPrices.reduce((a, b) => a + b, 0);
 
       const totalValue =
-        totalDynamic + CONSULAR_FEE  ;
+        totalDynamic  ;
 
       setTotal(totalValue);
     }
@@ -211,11 +207,7 @@ const MultiStepForm = () => {
 
 
 
-                    {/* ✅ Static Fees */}
-                 
-               
-                
-                 
+              
                     {/* ✅ Total */}
                     <div className="flex justify-between items-center border-t pt-4 font-bold text-base">
                       <span>Total</span>
