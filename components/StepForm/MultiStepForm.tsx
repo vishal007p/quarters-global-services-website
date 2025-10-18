@@ -27,9 +27,7 @@ const MultiStepForm = () => {
 
   //  Static fixed fees
   const CONSULAR_FEE = 798.42;
-  const MONEY_ORDER_FEE = 5.0;
-  const SERVICE_FEE = 10.0;
-  const VFS_FEE = 150.0;
+ 
 
 
   useEffect(() => {
@@ -71,7 +69,7 @@ const MultiStepForm = () => {
         addOnPrices.reduce((a, b) => a + b, 0);
 
       const totalValue =
-        totalDynamic + CONSULAR_FEE + MONEY_ORDER_FEE + SERVICE_FEE + VFS_FEE;
+        totalDynamic + CONSULAR_FEE  ;
 
       setTotal(totalValue);
     }
@@ -214,39 +212,10 @@ const MultiStepForm = () => {
 
 
                     {/* ✅ Static Fees */}
-                    <div className="flex justify-between items-center py-2">
-                      <span className="font-medium text-gray-700">
-                        Consular Fee
-                      </span>
-                      <span className="text-gray-900">
-                        ${CONSULAR_FEE.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="font-medium text-gray-700">
-                        Money Order Fee
-                      </span>
-                      <span className="text-gray-900">
-                        ${MONEY_ORDER_FEE.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="font-medium text-gray-700">
-                        Service Fee
-                      </span>
-                      <span className="text-gray-900">
-                        ${SERVICE_FEE.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="font-medium text-gray-700">
-                        VFS Mandatory Service Fee
-                      </span>
-                      <span className="text-gray-900">
-                        ${VFS_FEE.toFixed(2)}
-                      </span>
-                    </div>
-
+                 
+               
+                
+                 
                     {/* ✅ Total */}
                     <div className="flex justify-between items-center border-t pt-4 font-bold text-base">
                       <span>Total</span>
