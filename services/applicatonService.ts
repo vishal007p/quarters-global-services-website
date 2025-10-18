@@ -16,7 +16,7 @@ export const getApplications = async ({
 }): Promise<ApiPagination & { data: UserDataType[] }> => {
   try {
     const data = await fetcher(
-      `/application/get-application?page=${page}&applicationSources=${applicationSources}&search=${search || ''}`,
+      `/application/get-application?page=${1}&applicationSources=${applicationSources}&search=${search || ''}`,
       {
         cache: 'no-cache',
         revalidate: 60,

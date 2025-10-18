@@ -193,12 +193,7 @@ export default function Step1() {
                                 platformServiceCategoryId: "",
                                 platformServiceCategoryPackageId: "",
                                 platformServiceCategoryPackageAddonsId: [],
-                                price: 0,
-                                currency: "USD",
-                                Price_name: "",
-                                additionService: false,
-                                additionService_price: 0,
-                                additionService_name: ""
+                               
                             });
 
                             // return as array (to keep the same structure)
