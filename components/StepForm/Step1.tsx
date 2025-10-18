@@ -179,7 +179,7 @@ export default function Step1() {
                             const merged = (platformServices || []).reduce((acc: any, s: any) => {
                                 // merge all non-empty values
                                 for (const [key, value] of Object.entries(s)) {
-                                    if (Array.isArray(value) && value.length > 0) {fasdZX
+                                    if (Array.isArray(value) && value.length > 0) {
                                         // merge arrays safely
                                         acc[key] = [...(acc[key] || []), ...value];
                                     } else if (value !== "" && value !== null && value !== undefined) {
@@ -193,7 +193,12 @@ export default function Step1() {
                                 platformServiceCategoryId: "",
                                 platformServiceCategoryPackageId: "",
                                 platformServiceCategoryPackageAddonsId: [],
-                               
+                                price: 0,
+                                currency: "USD",
+                                Price_name: "",
+                                additionService: false,
+                                additionService_price: 0,
+                                additionService_name: ""
                             });
 
                             // return as array (to keep the same structure)
