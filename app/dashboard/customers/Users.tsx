@@ -119,7 +119,7 @@ const UsersPage = ({ customersData, currentPage }: UsersProps) => {
           />
 
           <Button asChild>
-            <Link href="/admin/customers/create">
+            <Link href="/dashboard/customers/create">
               <Plus className="mr-2 h-4 w-4" />
               Add Customer
             </Link>

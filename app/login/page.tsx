@@ -13,9 +13,7 @@ const LoginPage = () => {
       {/* 🏠 Floating Back to Home Button */}
       <button
         onClick={() => router.push("/")}
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 bg-white text-red-600 border border-red-200 
-                   shadow-lg rounded-full px-4 py-2 text-sm font-medium hover:bg-red-50 hover:shadow-xl 
-                   transition-all duration-200"
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 bg-white text-red-600 border border-red-200 shadow-lg rounded-full px-4 py-2 text-sm font-medium hover:bg-red-50 hover:shadow-xl  transition-all duration-200"
       >
         <Home className="h-4 w-4" />
         Back to Home

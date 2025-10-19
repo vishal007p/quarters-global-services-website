@@ -20,7 +20,9 @@ const page = async ({
 
   return (
     <DashboardLayout>
-      <Application applicationsData={applications} selectedApplicationSources={applicationSources} />
+      <div className="min-h-screen bg-gray-50 py-10 px-6">
+        <Application applicationsData={applications} selectedApplicationSources={applicationSources} />
+      </div>
     </DashboardLayout>
   );
 };

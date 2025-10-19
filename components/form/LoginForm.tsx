@@ -58,7 +58,7 @@ const LoginForm = () => {
         { id: userDataId, token: userDataToken },
         UserTypeENUM.ADMIN // or .USER or whatever role applies
       ); toast.success('Login successfully');
-      route.push('/dashboard');
+      route.push('/dashboard/applications');
     } finally {
       console.log('done');
     }
