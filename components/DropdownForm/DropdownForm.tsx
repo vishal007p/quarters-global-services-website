@@ -151,6 +151,7 @@ function DropdownForm({ activeTab, setActiveTab }: DropdownFormProps) {
     if (!validate()) return;
     localStorage.setItem("fromCountryId", citizenship?.id ?? "")
     localStorage.setItem("toCountryId", country?.id ?? "")
+    localStorage.setItem("county",country?.code ??"")
 
     console.log(country, citizenship, "country")
     const step: PlatformServiceStep = {

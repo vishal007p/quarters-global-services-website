@@ -59,8 +59,8 @@ const Page = () => {
 
     // 🔍 Loop through all applications in localStorage
     parsed.applications?.forEach((app: any) => {
-      const country = "US";
-      const serviceName = "Visa";
+      const country = localStorage.getItem("county")??"";
+      const serviceName = app.type;
       const checklistArray = CHECKLIST_PACKAGES[serviceName]?.[country]
 
       console.log(checklistArray,"checklistArray")
