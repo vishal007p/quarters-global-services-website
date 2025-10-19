@@ -145,6 +145,8 @@ export default function Step1() {
         try {
 
             console.log(platformServices, "platformServices")
+            const applicationData = localStorage.getItem("applications")
+            console.log(applicationData,"applicationData")
             //  Build one common address object from currentLegalAddress
             const fullAddress = {
                 addressLine1: values.currentLegalAddress?.addressLine1 || "",
@@ -206,6 +208,7 @@ export default function Step1() {
                             serviceType: "CourierDelivery",
                         },
                     },
+                    
                 ],
             };
             //  Save to Redux if editing existing app
@@ -253,9 +256,110 @@ export default function Step1() {
 
         } catch (error: any) {
             toast.error(error?.data?.message || "Something went wrong while creating application");
-        
+
         }
     };
+
+    // const onSubmit = async (values: Step1Data) => {
+    //     try {
+    //         // 🌍 Read existing applications from localStorage
+    //         const stored = JSON.parse(localStorage.getItem("applications") || "{}");
+    //         const existingApps = stored.applications || [];
+
+    //         // 🧱 Common address object
+    //         const fullAddress = {
+    //             addressLine1: values.currentLegalAddress?.addressLine1 || "",
+    //             addressLine2: values.currentLegalAddress?.addressLine2 || "",
+    //             city: values.currentLegalAddress?.city || "",
+    //             state: values.currentLegalAddress?.state || "",
+    //             zipCode: values.currentLegalAddress?.zipCode || "",
+    //             country: values.currentLegalAddress?.country || "",
+    //         };
+
+    //         // 🏗 Build full payload
+    //         const payload = {
+    //             applications: existingApps.map((app: any) => {
+    //                 const mergedServices = (platformServices || []).reduce((acc: any, s: any) => {
+    //                     for (const [key, value] of Object.entries(s)) {
+    //                         if (Array.isArray(value)) {
+    //                             acc[key] = [...(acc[key] || []), ...value];
+    //                         } else if (value !== "" && value !== null && value !== undefined) {
+    //                             acc[key] = value;
+    //                         }
+    //                     }
+    //                     return acc;
+    //                 }, {
+    //                     platformServiceId: "",
+    //                     platformServiceCategoryId: "",
+    //                     platformServiceCategoryPackageId: "",
+    //                     platformServiceCategoryPackageAddonsId: [],
+    //                     price: 0,
+    //                     currency: "USD",
+    //                     Price_name: "",
+    //                     additionService: false,
+    //                     additionService_price: 0,
+    //                     additionService_name: ""
+    //                 });
+
+    //                 return {
+    //                     ...app, // keep id, type, etc.
+    //                     form: {
+    //                         applications: [
+    //                             {
+    //                                 firstName: values.firstName,
+    //                                 lastName: values.lastName,
+    //                                 email: values.email,
+    //                                 phone: values.phone,
+    //                                 countryCode: "+1",
+    //                                 company: values.company || "",
+    //                                 status: "Submitted",
+    //                                 applicationSource: "Website",
+    //                                 address: fullAddress,
+    //                                 currentLegalAddress: fullAddress,
+    //                                 fromCountryId: localStorage.getItem("fromCountryId"),
+    //                                 toCountryId: localStorage.getItem("toCountryId"),
+    //                                 platformServices: [mergedServices],
+    //                                 serviceFields: {
+    //                                     serviceType: "CourierDelivery",
+    //                                 },
+    //                             },
+    //                         ],
+    //                     },
+    //                 };
+    //             }),
+    //         };
+
+    //         // 🧾 Save back to localStorage
+    //         const finalState = {
+    //             ...stored,
+    //             applications: payload.applications,
+    //         };
+    //         localStorage.setItem("applications", JSON.stringify(finalState));
+
+    //         // 🧠 Save to redux (optional)
+    //         const activeId = stored.activeId;
+    //         if (activeId) {
+    //             dispatch(setFormData({ id: activeId, form: payload }));
+    //         }
+
+    //         // ✉️ Continue email verification flow
+    //         const res = await verifyEmail({ email: values.email }).unwrap();
+    //         if (res.status) {
+    //             if (res?.message === "Email is already verified.") {
+    //                 const response = await createApplication(payload).unwrap();
+    //                 if (response?.status && response.data?.redirectURL) {
+    //                     window.location.href = response.data.redirectURL;
+    //                 }
+    //             } else {
+    //                 setEmailVerify(true);
+    //             }
+    //         }
+    //     } catch (error: any) {
+    //         toast.error(
+    //             error?.data?.message || "Something went wrong while creating application"
+    //         );
+    //     }
+    // };
 
     const handleVerify = async () => {
         const response = await createApplication(payload as ApplicationPayload).unwrap();

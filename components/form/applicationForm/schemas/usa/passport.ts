@@ -5,7 +5,7 @@ import { requiredFileSchema, serviceTypes } from '../common';
 
 // USA New Passport (DS-11)
 export const passportUSANewDS11Schema = z.object({
-  serviceType: z.literal(serviceTypes['usa-passport-new-ds11']),
+  serviceType: z.literal(serviceTypes['new-passport']),
   proofOfCitizenship: requiredFileSchema,
   proofOfIdentity: requiredFileSchema,
   passportPhoto2x2: requiredFileSchema,

@@ -58,7 +58,7 @@ export const serviceTypes = {
   'conference-visa': 'conference-visa',
   'employment-visa': 'employment-visa',
   // USA Passport Types
-  'usa-passport-new-ds11': 'usa-passport-new-ds11',
+  'new-passport': 'new-passport',
   'usa-passport-renewal-ds82': 'usa-passport-renewal-ds82',
   'usa-passport-child-under16': 'usa-passport-child-under16',
   'usa-passport-lost-stolen-damaged': 'usa-passport-lost-stolen-damaged',

@@ -33,12 +33,11 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/Fevicon.svg" type="image/svg+xml" />
       </head>
-      <body className={`${poppins.variable} antialiased`}>
+      <body className={`${poppins.variable} antialiased overflow-x-hidden`}>
         <ReduxProvider>
           <BasicLayout>
             {children}
           </BasicLayout>
-
           <Toaster />
         </ReduxProvider>
         <NextTopLoader />

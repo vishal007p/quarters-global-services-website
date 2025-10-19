@@ -43,7 +43,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gray-100">
+    <div className="flex h-screen overflow-hidden w-full bg-gray-100">
       {/* Sidebar */}
       <div
         className={clsx(
@@ -127,8 +127,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
-        <main className="flex-1 p-6 bg-white overflow-y-auto">
-          <div className="w-full h-full overflow-x-auto  ">
+        <main className="flex-1 p-6 bg-white overflow-y-hidden">
+          <div className="w-full h-full overflow-auto  ">
             {children}
           </div>
         </main>

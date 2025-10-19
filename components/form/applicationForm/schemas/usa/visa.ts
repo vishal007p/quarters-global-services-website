@@ -6,12 +6,12 @@ import { requiredFileSchema, serviceTypes } from '../common';
 // US Visitor Visa (B1/B2) - Tourist Visa
 export const visaUSB1B2Schema = z.object({
   serviceType: z.literal(serviceTypes['b1b2-visitor-visa']),
-  validPassport: requiredFileSchema,
-  ds160Confirmation: requiredFileSchema,
-  visaFeeReceipt: requiredFileSchema,
-  passportPhoto: requiredFileSchema,
-  travelItinerary: requiredFileSchema,
-  bankStatements: requiredFileSchema,
+  validPassport: requiredFileSchema.optional(),
+  ds160Confirmation: requiredFileSchema.optional(),
+  visaFeeReceipt: requiredFileSchema.optional(),
+  passportPhoto: requiredFileSchema.optional(),
+  travelItinerary: requiredFileSchema.optional(),
+  bankStatements: requiredFileSchema.optional(),
   invitationLetter: requiredFileSchema.optional(),
 });
 

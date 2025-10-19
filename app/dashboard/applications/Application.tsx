@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { ExternalLink, Plus } from 'lucide-react';
 import Link from 'next/link';
- import { toast } from 'sonner';
+import { toast } from 'sonner';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CommonTable from '@/components/common/CommonTable';
@@ -92,7 +92,7 @@ const ApplicationsPage = ({
                     <Link href={`/dashboard/applications/edit?application=${row.id}&isView=1`}>
                         <Icon name="view" />
                     </Link>
-                    
+
                 </div>
             ),
         },
@@ -116,21 +116,7 @@ const ApplicationsPage = ({
             {/* Top Bar */}
             <div className="flex items-center justify-between flex-wrap gap-2">
                 {/* Tabs */}
-                <Tabs defaultValue={selectedApplicationSources || applicationSources[0]}>
-                    <TabsList className="bg-primary-300 text-black-100 p-0">
-                    
-                        <TabsTrigger
-                        
-                            asChild
-                            value={applicationSources[2]}
-                            className="data-[state=active]:bg-black data-[state=active]:text-white"
-                        >
-                            <Link href={`/dashboard/applications?applicationSources=${applicationSources[2]}`}>
-                                Online
-                            </Link>
-                        </TabsTrigger>
-                    </TabsList>
-                </Tabs>
+
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">
@@ -146,7 +132,12 @@ const ApplicationsPage = ({
                         <PopoverContent className="max-w-sm">Filter options here</PopoverContent>
                     </Popover>
 
-                   
+                    <Button asChild>
+                        <Link href="/dashboard/applications/create">
+                            <Plus className="mr-2 h-4 w-4" />
+                            New  Application
+                        </Link>
+                    </Button>
                 </div>
             </div>
 

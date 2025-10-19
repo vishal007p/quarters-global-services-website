@@ -83,7 +83,7 @@ const Page = () => {
 
   const onSubmit = (values: FormValues) => {
     if (values.documentMethod === "shipping") {
-      router.push("/shipping/by-shipping-documents");
+      router.push("/shipping/by-shipping-documents?");
     } else {
       router.push("/login");
     }
@@ -157,6 +157,7 @@ const Page = () => {
                       >
                         <FormControl>
                           <Checkbox
+                          defaultChecked
                             checked={field.value?.includes(item)}
                             onCheckedChange={(checked) => {
                               return checked

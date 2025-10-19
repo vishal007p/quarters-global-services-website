@@ -52,9 +52,9 @@ import {
   passportIndiaNameChangeSchema,
   emptySchema,
 } from './schemas/index'; // organized schemas folder
- import { useFormContext } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
 import { FileInput } from '@/components/ui/file-input';
+import { useFormContext } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
 
 interface DocumentFormProps {
   isView?: boolean;
@@ -130,7 +130,7 @@ const DocumentForm = ({ selectedCategory, existingDocuments, isView }: DocumentF
       case serviceTypes['employment-visa']:
         return visaIndiaEmploymentSchema;
       // USA Passport Cases
-      case serviceTypes['usa-passport-new-ds11']:
+      case serviceTypes['new-passport']:
         return passportUSANewDS11Schema;
       case serviceTypes['usa-passport-renewal-ds82']:
         return passportUSARenewalDS82Schema;
@@ -170,7 +170,7 @@ const DocumentForm = ({ selectedCategory, existingDocuments, isView }: DocumentF
   })();
 
   const fields = schema ? getSchemaFields(schema) : [];
-
+  console.log(fields, 'fields');
   return (
     <>
       {fields.length > 0 ? (

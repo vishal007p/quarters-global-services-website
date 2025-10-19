@@ -42,7 +42,7 @@ const page = async ({
           <p className="text-base font-semibold grow">Application ID: {application} </p>
           <Actions />
         </div>
-        <StatusTimeLine activeStatus={applicationData.status || 'Submitted'} />
+        {/* <StatusTimeLine activeStatus={applicationData.status || 'Submitted'} /> */}
         <ApplicationForm isEdit={true} isView={!!isView} applicationData={applicationData} />
       </div>
     </DashboardLayout>

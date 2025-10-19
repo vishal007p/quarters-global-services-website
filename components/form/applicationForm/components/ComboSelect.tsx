@@ -55,6 +55,7 @@ const ComboSelect = ({
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const lastSlugSetRef = React.useRef<string | null>(null);
 
   // Default static options (fallback)
   const defaultOptions: ComboSelectOption[] = [];
@@ -98,6 +99,23 @@ const ComboSelect = ({
 
     fetchOptions();
   }, [apiPath, staticOptions, labelKey, valueKey]);
+
+  // Handle slug selection for existing values in edit mode
+  useEffect(() => {
+    const currentValue = form.getValues(name as keyof CreateApplicationType);
+
+    if (currentValue && options.length > 0 && onSlugSelect) {
+      const selectedOption = options.find((option) => {
+        const optionValue = option[valueKey] || option._id;
+        return optionValue === currentValue;
+      });
+
+      if (selectedOption && selectedOption.slug && selectedOption.slug !== lastSlugSetRef.current) {
+        lastSlugSetRef.current = selectedOption.slug;
+        onSlugSelect(selectedOption.slug);
+      }
+    }
+  }, [options, form, name, valueKey, onSlugSelect]);
 
   return (
     <FormField

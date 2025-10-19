@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { PhoneInput } from '@/components/ui/phone-input';
 import ComboSelect from './components/ComboSelect';
 import PackageAddons from './components/PackageAddons';
 import { toast } from 'sonner';
@@ -33,12 +32,22 @@ import {
   editApplication,
 } from '@/services/applicatonService';
 import handleAsync from '@/lib/handleAsync';
- import Link from 'next/link';
+
+import Link from 'next/link';
 import { getUsers } from '@/services/usersService';
-import { applicationSources, ApplicationStatus, applicationStatuses } from '@/lib/Types';
+
+import PersonalInfo from './PersonalInfo';
+import PassportDetails from './PassportDetails';
+import ContactInfo from './ContactInfo';
+import FamilyInfo from './FamilyInfo';
+import WorkSchoolInfo from './WorkSchoolInfo';
+import TravelToIndia from './TravelToIndia';
+import ReferenceIndia from './ReferenceIndia';
+import ReferenceUSA from './ReferenceUsa';
+import AdditionalQuestions from './AdditionalQuestion';
+import USPassportForm from './USPassportForm';
 import { uploadFile } from '@/lib/uploadFile';
-import { Spinner } from '@/components/ui/spinner';
- 
+import { applicationSources, ApplicationStatus, applicationStatuses } from '@/lib/Types';
 
 const ApplicationForm = ({
   isView = false,
@@ -59,7 +68,9 @@ const ApplicationForm = ({
   const [selectedCategory, setSelectedCategory] = useState(
     applicationData?.serviceFields?.serviceType || '',
   );
-  const [startCheckUserLoading, setCheckUserLoading] = useTransition();
+  const [countrySlug, setCountrySlug] = useState('');
+  const [serviceSlug, setServiceSlug] = useState('');
+  const [_startCheckUserLoading, setCheckUserLoading] = useTransition();
   const form = useForm<CreateApplicationType>({
     resolver: zodResolver(createApplicationValidator),
     defaultValues: {
@@ -80,6 +91,141 @@ const ApplicationForm = ({
       state: applicationData?.address?.state || '',
       pincode: applicationData?.address?.zipCode || '',
       notes: applicationData?.description || '',
+
+      // Personal Information fields
+      middleName: applicationData?.serviceFields?.middleName || '',
+      previousNames: applicationData?.serviceFields?.previousNames || '',
+      sex: applicationData?.serviceFields?.sex || '',
+      dob: applicationData?.serviceFields?.dob || '',
+      birthCity: applicationData?.serviceFields?.birthCity || '',
+      birthState: applicationData?.serviceFields?.birthState || '',
+      countryOfBirth: applicationData?.serviceFields?.countryOfBirth || '',
+      countryOfBirthOther: applicationData?.serviceFields?.countryOfBirthOther || '',
+      nationalId: applicationData?.serviceFields?.nationalId || '',
+      religion: applicationData?.serviceFields?.religion || '',
+      visibleMarks: applicationData?.serviceFields?.visibleMarks || '',
+      educationLevel: applicationData?.serviceFields?.educationLevel || '',
+      educationOther: applicationData?.serviceFields?.educationOther || '',
+      citizenshipCountry: applicationData?.serviceFields?.citizenshipCountry || '',
+      citizenshipCountryOther: applicationData?.serviceFields?.citizenshipCountryOther || '',
+      citizenshipAcquiredBy: applicationData?.serviceFields?.citizenshipAcquiredBy || '',
+      previousCitizenship: applicationData?.serviceFields?.previousCitizenship || '',
+      previousCitizenshipOther: applicationData?.serviceFields?.previousCitizenshipOther || '',
+
+      // Passport Details fields
+      passportNumber: applicationData?.serviceFields?.passportNumber || '',
+      passportIssuingAuthority: applicationData?.serviceFields?.passportIssuingAuthority || '',
+      passportIssueDate: applicationData?.serviceFields?.passportIssueDate || '',
+      passportExpiryDate: applicationData?.serviceFields?.passportExpiryDate || '',
+      holdsOtherPassport: applicationData?.serviceFields?.holdsOtherPassport || '',
+      otherPassportNumber: applicationData?.serviceFields?.otherPassportNumber || '',
+      otherPassportIssuingAuthority:
+        applicationData?.serviceFields?.otherPassportIssuingAuthority || '',
+      otherPassportIssueDate: applicationData?.serviceFields?.otherPassportIssueDate || '',
+      otherPassportExpiryDate: applicationData?.serviceFields?.otherPassportExpiryDate || '',
+
+      // Contact Information fields
+      homeAddress: applicationData?.serviceFields?.homeAddress || '',
+      homeCity: applicationData?.serviceFields?.homeCity || '',
+      homeState: applicationData?.serviceFields?.homeState || '',
+      homeZip: applicationData?.serviceFields?.homeZip || '',
+      isPermanentAddress: applicationData?.serviceFields?.isPermanentAddress || '',
+      permAddress: applicationData?.serviceFields?.permAddress || '',
+      permCity: applicationData?.serviceFields?.permCity || '',
+      permState: applicationData?.serviceFields?.permState || '',
+      permZip: applicationData?.serviceFields?.permZip || '',
+      permCountry: applicationData?.serviceFields?.permCountry || '',
+      homePhone: applicationData?.serviceFields?.homePhone || '',
+      mobilePhone: applicationData?.serviceFields?.mobilePhone || '',
+      homeEmail: applicationData?.serviceFields?.homeEmail || '',
+
+      // Family Information fields
+      fatherName: applicationData?.serviceFields?.fatherName || '',
+      fatherBirthCity: applicationData?.serviceFields?.fatherBirthCity || '',
+      fatherBirthState: applicationData?.serviceFields?.fatherBirthState || '',
+      fatherBirthCountry: applicationData?.serviceFields?.fatherBirthCountry || '',
+      fatherCitizenship: applicationData?.serviceFields?.fatherCitizenship || '',
+      fatherPrevCitizenship: applicationData?.serviceFields?.fatherPrevCitizenship || '',
+      motherName: applicationData?.serviceFields?.motherName || '',
+      motherBirthCity: applicationData?.serviceFields?.motherBirthCity || '',
+      motherBirthState: applicationData?.serviceFields?.motherBirthState || '',
+      motherBirthCountry: applicationData?.serviceFields?.motherBirthCountry || '',
+      motherCitizenship: applicationData?.serviceFields?.motherCitizenship || '',
+      motherPrevCitizenship: applicationData?.serviceFields?.motherPrevCitizenship || '',
+      maritalStatus: applicationData?.serviceFields?.maritalStatus || '',
+      spouseName: applicationData?.serviceFields?.spouseName || '',
+      spouseCitizenship: applicationData?.serviceFields?.spouseCitizenship || '',
+      spousePrevCitizenship: applicationData?.serviceFields?.spousePrevCitizenship || '',
+      spouseBirthCity: applicationData?.serviceFields?.spouseBirthCity || '',
+      spouseBirthState: applicationData?.serviceFields?.spouseBirthState || '',
+      spouseBirthCountry: applicationData?.serviceFields?.spouseBirthCountry || '',
+      grandparentsPakistan: applicationData?.serviceFields?.grandparentsPakistan || '',
+      grandparentsPakistanDetails:
+        applicationData?.serviceFields?.grandparentsPakistanDetails || '',
+
+      // Work/School Information fields
+      occupation: applicationData?.serviceFields?.occupation || '',
+      jobTitle: applicationData?.serviceFields?.jobTitle || '',
+      employerOrSchool: applicationData?.serviceFields?.employerOrSchool || '',
+      workAddress: applicationData?.serviceFields?.workAddress || '',
+      workCity: applicationData?.serviceFields?.workCity || '',
+      workState: applicationData?.serviceFields?.workState || '',
+      workZip: applicationData?.serviceFields?.workZip || '',
+      workPhone: applicationData?.serviceFields?.workPhone || '',
+      workEmail: applicationData?.serviceFields?.workEmail || '',
+      previousOccupation: applicationData?.serviceFields?.previousOccupation || '',
+      militaryService: applicationData?.serviceFields?.militaryService || '',
+      militaryCountryBranch: applicationData?.serviceFields?.militaryCountryBranch || '',
+      militarySpecialization: applicationData?.serviceFields?.militarySpecialization || '',
+      militaryHighestRank: applicationData?.serviceFields?.militaryHighestRank || '',
+      militaryCity: applicationData?.serviceFields?.militaryCity || '',
+      militaryState: applicationData?.serviceFields?.militaryState || '',
+      militaryCountry: applicationData?.serviceFields?.militaryCountry || '',
+
+      // Travel to India fields
+      visaType: applicationData?.serviceFields?.visaType || '',
+      expectedArrivalDate: applicationData?.serviceFields?.expectedArrivalDate || '',
+      arrivalCity: applicationData?.serviceFields?.arrivalCity || '',
+      exitCity: applicationData?.serviceFields?.exitCity || '',
+      otherIndianCities: applicationData?.serviceFields?.otherIndianCities || '',
+      purposeOfVisit: applicationData?.serviceFields?.purposeOfVisit || '',
+      previousVisitToIndia: applicationData?.serviceFields?.previousVisitToIndia || '',
+      prevHotelAddress: applicationData?.serviceFields?.prevHotelAddress || '',
+      prevCitiesVisited: applicationData?.serviceFields?.prevCitiesVisited || '',
+      prevVisaNumber: applicationData?.serviceFields?.prevVisaNumber || '',
+      prevVisaIssuedBy: applicationData?.serviceFields?.prevVisaIssuedBy || '',
+      prevVisaType: applicationData?.serviceFields?.prevVisaType || '',
+      prevVisaIssuedDate: applicationData?.serviceFields?.prevVisaIssuedDate || '',
+      visaRefused: applicationData?.serviceFields?.visaRefused || '',
+      visaRefusalDetails: applicationData?.serviceFields?.visaRefusalDetails || '',
+      countriesVisited10Years: applicationData?.serviceFields?.countriesVisited10Years || '',
+
+      // Reference in India fields
+      refIndiaName: applicationData?.serviceFields?.refIndiaName || '',
+      refIndiaCompany: applicationData?.serviceFields?.refIndiaCompany || '',
+      refIndiaAddress1: applicationData?.serviceFields?.refIndiaAddress1 || '',
+      refIndiaAddress2: applicationData?.serviceFields?.refIndiaAddress2 || '',
+      refIndiaPhone: applicationData?.serviceFields?.refIndiaPhone || '',
+      refIndiaEmail: applicationData?.serviceFields?.refIndiaEmail || '',
+
+      // Reference in USA fields
+      refUSAName: applicationData?.serviceFields?.refUSAName || '',
+      refUSACompany: applicationData?.serviceFields?.refUSACompany || '',
+      refUSAAddress: applicationData?.serviceFields?.refUSAAddress || '',
+      refUSACity: applicationData?.serviceFields?.refUSACity || '',
+      refUSAState: applicationData?.serviceFields?.refUSAState || '',
+      refUSAZip: applicationData?.serviceFields?.refUSAZip || '',
+      refUSAPhone: applicationData?.serviceFields?.refUSAPhone || '',
+      refUSAEmail: applicationData?.serviceFields?.refUSAEmail || '',
+
+      // Additional Questions fields
+      refusedEntryDeported: applicationData?.serviceFields?.refusedEntryDeported || '',
+      refusedEntryDetails: applicationData?.serviceFields?.refusedEntryDetails || '',
+      everArrested: applicationData?.serviceFields?.everArrested || '',
+      arrestedDetails: applicationData?.serviceFields?.arrestedDetails || '',
+      everConvicted: applicationData?.serviceFields?.everConvicted || '',
+      convictedDetails: applicationData?.serviceFields?.convictedDetails || '',
+
       // -
       additionalServiceFields: {
         paymentMethod: applicationData?.serviceFields?.paymentMethod || '',
@@ -151,7 +297,9 @@ const ApplicationForm = ({
             {
               platformServiceId: values.platformServiceId,
               platformServiceCategoryId: values.platformServiceCategoryId,
-              platformServiceSubCategoryId: values.platformServiceSubCategoryId,
+              ...(values.platformServiceSubCategoryId && {
+                platformServiceSubCategoryId: values.platformServiceSubCategoryId,
+              }),
               platformServiceCategoryPackageId: values.platformServiceCategoryPackageId,
               platformServiceCategoryPackageAddonsId: values.platformServiceCategoryPackageAddonsId
                 ? values.platformServiceCategoryPackageAddonsId
@@ -163,6 +311,129 @@ const ApplicationForm = ({
             ...values.additionalServiceFields,
             serviceType: values.documents.serviceType,
             ...processedDocuments,
+            // Personal Information fields
+            middleName: values.middleName,
+            previousNames: values.previousNames,
+            sex: values.sex,
+            dob: values.dob,
+            birthCity: values.birthCity,
+            birthState: values.birthState,
+            countryOfBirth: values.countryOfBirth,
+            countryOfBirthOther: values.countryOfBirthOther,
+            nationalId: values.nationalId,
+            religion: values.religion,
+            visibleMarks: values.visibleMarks,
+            educationLevel: values.educationLevel,
+            educationOther: values.educationOther,
+            citizenshipCountry: values.citizenshipCountry,
+            citizenshipCountryOther: values.citizenshipCountryOther,
+            citizenshipAcquiredBy: values.citizenshipAcquiredBy,
+            previousCitizenship: values.previousCitizenship,
+            previousCitizenshipOther: values.previousCitizenshipOther,
+            // Passport Details fields
+            passportNumber: values.passportNumber,
+            passportIssuingAuthority: values.passportIssuingAuthority,
+            passportIssueDate: values.passportIssueDate,
+            passportExpiryDate: values.passportExpiryDate,
+            holdsOtherPassport: values.holdsOtherPassport,
+            otherPassportNumber: values.otherPassportNumber,
+            otherPassportIssuingAuthority: values.otherPassportIssuingAuthority,
+            otherPassportIssueDate: values.otherPassportIssueDate,
+            otherPassportExpiryDate: values.otherPassportExpiryDate,
+            // Contact Information fields
+            homeAddress: values.homeAddress,
+            homeCity: values.homeCity,
+            homeState: values.homeState,
+            homeZip: values.homeZip,
+            isPermanentAddress: values.isPermanentAddress,
+            permAddress: values.permAddress,
+            permCity: values.permCity,
+            permState: values.permState,
+            permZip: values.permZip,
+            permCountry: values.permCountry,
+            homePhone: values.homePhone,
+            mobilePhone: values.mobilePhone,
+            homeEmail: values.homeEmail,
+            // Family Information fields
+            fatherName: values.fatherName,
+            fatherBirthCity: values.fatherBirthCity,
+            fatherBirthState: values.fatherBirthState,
+            fatherBirthCountry: values.fatherBirthCountry,
+            fatherCitizenship: values.fatherCitizenship,
+            fatherPrevCitizenship: values.fatherPrevCitizenship,
+            motherName: values.motherName,
+            motherBirthCity: values.motherBirthCity,
+            motherBirthState: values.motherBirthState,
+            motherBirthCountry: values.motherBirthCountry,
+            motherCitizenship: values.motherCitizenship,
+            motherPrevCitizenship: values.motherPrevCitizenship,
+            maritalStatus: values.maritalStatus,
+            spouseName: values.spouseName,
+            spouseCitizenship: values.spouseCitizenship,
+            spousePrevCitizenship: values.spousePrevCitizenship,
+            spouseBirthCity: values.spouseBirthCity,
+            spouseBirthState: values.spouseBirthState,
+            spouseBirthCountry: values.spouseBirthCountry,
+            grandparentsPakistan: values.grandparentsPakistan,
+            grandparentsPakistanDetails: values.grandparentsPakistanDetails,
+            // Work/School Information fields
+            occupation: values.occupation,
+            jobTitle: values.jobTitle,
+            employerOrSchool: values.employerOrSchool,
+            workAddress: values.workAddress,
+            workCity: values.workCity,
+            workState: values.workState,
+            workZip: values.workZip,
+            workPhone: values.workPhone,
+            workEmail: values.workEmail,
+            previousOccupation: values.previousOccupation,
+            militaryService: values.militaryService,
+            militaryCountryBranch: values.militaryCountryBranch,
+            militarySpecialization: values.militarySpecialization,
+            militaryHighestRank: values.militaryHighestRank,
+            militaryCity: values.militaryCity,
+            militaryState: values.militaryState,
+            militaryCountry: values.militaryCountry,
+            // Travel to India fields
+            visaType: values.visaType,
+            expectedArrivalDate: values.expectedArrivalDate,
+            arrivalCity: values.arrivalCity,
+            exitCity: values.exitCity,
+            otherIndianCities: values.otherIndianCities,
+            purposeOfVisit: values.purposeOfVisit,
+            previousVisitToIndia: values.previousVisitToIndia,
+            prevHotelAddress: values.prevHotelAddress,
+            prevCitiesVisited: values.prevCitiesVisited,
+            prevVisaNumber: values.prevVisaNumber,
+            prevVisaIssuedBy: values.prevVisaIssuedBy,
+            prevVisaType: values.prevVisaType,
+            prevVisaIssuedDate: values.prevVisaIssuedDate,
+            visaRefused: values.visaRefused,
+            visaRefusalDetails: values.visaRefusalDetails,
+            countriesVisited10Years: values.countriesVisited10Years,
+            // Reference in India fields
+            refIndiaName: values.refIndiaName,
+            refIndiaCompany: values.refIndiaCompany,
+            refIndiaAddress1: values.refIndiaAddress1,
+            refIndiaAddress2: values.refIndiaAddress2,
+            refIndiaPhone: values.refIndiaPhone,
+            refIndiaEmail: values.refIndiaEmail,
+            // Reference in USA fields
+            refUSAName: values.refUSAName,
+            refUSACompany: values.refUSACompany,
+            refUSAAddress: values.refUSAAddress,
+            refUSACity: values.refUSACity,
+            refUSAState: values.refUSAState,
+            refUSAZip: values.refUSAZip,
+            refUSAPhone: values.refUSAPhone,
+            refUSAEmail: values.refUSAEmail,
+            // Additional Questions fields
+            refusedEntryDeported: values.refusedEntryDeported,
+            refusedEntryDetails: values.refusedEntryDetails,
+            everArrested: values.everArrested,
+            arrestedDetails: values.arrestedDetails,
+            everConvicted: values.everConvicted,
+            convictedDetails: values.convictedDetails,
           },
         },
       ],
@@ -220,7 +491,9 @@ const ApplicationForm = ({
         {
           platformServiceId: values.platformServiceId,
           platformServiceCategoryId: values.platformServiceCategoryId,
-          platformServiceSubCategoryId: values.platformServiceSubCategoryId,
+          ...(values.platformServiceSubCategoryId && {
+            platformServiceSubCategoryId: values.platformServiceSubCategoryId,
+          }),
           platformServiceCategoryPackageId: values.platformServiceCategoryPackageId,
           platformServiceCategoryPackageAddonsId: values.platformServiceCategoryPackageAddonsId
             ? values.platformServiceCategoryPackageAddonsId
@@ -231,6 +504,129 @@ const ApplicationForm = ({
         ...values.additionalServiceFields,
         serviceType: values.documents.serviceType,
         ...processedDocuments,
+        // Personal Information fields
+        middleName: values.middleName,
+        previousNames: values.previousNames,
+        sex: values.sex,
+        dob: values.dob,
+        birthCity: values.birthCity,
+        birthState: values.birthState,
+        countryOfBirth: values.countryOfBirth,
+        countryOfBirthOther: values.countryOfBirthOther,
+        nationalId: values.nationalId,
+        religion: values.religion,
+        visibleMarks: values.visibleMarks,
+        educationLevel: values.educationLevel,
+        educationOther: values.educationOther,
+        citizenshipCountry: values.citizenshipCountry,
+        citizenshipCountryOther: values.citizenshipCountryOther,
+        citizenshipAcquiredBy: values.citizenshipAcquiredBy,
+        previousCitizenship: values.previousCitizenship,
+        previousCitizenshipOther: values.previousCitizenshipOther,
+        // Passport Details fields
+        passportNumber: values.passportNumber,
+        passportIssuingAuthority: values.passportIssuingAuthority,
+        passportIssueDate: values.passportIssueDate,
+        passportExpiryDate: values.passportExpiryDate,
+        holdsOtherPassport: values.holdsOtherPassport,
+        otherPassportNumber: values.otherPassportNumber,
+        otherPassportIssuingAuthority: values.otherPassportIssuingAuthority,
+        otherPassportIssueDate: values.otherPassportIssueDate,
+        otherPassportExpiryDate: values.otherPassportExpiryDate,
+        // Contact Information fields
+        homeAddress: values.homeAddress,
+        homeCity: values.homeCity,
+        homeState: values.homeState,
+        homeZip: values.homeZip,
+        isPermanentAddress: values.isPermanentAddress,
+        permAddress: values.permAddress,
+        permCity: values.permCity,
+        permState: values.permState,
+        permZip: values.permZip,
+        permCountry: values.permCountry,
+        homePhone: values.homePhone,
+        mobilePhone: values.mobilePhone,
+        homeEmail: values.homeEmail,
+        // Family Information fields
+        fatherName: values.fatherName,
+        fatherBirthCity: values.fatherBirthCity,
+        fatherBirthState: values.fatherBirthState,
+        fatherBirthCountry: values.fatherBirthCountry,
+        fatherCitizenship: values.fatherCitizenship,
+        fatherPrevCitizenship: values.fatherPrevCitizenship,
+        motherName: values.motherName,
+        motherBirthCity: values.motherBirthCity,
+        motherBirthState: values.motherBirthState,
+        motherBirthCountry: values.motherBirthCountry,
+        motherCitizenship: values.motherCitizenship,
+        motherPrevCitizenship: values.motherPrevCitizenship,
+        maritalStatus: values.maritalStatus,
+        spouseName: values.spouseName,
+        spouseCitizenship: values.spouseCitizenship,
+        spousePrevCitizenship: values.spousePrevCitizenship,
+        spouseBirthCity: values.spouseBirthCity,
+        spouseBirthState: values.spouseBirthState,
+        spouseBirthCountry: values.spouseBirthCountry,
+        grandparentsPakistan: values.grandparentsPakistan,
+        grandparentsPakistanDetails: values.grandparentsPakistanDetails,
+        // Work/School Information fields
+        occupation: values.occupation,
+        jobTitle: values.jobTitle,
+        employerOrSchool: values.employerOrSchool,
+        workAddress: values.workAddress,
+        workCity: values.workCity,
+        workState: values.workState,
+        workZip: values.workZip,
+        workPhone: values.workPhone,
+        workEmail: values.workEmail,
+        previousOccupation: values.previousOccupation,
+        militaryService: values.militaryService,
+        militaryCountryBranch: values.militaryCountryBranch,
+        militarySpecialization: values.militarySpecialization,
+        militaryHighestRank: values.militaryHighestRank,
+        militaryCity: values.militaryCity,
+        militaryState: values.militaryState,
+        militaryCountry: values.militaryCountry,
+        // Travel to India fields
+        visaType: values.visaType,
+        expectedArrivalDate: values.expectedArrivalDate,
+        arrivalCity: values.arrivalCity,
+        exitCity: values.exitCity,
+        otherIndianCities: values.otherIndianCities,
+        purposeOfVisit: values.purposeOfVisit,
+        previousVisitToIndia: values.previousVisitToIndia,
+        prevHotelAddress: values.prevHotelAddress,
+        prevCitiesVisited: values.prevCitiesVisited,
+        prevVisaNumber: values.prevVisaNumber,
+        prevVisaIssuedBy: values.prevVisaIssuedBy,
+        prevVisaType: values.prevVisaType,
+        prevVisaIssuedDate: values.prevVisaIssuedDate,
+        visaRefused: values.visaRefused,
+        visaRefusalDetails: values.visaRefusalDetails,
+        countriesVisited10Years: values.countriesVisited10Years,
+        // Reference in India fields
+        refIndiaName: values.refIndiaName,
+        refIndiaCompany: values.refIndiaCompany,
+        refIndiaAddress1: values.refIndiaAddress1,
+        refIndiaAddress2: values.refIndiaAddress2,
+        refIndiaPhone: values.refIndiaPhone,
+        refIndiaEmail: values.refIndiaEmail,
+        // Reference in USA fields
+        refUSAName: values.refUSAName,
+        refUSACompany: values.refUSACompany,
+        refUSAAddress: values.refUSAAddress,
+        refUSACity: values.refUSACity,
+        refUSAState: values.refUSAState,
+        refUSAZip: values.refUSAZip,
+        refUSAPhone: values.refUSAPhone,
+        refUSAEmail: values.refUSAEmail,
+        // Additional Questions fields
+        refusedEntryDeported: values.refusedEntryDeported,
+        refusedEntryDetails: values.refusedEntryDetails,
+        everArrested: values.everArrested,
+        arrestedDetails: values.arrestedDetails,
+        everConvicted: values.everConvicted,
+        convictedDetails: values.convictedDetails,
       },
     };
     console.log(backendPayload, 'backendPayload');
@@ -239,7 +635,7 @@ const ApplicationForm = ({
   });
 
   // Check is  user data exist when entered email
-  const checkExistingUserData = handleAsync(async () => {
+  const _checkExistingUserData = handleAsync(async () => {
     const email = form.getValues('email') || '';
     const validation = emailSchema().safeParse(email);
     if (!validation.success) {
@@ -344,7 +740,15 @@ const ApplicationForm = ({
         setIsSubCategoriesAvailable(true);
       }
     }
-  }, [applicationData]);
+  }, [applicationData, form]);
+
+  // Set default serviceType for US passport forms
+  useEffect(() => {
+    if (countrySlug === 'united-states' && serviceSlug === 'passport') {
+      // Set a default USA passport service type for validation
+      form.setValue('documents.serviceType', 'usa-passport-new-ds11' as any);
+    }
+  }, [countrySlug, serviceSlug, form]);
 
   return (
     <Form {...form}>
@@ -352,22 +756,35 @@ const ApplicationForm = ({
         {/* Step Indicator */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-lg font-semibold">Application</p>
-          <Select
-            onValueChange={handleApplicationStatusChange}
-            defaultValue={applicationData?.status || 'Submitted'}
-            disabled={isView || !isEdit}
-          >
-            <SelectTrigger className="w-fit min-w-44">
-              <SelectValue placeholder="Select Country" />
-            </SelectTrigger>
-            <SelectContent>
-              {applicationStatuses.map((status) => (
-                <SelectItem key={status} value={status}>
-                  {status}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex gap-2  ">
+            <Select
+              onValueChange={handleApplicationStatusChange}
+              defaultValue={applicationData?.status || 'Submitted'}
+              disabled={isView || !isEdit}
+            >
+              <SelectTrigger className="w-fit min-w-44">
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent>
+                {applicationStatuses.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Link
+              target="_blank"
+              href={
+                countrySlug === 'united-states' && serviceSlug === 'passport'
+                  ? 'https://drive.google.com/file/d/16W8JoIvZxLrGIvXKtyDBmnc1a9ZAOT8L/view?usp=sharing'
+                  : 'https://drive.google.com/file/d/12l-ijYTA0ODpNEbyGwFRBTjb-IDdQKeQ/view?usp=sharing'
+              }
+              className="!h-12 flex items-center border  rounded-md px-4"
+            >
+              Download Form
+            </Link>
+          </div>
         </div>
         {/* {!isView && (
             <Select>
@@ -399,6 +816,7 @@ const ApplicationForm = ({
               placeholder="Select country"
               apiPath="/country/get-country?page=1&pageSize=256"
               enable={isEdit ? false : true}
+              onSlugSelect={(slug) => setCountrySlug(slug)}
             />
 
             <ComboSelect
@@ -410,6 +828,7 @@ const ApplicationForm = ({
                   ? `/platform-service/get-platform-service?toCountryId=${form.watch('toCountryId')}`
                   : ''
               }
+              onSlugSelect={(slug) => setServiceSlug(slug)}
             />
 
             <ComboSelect
@@ -485,186 +904,21 @@ const ApplicationForm = ({
           </div>
 
           {/* Personal Details */}
-          <div className="p-4 border rounded-lg grid sm:grid-cols-2 gap-4">
-            <p className="col-span-2 font-semibold">Personal Details</p>
-            <FormField
-              name="firstName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="lastName"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="email"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex justify-between pr-2 items-center">
-                    Email
-                    {startCheckUserLoading && (
-                      <small className="flex items-center gap-2">
-                        <Spinner className="size-3" />
-                        Searching user...
-                      </small>
-                    )}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder=""
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e.target.value);
-                        checkExistingUserData();
-                      }}
-                      disabled={isView || isEdit}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="phone"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone</FormLabel>
-                  <FormControl>
-                    <PhoneInput
-                      value={(field.value as string) || ''}
-                      onChange={field.onChange}
-                      placeholder="+1"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              name="country"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USA">USA</SelectItem>
-                        <SelectItem value="UK">UK</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="additionalServiceFields.passportNumber"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Passport Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="notes"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Additional Notes</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Address */}
-          <div className="p-4 border rounded-lg grid sm:grid-cols-2 gap-4">
-            <p className="col-span-2 font-semibold">Current Address</p>
-            <FormField
-              name="address"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="city"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="state"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>State</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="pincode"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pincode</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" readOnly={isView} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          {countrySlug === 'united-states' && serviceSlug === 'passport' ? (
+            <USPassportForm isView={isView} />
+          ) : (
+            <>
+              <PersonalInfo isView={isView} />
+              <PassportDetails isView={isView} />
+              <ContactInfo isView={isView} />
+              <FamilyInfo isView={isView} />
+              <WorkSchoolInfo isView={isView} />
+              <TravelToIndia isView={isView} />
+              <ReferenceIndia isView={isView} />
+              <ReferenceUSA isView={isView} />
+              <AdditionalQuestions isView={isView} />
+            </>
+          )}
 
           {/* Payment Details */}
           <div className="p-4 border rounded-lg grid sm:grid-cols-2 gap-4">
