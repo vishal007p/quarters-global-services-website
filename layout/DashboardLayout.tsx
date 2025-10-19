@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/lib/logout";
+import Image from "next/image";
+import Link from "next/link";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -75,15 +77,31 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             open ? "w-64" : "w-0 lg:w-64"
           )}
         >
-          <div className="flex items-center justify-between p-4 border-b">
-            <h1 className="font-bold text-red-600 text-lg">Dashboard</h1>
+          <div className="relative flex items-center justify-center p-4 border-b">
+            {/* Logo centered */}
+            <Link
+              href="/"
+              className="font-bold text-red-600 text-lg flex items-center justify-center"
+            >
+              <Image
+                src="/logo.png"
+                alt="Quartus Logo"
+                width={120}
+                height={40}
+                onClick={() => router.push("/")}
+                className="cursor-pointer"
+              />
+            </Link>
+
+            {/* Close button on the right side */}
             <button
-              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded"
+              className="absolute right-4 p-2 text-gray-600 hover:bg-gray-100 rounded lg:hidden"
               onClick={() => setOpen(false)}
             >
               <X className="h-5 w-5" />
             </button>
           </div>
+
 
           <div className="flex flex-col justify-between flex-1 overflow-y-auto">
             <nav className="mt-2 px-4">
@@ -124,7 +142,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
-          <header className="flex items-center justify-between px-6 h-15 bg-white border-b shadow-sm">
+          <header className="flex items-center justify-between px-6 h-17 bg-white border-b shadow-sm">
             <button
               className="lg:hidden p-2 text-gray-600"
               onClick={() => setOpen(!open)}
