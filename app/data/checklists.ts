@@ -19,7 +19,7 @@ type Checklists = {
 
 
 export const CHECKLIST_PACKAGES:any = {
-      oci: {
+      "OCI Card": {
         "IN": [
             {
                 id: "oci-adult",
