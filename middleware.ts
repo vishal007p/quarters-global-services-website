@@ -19,13 +19,13 @@ export function middleware(req: NextRequest) {
 
   // 2️⃣ Authenticated user visiting login/register — redirect them away
   if ((isLoginPage || isRegisterPage) && sessionCookie) {
-    const dashboardUrl = new URL("/dashboard", req.url);
+    const dashboardUrl = new URL("/dashboard/applications", req.url);
     return NextResponse.redirect(dashboardUrl);
   }
 
   // 3️⃣ Restrict admin-only routes
   if (isAdminRoute && roleCookie !== "admin") {
-    const dashboardUrl = new URL("/dashboard", req.url);
+    const dashboardUrl = new URL("/dashboard/applications", req.url);
     return NextResponse.redirect(dashboardUrl);
   }
 

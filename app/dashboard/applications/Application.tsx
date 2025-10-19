@@ -104,7 +104,7 @@ const ApplicationsPage = ({
         id: data._id,
         name: data.firstName,
         avatar: '/avatars/avatar1.jpg',
-        service: data.serviceFields.serviceType,
+        service: data.serviceFields.service,
         serviceType: data.serviceFields.serviceType,
         phone: data.phone,
         email: data.email,
