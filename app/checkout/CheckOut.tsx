@@ -11,7 +11,8 @@ export default function CheckoutPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 py-10">
-      {type === "OCI" ? <MultiStepForm2 /> : <MultiStepForm />}
+      {/* {type === "OCI" ? <MultiStepForm2 /> : <MultiStepForm />} */}
+      <MultiStepForm />
     </main>
   );
 }
