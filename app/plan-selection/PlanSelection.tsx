@@ -2,11 +2,13 @@
 import BannerLayout from "@/components/Banner/BannerLayout";
 import PlanCard, { VisaPlan } from "@/components/Cards/PlanCard";
 import CommitmentSection from "@/components/CommitmentSection/CommitmentSection";
+import CurrencyAndTime from "@/components/CurrencyAndTime";
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import PlanCardSkeleton from "@/components/Skeletons/PlanCardSkeletons";
 import StepFlow from "@/components/StepFlow";
 import TestimonialSlider from "@/components/TestimonialSlider ";
+import WeatherStripAxiosDirect from "@/components/WeatherStrip";
 import { useGetPlatformServiceCategoryPackagesQuery } from "@/services/platformCategoryPackageApi";
 import { useSearchParams } from "next/navigation";
 import React from "react";
@@ -70,6 +72,8 @@ const PlanSelection = () => {
       </div>
       <CommitmentSection />
       <StepFlow/>
+         <WeatherStripAxiosDirect  className="max-w-5xl mx-auto mt-10" />
+                  <CurrencyAndTime />
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"

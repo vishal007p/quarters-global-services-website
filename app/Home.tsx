@@ -95,28 +95,7 @@ export default function Home() {
             }
           />
 
-          <Button
-            iconPosition="right"
-            name={"Start Application"}
-            icon={
-              <svg
-                width="24"
-                height="25"
-                viewBox="0 0 24 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="12" cy="12.5" r="12" fill="#D31021" />
-                <path
-                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            }
-          />
+
         </div>
 
         {/* Dropdown Form */}
@@ -256,28 +235,7 @@ export default function Home() {
             }
           />
 
-          <ButtonTwo
-            iconPosition="right"
-            name={"Track Application"}
-            icon={
-              <svg
-                width="24"
-                height="25"
-                viewBox="0 0 24 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="12" cy="12.5" r="12" fill="white" />
-                <path
-                  d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
-                  stroke="#022146"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            }
-          />
+
         </div>
       </div>
 
@@ -294,7 +252,30 @@ export default function Home() {
             </h2>
 
             <p className="font-normal mt-4">Join Our Trusted Network of Certified Visa Agents Worldwide</p>
-            <p className="text-sm mt-5">{`Quartus Global Service empowers agents across the globe to connect, collaborate, and offer streamlined visa and immigration services through our secure digital platform. Whether you're an individual consultant or an agency, our cloud-based system gives you the tools to manage client applications, upload documents, and track statuses in real-time—all from one centralized portal.`}</p>
+            <p className="text-sm mt-5 mb-5">{`Quartus Global Service empowers agents across the globe to connect, collaborate, and offer streamlined visa and immigration services through our secure digital platform. Whether you're an individual consultant or an agency, our cloud-based system gives you the tools to manage client applications, upload documents, and track statuses in real-time—all from one centralized portal.`}</p>
+            <ButtonTwo
+              iconPosition="right"
+              name="Become a  Agent"
+              link="https://quartus-five.vercel.app/"
+              icon={
+                <svg
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="12" cy="12.5" r="12" fill="white" />
+                  <path
+                    d="M7.33325 12.5H16.6666M16.6666 12.5L12.6666 8.5M16.6666 12.5L12.6666 16.5"
+                    stroke="#022146"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              }
+            />
           </div>
           <div className="flex justify-end">
             <Image src="/serviceImg.png" width={500} height={500} alt="serve"></Image>
@@ -357,6 +338,7 @@ export default function Home() {
           <Button
             iconPosition="right"
             name={"Explore All Blogs"}
+            link="/blogs"
             icon={
               <svg
                 width="24"
@@ -379,7 +361,7 @@ export default function Home() {
         </div>
       </div>
 
-      <TrustedSection/>
+      <TrustedSection />
 
       <section className="mt-10">
         <SectionHeading

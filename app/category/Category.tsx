@@ -106,7 +106,7 @@ const Category = () => {
                 />
                 <TestimonialSlider />
             </div>
-            <FAQSection />
+            {/* <FAQSection /> */}
         </>
     );
 };

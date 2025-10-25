@@ -129,7 +129,7 @@ const SubCategory = () => {
         <TestimonialSlider />
       </div>
 
-      <FAQSection />
+      {/* <FAQSection /> */}
     </>
   );
 };

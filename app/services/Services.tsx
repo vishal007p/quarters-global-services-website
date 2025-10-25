@@ -102,7 +102,7 @@ const Services = () => {
                 <TestimonialSlider />
             </div>
 
-            <FAQSection />
+            {/* <FAQSection /> */}
 
         </>
     )

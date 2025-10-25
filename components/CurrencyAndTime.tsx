@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,24 +15,33 @@ import {
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 
+// Countries with slug and timezone
 const countries = [
-  { code: "US", name: "US Dollar" },
-  { code: "IN", name: "Indian Rupee" },
-  { code: "CN", name: "Chinese Yuan Renminbi" },
-  { code: "EU", name: "Euro" },
-  { code: "JP", name: "Japanese Yen" },
+  { code: "US", slug: "united-states", name: "US Dollar", timezone: "America/New_York" },
+  { code: "IN", slug: "india", name: "Indian Rupee", timezone: "Asia/Kolkata" },
+  { code: "CN", slug: "china", name: "Chinese Yuan", timezone: "Asia/Shanghai" },
+  { code: "EU", slug: "europe", name: "Euro", timezone: "Europe/Berlin" },
+  { code: "JP", slug: "japan", name: "Japanese Yen", timezone: "Asia/Tokyo" },
 ];
 
 export default function CurrencyAndTime() {
+  const searchParams = useSearchParams();
+  const toCountrySlug = searchParams.get("toCountrySlug") || "india";
+  const fromCountrySlug = searchParams.get("fromCountrySlug") || "us-visa";
+
+  // Find countries based on slug
+  const defaultToCountry = countries.find(c => c.slug === toCountrySlug) || countries[0];
+  const defaultFromCountry = countries.find(c => c.slug === fromCountrySlug) || countries[0];
+
   const [amount, setAmount] = useState("");
-  const [fromCountry, setFromCountry] = useState("US");
-  const [toCountry, setToCountry] = useState("IN");
+  const [fromCountry, setFromCountry] = useState(defaultFromCountry.code);
+  const [toCountry, setToCountry] = useState(defaultToCountry.code);
   const [converted, setConverted] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   const base = process.env.NEXT_PUBLIC_QUARTUS_API_URL;
 
-  // ✅ FIX: wrap in useCallback so it doesn’t change on every render
+  // Currency conversion
   const handleConvert = useCallback(async () => {
     if (!amount || isNaN(Number(amount))) return;
     setLoading(true);
@@ -48,9 +58,8 @@ export default function CurrencyAndTime() {
     } finally {
       setLoading(false);
     }
-  }, [amount, fromCountry, toCountry, base]); // ✅ proper deps
+  }, [amount, fromCountry, toCountry, base]);
 
-  // ✅ Effect will only re-run when amount/from/to actually change
   useEffect(() => {
     if (amount) handleConvert();
   }, [amount, fromCountry, toCountry, handleConvert]);
@@ -62,19 +71,23 @@ export default function CurrencyAndTime() {
     return () => clearInterval(timer);
   }, []);
 
-  const chinaTime = new Date(time.toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
-  const chinaHours = chinaTime.toLocaleTimeString("en-US", {
+  const selectedCountry = countries.find(c => c.code === toCountry) || countries[0];
+  const countryTime = new Date(
+    time.toLocaleString("en-US", { timeZone: selectedCountry.timezone })
+  );
+
+  const hours = countryTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
   });
-  const chinaDate = chinaTime.toLocaleDateString("en-US", {
+  const date = countryTime.toLocaleDateString("en-US", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-  const week = `Week ${Math.ceil(chinaTime.getDate() / 7) + chinaTime.getMonth() * 4}`;
+  const week = `Week ${Math.ceil(countryTime.getDate() / 7) + countryTime.getMonth() * 4}`;
 
   return (
     <div className="grid md:grid-cols-2 gap-6 max-w-5xl m-auto mt-10">
@@ -147,23 +160,22 @@ export default function CurrencyAndTime() {
       <Card className="shadow-md border border-blue-100">
         <CardHeader className="bg-blue-900 text-white rounded-t-lg py-2">
           <CardTitle className="text-center text-sm font-semibold tracking-wide">
-            Current Time in China
+            Current Time in {selectedCountry.name}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-5 text-center">
           <motion.div
-            key={chinaHours}
+            key={hours}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-3xl sm:text-4xl font-bold text-blue-900 bg-blue-100 rounded-lg py-2"
           >
-            {chinaHours} <span className="text-sm text-gray-600 align-middle">GMT+8</span>
+            {hours} <span className="text-sm text-gray-600 align-middle">({selectedCountry.timezone})</span>
           </motion.div>
 
           <p className="mt-3 text-gray-700">
-            {chinaDate}, {week}
+            {date}, {week}
           </p>
-          <p className="text-sm text-gray-500 mt-1">Chinese Standard Time (CST)</p>
         </CardContent>
       </Card>
     </div>

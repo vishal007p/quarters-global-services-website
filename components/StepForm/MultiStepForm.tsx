@@ -209,7 +209,7 @@ const MultiStepForm = () => {
 
               
                     {/* ✅ Total */}
-                    <div className="flex justify-between items-center border-t pt-4 font-bold text-base">
+                    <div className="flex justify-between items-center pt-4 font-bold text-base">
                       <span>Total</span>
                       <span>
                         {currency} {total.toFixed(2)}
