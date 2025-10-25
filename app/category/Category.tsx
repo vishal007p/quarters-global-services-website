@@ -94,7 +94,7 @@ const Category = () => {
                 </div>
             </div>
             <CommitmentSection />
-            <WeatherStrip dummy={true} className="max-w-5xl mx-auto mt-10" />
+            <WeatherStrip  className="max-w-5xl mx-auto mt-10" />
             <CurrencyAndTime />
 
             <div className="max-w-7xl mx-auto px-10 py-12  ">

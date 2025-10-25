@@ -117,7 +117,7 @@ const SubCategory = () => {
       <WhyChoose />
 
       <CommitmentSection />
-      <WeatherStripAxiosDirect dummy={true} className="max-w-5xl mx-auto mt-10" />
+      <WeatherStripAxiosDirect className="max-w-5xl mx-auto mt-10" />
       <CurrencyAndTime />
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
