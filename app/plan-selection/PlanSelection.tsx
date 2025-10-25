@@ -5,6 +5,7 @@ import CommitmentSection from "@/components/CommitmentSection/CommitmentSection"
 import FAQSection from "@/components/FAQSection";
 import SectionTitle from "@/components/SectionTitle/SectionTitle";
 import PlanCardSkeleton from "@/components/Skeletons/PlanCardSkeletons";
+import StepFlow from "@/components/StepFlow";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import { useGetPlatformServiceCategoryPackagesQuery } from "@/services/platformCategoryPackageApi";
 import { useSearchParams } from "next/navigation";
@@ -68,6 +69,7 @@ const PlanSelection = () => {
         </div>
       </div>
       <CommitmentSection />
+      <StepFlow/>
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"

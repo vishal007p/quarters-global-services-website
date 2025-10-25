@@ -17,9 +17,9 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
 
   return (
     <>
-      {!hideLayout && <Header />}
+     <Header />
       {children}
-      {!hideLayout && <Footer />}
+       <Footer />
     </>
   );
 };

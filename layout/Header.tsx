@@ -2,42 +2,48 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import {  MdMenu, MdClose, MdShoppingCart } from "react-icons/md";
+import { MdMenu, MdClose, MdShoppingCart } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { usePathname } from "next/navigation";
-import { useRouter } from "nextjs-toploader/app";
+import { usePathname, useRouter } from "next/navigation";
 import { useGetNavbarServicesQuery } from "@/services/platformNavbarApi";
+import { getSession } from "@/lib/session";
 
 const Header = () => {
   const { data, isError, isLoading } = useGetNavbarServicesQuery();
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // track login
 
   const router = useRouter();
   const currentPath = usePathname();
-
   const services = data?.data?.data;
 
-  // ✅ Fetch cart count from localStorage
+  // ✅ Check login status via cookie
+  useEffect(() => {
+    const fetchSession = async () => {
+      const token = await getSession(); // ✅ await the promise
+      console.log(token?.token, "token");
+      setIsLoggedIn(!!token);
+    };
+
+    fetchSession();
+  }, []);
+
+  // ✅ Fetch cart count
   useEffect(() => {
     const saved = localStorage.getItem("applications");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-
         if (Array.isArray(parsed.applications)) {
           const validApps = parsed.applications.filter(
             (app: any) =>
               typeof app?.platformServiceCategoryId === "string" &&
               app.platformServiceCategoryId.trim() !== ""
           );
-
           setCartCount(validApps.length);
-        } else {
-          setCartCount(0);
-        }
+        } else setCartCount(0);
       } catch {
         setCartCount(0);
       }
@@ -65,11 +71,7 @@ const Header = () => {
             Array.from({ length: 5 }).map((_, i) => (
               <Skeleton key={i} width={100} height={20} />
             ))}
-
-          {isError && (
-            <span className="text-red-500">Error loading services</span>
-          )}
-
+          {isError && <span className="text-red-500">Error loading services</span>}
           {!isLoading && !isError && (
             <>
               {services
@@ -83,32 +85,29 @@ const Header = () => {
                     key={service._id}
                     onClick={() => router.push(`/${service.slug}`)}
                     className={`${currentPath === `/${service.slug}`
-                      ? "text-blue-600 font-semibold"
-                      : "hover:text-blue-600"
+                        ? "text-blue-600 font-semibold"
+                        : "hover:text-blue-600"
                       } transition cursor-pointer`}
                   >
                     {service.name}
                   </button>
                 ))}
 
-           
-
               {/* Static Pages */}
               <button
                 onClick={() => router.push("/about-us")}
                 className={`${currentPath === "/about-us"
-                  ? "text-blue-600 font-semibold"
-                  : "hover:text-blue-600"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
                   } transition cursor-pointer`}
               >
                 About Us
               </button>
-
               <button
                 onClick={() => router.push("/contact-us")}
                 className={`${currentPath === "/contact-us"
-                  ? "text-blue-600 font-semibold"
-                  : "hover:text-blue-600"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
                   } transition cursor-pointer`}
               >
                 Contact Us
@@ -132,15 +131,25 @@ const Header = () => {
             )}
           </div>
 
-         
-
-          {/* Login */}
-          <button onClick={() => router.push("/login")}  className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
-            Login
-          </button>
+          {/* Login / Dashboard Button */}
+          {!isLoggedIn ? (
+            <button
+              onClick={() => router.push("/login")}
+              className="w-[113px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition"
+            >
+              Login
+            </button>
+          ) : (
+            <button
+              onClick={() => router.push("/dashboard/applications")}
+              className="w-[130px] h-[47px] px-[16px] py-[10px] text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition"
+            >
+              Dashboard
+            </button>
+          )}
         </div>
 
-        {/* Mobile Hamburger Menu Button */}
+        {/* Mobile Hamburger */}
         <div className="md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -158,11 +167,7 @@ const Header = () => {
             Array.from({ length: 3 }).map((_, i) => (
               <Skeleton key={i} width={`100%`} height={20} className="mb-2" />
             ))}
-
-          {isError && (
-            <span className="text-red-500">Error loading services</span>
-          )}
-
+          {isError && <span className="text-red-500">Error loading services</span>}
           {!isLoading && !isError && (
             <>
               {services
@@ -179,23 +184,22 @@ const Header = () => {
                       setMobileMenuOpen(false);
                     }}
                     className={`block w-full text-left py-2 ${currentPath === `/${service.slug}`
-                      ? "text-blue-600 font-semibold"
-                      : "hover:text-blue-600"
+                        ? "text-blue-600 font-semibold"
+                        : "hover:text-blue-600"
                       }`}
                   >
                     {service.name}
                   </button>
                 ))}
 
-              {/* Add E-Visa */}
               <button
                 onClick={() => {
                   router.push("/e-visa");
                   setMobileMenuOpen(false);
                 }}
                 className={`block w-full text-left py-2 ${currentPath === "/e-visa"
-                  ? "text-blue-600 font-semibold"
-                  : "hover:text-blue-600"
+                    ? "text-blue-600 font-semibold"
+                    : "hover:text-blue-600"
                   }`}
               >
                 E-Visa
@@ -212,11 +216,29 @@ const Header = () => {
                 <MdShoppingCart className="text-xl text-gray-800" />
                 <span className="text-sm">Cart ({cartCount})</span>
               </div>
- 
-              {/* Login */}
-              <button onClick={() => router.push("/login")} className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition">
-                Login
-              </button>
+
+              {/* Mobile Login / Dashboard */}
+              {!isLoggedIn ? (
+                <button
+                  onClick={() => {
+                    router.push("/login");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition"
+                >
+                  Login
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    router.push("/dashboard/applications");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full mt-4 px-4 py-3 text-xs font-semibold border border-[#00408D] bg-[#00408D] text-white rounded-[12px] hover:bg-blue-50 hover:text-[#00408D] transition"
+                >
+                  Dashboard
+                </button>
+              )}
             </>
           )}
         </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import {
   FaFacebookF,
@@ -7,13 +8,52 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 
+const socialLinks = [
+  { icon: <FaFacebookF />, href: "https://facebook.com" },
+  { icon: <FaTwitter />, href: "https://twitter.com" },
+  { icon: <FaInstagram />, href: "https://instagram.com" },
+  { icon: <FaLinkedinIn />, href: "https://linkedin.com" },
+];
+
+const services = [
+  { name: "Visa Services", href: "/" },
+  { name: "Passport Services", href: "/" },
+  { name: "Agent Registration Form", href: "/" },
+  { name: "OCI Card", href: "/" },
+  { name: "Apostille & Legalization", href: "/" },
+  { name: "Managed Service Program", href: "/" },
+  { name: "Travel Medical Insurance", href: "/" },
+];
+
+const company = [
+  { name: "About Us", href: "/about-us" },
+  { name: "Blogs", href: "/" },
+  { name: "Testimonials", href: "/" },
+  { name: "Locations", href: "/" },
+  { name: "Job Openings", href: "/" },
+];
+
+const resources = [
+  { name: "Support", href: "/support" },
+  { name: "Help Center", href: "/help-center" },
+  { name: "Legal", href: "/legal" },
+  { name: "Policies", href: "/policies" },
+  { name: "Terms & Condition", href: "/terms-and-condition" }, // internal page link
+];
+
 export const Footer = () => {
   return (
-    <footer className="bg-black text-white py-10 px-4 md:px-12 lg:px-20">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+    <footer className="bg-black text-white py-12 px-4 sm:px-6 md:px-12 lg:px-20">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
         {/* Logo & Contact */}
         <div className="md:col-span-1">
-          <Image src={"/whiteLogo.png"} className="mb-4" width={200} height={240} alt="logo"></Image>
+          <Image
+            src="/whiteLogo.png"
+            width={200}
+            height={50}
+            alt="Quartus Logo"
+            className="mb-4 object-contain"
+          />
           <p className="text-sm mb-2">
             Simplifying Visa & Document Processes <br /> with Speed & Security.
           </p>
@@ -33,13 +73,13 @@ export const Footer = () => {
         <div>
           <h3 className="font-semibold mb-3">SERVICES</h3>
           <ul className="space-y-2 text-sm">
-            <li>Visa services</li>
-            <li>Passport Services</li>
-            <li>Agent Registration Form</li>
-            <li>OCI Card</li>
-            <li>Apostille & Legalization</li>
-            <li>Managed Service Program</li>
-            <li>Travel Medical Insurance</li>
+            {services.map((service) => (
+              <li key={service.name}>
+                <Link href={service.href} className="hover:underline">
+                  {service.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -47,11 +87,13 @@ export const Footer = () => {
         <div>
           <h3 className="font-semibold mb-3">COMPANY</h3>
           <ul className="space-y-2 text-sm">
-            <li>About Us</li>
-            <li>Blogs</li>
-            <li>Testimonials</li>
-            <li>Locations</li>
-            <li>Job Openings</li>
+            {company.map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="hover:underline">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -59,11 +101,13 @@ export const Footer = () => {
         <div>
           <h3 className="font-semibold mb-3">RESOURCES</h3>
           <ul className="space-y-2 text-sm">
-            <li>Support</li>
-            <li>Help Center</li>
-            <li>Legal</li>
-            <li>Policies</li>
-            <li>Terms & Condition</li>
+            {resources.map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="hover:underline">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -71,18 +115,17 @@ export const Footer = () => {
         <div>
           <h3 className="font-semibold mb-3">FOLLOW US</h3>
           <div className="flex gap-4 text-lg">
-            <a href="#" className="hover:text-gray-400">
-              <FaFacebookF />
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              <FaTwitter />
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              <FaInstagram />
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              <FaLinkedinIn />
-            </a>
+            {socialLinks.map((social, index) => (
+              <a
+                key={index}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-400"
+              >
+                {social.icon}
+              </a>
+            ))}
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ type DashboardLayoutProps = {
 };
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -42,13 +42,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       console.error("Logout failed:", error);
     } finally {
       setLogoutDialogOpen(false);
-      setOpen(false);
+      setSidebarOpen(false);
     }
   };
 
   return (
     <>
-      {/* ✅ Logout Confirmation Dialog */}
+      {/* Logout Dialog */}
       <Dialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
         <DialogContent className="sm:max-w-md z-[9999]">
           <DialogHeader>
@@ -57,7 +57,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               Are you sure you want to log out? Your session will be cleared.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => setLogoutDialogOpen(false)}>
               Cancel
             </Button>
@@ -68,91 +68,64 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Main Layout */}
-      <div className="flex h-screen overflow-hidden w-full bg-gray-100">
+      {/* Layout */}
+      <div className="flex h-screen w-full overflow-hidden bg-gray-100">
         {/* Sidebar */}
-        <div
+        <aside
           className={clsx(
-            "flex flex-col bg-white border-r transition-all duration-300 ease-in-out shadow-md",
-            open ? "w-64" : "w-0 lg:w-64"
+            "flex flex-col bg-white border-r shadow-md transition-all duration-300 ease-in-out w-64",
+            !sidebarOpen && "hidden lg:flex"
           )}
         >
-          <div className="relative flex items-center justify-center p-4 border-b">
-            {/* Logo centered */}
-            <Link
-              href="/"
-              className="font-bold text-red-600 text-lg flex items-center justify-center"
+          {/* Logo */}
+         
+
+          {/* Nav */}
+          <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+            {topNavItems.map((item) => {
+              const isActive = pathname === item.path;
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => router.push(item.path)}
+                  className={clsx(
+                    "flex items-center w-full px-4 py-2 text-left rounded-md transition-colors",
+                    isActive
+                      ? "bg-red-100 text-red-600 font-medium"
+                      : "text-gray-600 hover:bg-red-50 hover:text-red-600"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="ml-3">{item.name}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Logout */}
+          <div className="p-4 border-t">
+            <Button
+              className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white"
+              onClick={() => setLogoutDialogOpen(true)}
             >
-              <Image
-                src="/logo.png"
-                alt="Quartus Logo"
-                width={120}
-                height={40}
-                onClick={() => router.push("/")}
-                className="cursor-pointer"
-              />
-            </Link>
-
-            {/* Close button on the right side */}
-            <button
-              className="absolute right-4 p-2 text-gray-600 hover:bg-gray-100 rounded lg:hidden"
-              onClick={() => setOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </button>
+              <LogOut className="h-5 w-5 mr-2" />
+              Logout
+            </Button>
           </div>
-
-
-          <div className="flex flex-col justify-between flex-1 overflow-y-auto">
-            <nav className="mt-2 px-4">
-              {topNavItems.map((item) => {
-                const isActive = pathname === item.path;
-                return (
-                  <button
-                    key={item.name}
-                    onClick={() => {
-                      router.push(item.path);
-                      setOpen(false);
-                    }}
-                    className={clsx(
-                      "flex items-center w-full px-4 py-2 text-left transition rounded-md",
-                      isActive
-                        ? "bg-red-100 text-red-600 font-medium"
-                        : "text-gray-600 hover:bg-red-50 hover:text-red-600"
-                    )}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    <span className="ml-3">{item.name}</span>
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="mt-auto mb-4 px-4 border-t pt-4">
-              <Button
-                className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white"
-                onClick={() => setLogoutDialogOpen(true)}
-              >
-                <LogOut className="h-5 w-5 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+        </aside>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
-          <header className="flex items-center justify-between px-6 h-17 bg-white border-b shadow-sm">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <header className="flex items-center justify-between px-6 h-16 bg-white border-b shadow-sm flex-shrink-0">
             <button
               className="lg:hidden p-2 text-gray-600"
-              onClick={() => setOpen(!open)}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <Menu className="h-6 w-6" />
             </button>
 
-            <h2 className="text-lg font-semibold text-gray-800">
-              Welcome Back 👋
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-800">Welcome Back 👋</h2>
 
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-700 font-medium">John Doe</span>
@@ -164,9 +137,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
           </header>
 
-          <main className="flex-1 p-6 bg-white overflow-y-hidden">
-            <div className="w-full h-full overflow-auto">{children}</div>
-          </main>
+          {/* Main */}
+          <main className="flex-1 overflow-auto bg-gray-100 p-6">{children}</main>
         </div>
       </div>
     </>

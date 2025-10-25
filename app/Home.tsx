@@ -13,6 +13,7 @@ import SectionHeading from "@/components/SectionTitle/SectionHeading";
 import TestimonialSlider from "@/components/TestimonialSlider ";
 import DropdownForm from "@/components/DropdownForm/DropdownForm";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
+import TrustedSection from "@/components/TrustedSection";
 
 const blogPosts = [
   {
@@ -377,6 +378,8 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <TrustedSection/>
 
       <section className="mt-10">
         <SectionHeading
