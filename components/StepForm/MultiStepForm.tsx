@@ -6,6 +6,7 @@ import Step3 from "./Step3";
 import Image from "next/image";
 import { getPlatformServices } from "@/lib/platformServiceStorage";
 import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const steps = [
   { id: 1, label: "Traveler Info" },
@@ -24,7 +25,7 @@ const MultiStepForm = () => {
   const { activeId } = useSelector((state: any) => state.application);
   const [, setNames] = useState<string[]>([]);
 
- 
+
 
   useEffect(() => {
     const stored = getPlatformServices();
@@ -65,7 +66,7 @@ const MultiStepForm = () => {
         addOnPrices.reduce((a, b) => a + b, 0);
 
       const totalValue =
-        totalDynamic  ;
+        totalDynamic;
 
       setTotal(totalValue);
     }
@@ -191,7 +192,7 @@ const MultiStepForm = () => {
                     {getPlatformServices()
                       .filter((s) => s.additionService && Number(s.additionService_price) > 0)
                       .map((s, idx) => (
-                        <div 
+                        <div
                           key={idx}
                           className="flex justify-between items-center py-2 border-b last:border-none"
                         >
@@ -207,7 +208,7 @@ const MultiStepForm = () => {
 
 
 
-              
+
                     {/* ✅ Total */}
                     <div className="flex justify-between items-center pt-4 font-bold text-base">
                       <span>Total</span>
@@ -219,19 +220,27 @@ const MultiStepForm = () => {
                 </div>
 
                 {/* Bottom Buttons */}
-                <div className="mt-6 space-y-3">
-                  <button className="w-full border border-dashed border-black text-black text-xs py-2 rounded">
-                    Add New Visa Service
-                  </button>
-                  <button className="w-full border border-dashed border-black text-black text-xs py-2 rounded">
-                    Passport Services
-                  </button>
-                  <button className="w-full border border-dashed border-black text-black text-xs py-2 rounded">
-                    Document Services
-                  </button>
-                  <button className="w-full border border-dashed border-black text-black text-xs py-2 rounded">
-                    Consultancy Service
-                  </button>
+                <div className="mt-6 flex flex-col gap-2">
+                  <Link href="/">
+                    <button className="w-full cursor-pointer border border-dashed border-black text-black text-xs py-2 rounded">
+                      Add New Visa Service
+                    </button>
+                  </Link>
+                  <Link href="/">
+                    <button className="w-full cursor-pointer  border border-dashed border-black text-black text-xs py-2 rounded">
+                      Passport Services
+                    </button>
+                  </Link>
+                  <Link href="/">
+                    <button className="w-full cursor-pointer  border border-dashed border-black text-black text-xs py-2 rounded">
+                      Document Services
+                    </button>
+                  </Link>
+                  <Link href="/">
+                    <button className="w-full  cursor-pointer border border-dashed border-black text-black text-xs py-2 rounded">
+                      Consultancy Service
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -25,7 +25,7 @@ const PlanSelection = () => {
     }
   );
   const packages = data?.data?.data;
-  console.log(packages,"sdss")
+  console.log(packages, "sdss")
   if (error) return <p>Something went wrong</p>;
 
   return (
@@ -71,9 +71,9 @@ const PlanSelection = () => {
         </div>
       </div>
       <CommitmentSection />
-      <StepFlow/>
-         <WeatherStripAxiosDirect  className="max-w-5xl mx-auto mt-10" />
-                  <CurrencyAndTime />
+      <StepFlow />
+      <WeatherStripAxiosDirect className="max-w-5xl mx-auto mt-10" />
+      <CurrencyAndTime />
       <div className="max-w-7xl mx-auto px-10 py-12  ">
         <SectionTitle
           subtitle="Our Testimonials"
