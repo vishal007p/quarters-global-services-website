@@ -18,6 +18,7 @@ type Service = {
     buttonText?: string; // optional
     platformServiceId:string;
     description:string;
+    imageUrl:string;
 };
 
 const OtherService = () => {
@@ -171,7 +172,7 @@ const OtherService = () => {
                                         title={service.name}
                                         description={service.description}
                                         buttonText="Learn More"
-                                        imageSrc={service.iconUrl}
+                                        imageSrc={service?.imageUrl}
                                         imagePosition={index % 2 === 0 ? "left" : "right"}
                                         slug={service.slug}
                                         id={service._id}

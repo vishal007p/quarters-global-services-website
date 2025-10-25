@@ -75,6 +75,7 @@ export default function Home() {
           <Button
             iconPosition="right"
             name={"Book a consultation"}
+            link="/other-services/consultancy_service"
             icon={
               <svg
                 width="24"
