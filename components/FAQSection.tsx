@@ -19,16 +19,13 @@ interface FAQSectionProps {
   items?: FAQItem[];
 }
 
-type MainServiceType = keyof typeof FaqsDatas;
-
 const formatCountryName = (slug: string) =>
   slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-const normalize = (str: string) =>
-  str.toLowerCase().replace(/[\s\/]+/g, "-");
+const normalize = (str: string) => str.toLowerCase().replace(/[\s\/]+/g, "-");
 
 export default function FAQSection({ items = [] }: FAQSectionProps) {
   const searchParams = useSearchParams();
@@ -39,15 +36,15 @@ export default function FAQSection({ items = [] }: FAQSectionProps) {
   useEffect(() => {
     if (!toCountrySlug || !FaqsDatas) return;
 
-    // ✅ Always lowercase and validate
-    const storedTypeRaw =
-      (typeof window !== "undefined" &&
-        sessionStorage.getItem("main_service_type")) || "visa";
+    const serviceType =
+      (typeof window !== "undefined"
+        ? sessionStorage.getItem("main_service_type")
+        : "visa"
+      )?.toLowerCase() || "visa";
 
-    const storedType = storedTypeRaw.toLowerCase();
-    console.log(storedType,"storedType")
-    const mainType: MainServiceType =
-      storedType in FaqsDatas ? (storedType as MainServiceType) : "visa";
+    const mainType = (
+      serviceType in FaqsDatas ? serviceType : "visa"
+    ) as keyof typeof FaqsDatas;
 
     const countryKey = Object.keys(FaqsDatas[mainType] || {}).find(
       (key) => normalize(key) === normalize(toCountrySlug)
@@ -61,34 +58,22 @@ export default function FAQSection({ items = [] }: FAQSectionProps) {
     const countryData =
       FaqsDatas[mainType][
         countryKey as keyof (typeof FaqsDatas)[typeof mainType]
-      ] as Record<string, FAQItem[] | FAQItem[][]>;
-
+      ];
     const categoryKey = categorySlug
-      ? Object.keys(countryData).find(
+      ? Object.keys(countryData || {}).find(
           (key) => normalize(key) === normalize(categorySlug)
         )
       : null;
 
     let faqsData: FAQItem[] = [];
-
-    if (categoryKey) {
-      const categoryData = countryData[categoryKey];
-      if (Array.isArray(categoryData[0])) {
-        faqsData = (categoryData as FAQItem[][]).flat();
-      } else {
-        faqsData = categoryData as FAQItem[];
-      }
-    } else {
-      faqsData = Object.values(countryData).flatMap((v) => {
-        if (Array.isArray(v[0])) {
-          return (v as FAQItem[][]).flat();
-        }
-        return v as FAQItem[];
-      });
+    if (countryData) {
+      faqsData = categoryKey
+        ? (countryData[categoryKey as keyof typeof countryData] as FAQItem[])
+        : (Object.values(countryData).flat() as FAQItem[]);
     }
 
     setFilteredFaqs(faqsData);
-  }, [toCountrySlug, categorySlug]);
+  }, [toCountrySlug, categorySlug, items]);
 
   const countryName = toCountrySlug ? formatCountryName(toCountrySlug) : "";
 
