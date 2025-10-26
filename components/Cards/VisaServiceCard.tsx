@@ -11,7 +11,7 @@ interface VisaServiceCardProps {
   description: string;
   link?: string;
   shouldStartApplication?: boolean; // ✅ renamed
-  save?: (id: string) => void
+  save?: (id: string) => void;
 }
 
 const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
@@ -21,8 +21,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   link,
   id,
   shouldStartApplication,
-  save
-
+  save,
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -35,7 +34,6 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
       router.push(link);
     }
   };
-
 
   return (
     <div className="max-w-sm p-4 rounded-xl border border-gray-200 h-[320px]  hover:shadow-md transition-shadow  flex items-center">
@@ -71,15 +69,19 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
           }
           onClick={() => {
             // Save the step in localStorage first
+
+            console.log(shouldStartApplication, "shouldStartApplication");
             if (shouldStartApplication) {
               dispatch(startApplication({ type: title ?? "" }));
             }
 
             if (title === "OCI Card") {
-              sessionStorage.setItem("formType", "OCI")
+              sessionStorage.setItem("formType", "OCI");
             }
 
-            if (save) { save(id) }
+            if (save) {
+              save(id);
+            }
             // Then navigate
             handleApplyNow();
           }}
