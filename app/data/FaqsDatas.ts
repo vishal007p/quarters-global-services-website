@@ -168,7 +168,7 @@
             ]
         }
     },
-    "pssport": {
+    "passport": {
         "united-states": {
             "New Passport": [
                 {

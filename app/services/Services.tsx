@@ -77,6 +77,7 @@ const Services = () => {
                                         title={service.name}
                                         description={service.name}
                                         shouldStartApplication={true}
+                                        mainType={true}
                                     />
                                 </div>
                             ))}

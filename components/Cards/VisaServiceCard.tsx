@@ -12,6 +12,7 @@ interface VisaServiceCardProps {
   link?: string;
   shouldStartApplication?: boolean; // ✅ renamed
   save?: (id: string) => void;
+  mainType?: boolean
 }
 
 const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
@@ -22,6 +23,7 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
   id,
   shouldStartApplication,
   save,
+  mainType
 }) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -32,6 +34,9 @@ const VisaServiceCard: React.FC<VisaServiceCardProps> = ({
     );
     if (link) {
       router.push(link);
+    }
+    if (mainType) {
+      sessionStorage.setItem("main_service_type", title)
     }
   };
 
